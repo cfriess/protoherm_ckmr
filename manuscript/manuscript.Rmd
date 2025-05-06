@@ -1030,7 +1030,7 @@ and the U.S. Fish and Wildlife Service Sport Fish Restoration Program
 
 ## Data availability
 
-All code associated with analysis is available on https://github.com/cfriess/gag_ckmr.
+All code associated with analysis is available on https://github.com/cfriess/protoherm_ckmr.
 
 \newpage
 
