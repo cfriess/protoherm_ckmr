@@ -10,16 +10,16 @@ author:
     email         : "elasmophile@gmail.com"
     role:         
   - name          : "Eric C. Anderson"
-    affiliation   : "2"
+    affiliation   : "2,3"
     role:
   - name          : "Lisa E. Ailloud"
-    affiliation   : "3"
-    role:
-  - name          : "David S. Portnoy"
     affiliation   : "4"
     role:
+  - name          : "David S. Portnoy"
+    affiliation   : "5"
+    role:
   - name          : "Susan K. Lowerre-Barbieri"
-    affiliation   : "1,5"
+    affiliation   : "1,6"
     role:
 
 affiliation:
@@ -28,11 +28,13 @@ affiliation:
   - id            : "2"
     institution   : "NOAA, National Marine Fisheries Service, Southwest Fisheries Science Center, Fisheries Ecology Division, Santa Cruz, CA, USA"
   - id            : "3"
-    institution   : "NOAA, National Marine Fisheries Service, Southeast Fisheries Science Center, Charleston, SC, USA"
+    institution   : Deptartment of Biology, Colorado State University, Fort Collins, CO, USA
   - id            : "4"
-    institution   : "Marine Genomics Laboratory, Texas A&M University, Corpus Christi, Corpus Christi, TX, USA"
+    institution   : "NOAA, National Marine Fisheries Service, Southeast Fisheries Science Center, Charleston, SC, USA"
   - id            : "5"
-    institution   : "University of Florida, Fisheries and Aquatic Sciences, Gainesville, FL USA"
+    institution   : "Marine Genomics Laboratory, Texas A&M University, Corpus Christi, Corpus Christi, TX, USA"
+  - id            : "6"
+    institution   : "University of Florida, Fisheries and Aquatic Sciences, Gainesville, FL, USA"
 
 authornote: ""
 
