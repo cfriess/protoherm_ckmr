@@ -1,0 +1,423 @@
+---
+title             : "Application of Close-kin mark–recapture (CKMR) to Protogynous Fishes"
+subtitle          : "Supplementary Material"
+author            : 
+  - Claudia Friess, Eric C. Anderson, Lisa E. Ailloud, David S. Portnoy, and
+  - Susan K. Lowerre-Barbieri
+
+bibliography      : ["citations.bib", "r-references.bib"]
+csl               : "cjfas.csl"
+
+floatsintext      : yes
+linenumbers       : no
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+always_allow_html : true
+
+documentclass     : article
+output            : pdf_document
+geometry          : margin=1in
+linestretch       : 1.5
+fontsize          : 12pt
+header-includes   : 
+  - \raggedright 
+  - \usepackage{color}
+  - \usepackage{tipa}
+  - \usepackage{wasysym}
+  - \usepackage{fancyhdr}
+  - \usepackage{mathrsfs}
+  - \thispagestyle{empty}
+  - \usepackage{hanging}
+  - \usepackage{setspace}
+  - \usepackage{caption} 
+  - \setlength{\baselineskip}{1.5\baselineskip}
+  - \newcommand{\tprob}{P^{F\rightarrow M}}
+  - \newcommand{\wt}[1]{\omega_#1}  % recruitment deviations
+  - \newcommand{\rbar}{\bar{R}}  % mean recruitment
+  - \newcommand{\fbarr}{{\bar{F}_\mathrm{rec}}}  % mean fishing mortality from rec fishery
+  - \newcommand{\frecdev}[1]{fdev^\mathrm{rec}_#1}  % annual deviations from mean mortality from rec fishery
+  - \newcommand{\fbarc}{{\bar{F}_\mathrm{com}}}  % mean fishing mortality from commercial fishery
+  - \newcommand{\fcomdev}[1]{fdev^\mathrm{com}_#1}  % annual deviations from mean mortality from rec fishery
+  - \newcommand{\Mage}[1]{\dot{M}_#1}  % age-specific instantaneous natural mortality
+  - \newcommand{\vulr}[1]{\dot{v}^\mathrm{rec}_#1}  % age-specific vulnerability to recreational fishery
+  - \newcommand{\vulc}[1]{\dot{v}^\mathrm{com}_#1}  % age-specific vulnerability to commercial fishery
+  - \newcommand{\dFec}[1]{\dot{Fec}_#1}    % age-specific relative fecundity
+  - \newcommand{\Af}[1]{\dot{Mat}_#1}    % age-specific fraction of females mature
+  - \newcommand{\Pfm}[1]{\dot{P}^{\mathrm{F}\rightarrow\mathrm{M}}_#1}    % age-specific prob of transitioning from female to male
+  - \newcommand{\Imp}[1]{\dot{P}^\mathrm{M}_#1}    % equilibrium proportion of males amongst age a fish
+  - \newcommand{\It}[1]{\mathring{I}_{#1}}   % recruitment index in year t
+  - \newcommand{\pacom}[2]{\mathring{p}^\mathrm{com}_{#1,#2}}   % relative abundance of age a females in year t
+  - \newcommand{\pacr}[3]{\mathring{p}^\mathrm{ckmr}_{#1,#2,#3}}   % relative abundance of age a males in year t
+  - \newcommand{\Z}[2]{Z_{#1,#2}}   % total instantaneous mortality at time t for age a fish 
+  - \newcommand{\AS}[2]{S_{#1,#2}}   % total annual survival
+  - \newcommand{\lxf}[1]{s_{#1}}     % survivorship
+  - \newcommand{\Nf}[2]{N^\mathrm{fem}_{{#1}, {#2}}}  % number of females of age a at time t
+  - \newcommand{\Nm}[2]{N^\mathrm{mal}_{{#1}, {#2}}}  % number of males of age a at time t
+  - \newcommand{\K}[4]{\mathring{K}^{\mathrm{#1},{{#4}}}_{{#2},{#3}}}
+  - \newcommand{\KHS}[3]{\mathring{K}^{\mathrm{HSP},{{#3}}}_{{#1},{#2}}}
+  - \newcommand{\KHSs}[2]{\mathring{K}^{\mathrm{HSP},{{#2}}}_{{#1}}}
+  - \newcommand{\KPOPT}[3]{\mathring{K}^{\mathrm{POP},{{#3}}}_{{#1},{#2}}}
+  - \newcommand{\KHSD}[2]{\mathring{K}^{\mathrm{HSP}^{\neq _{a,b}}}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with different mtDNA 
+  - \newcommand{\KHSS}[2]{\mathring{K}^{\mathrm{HSP}^{=_a}}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA
+  - \newcommand{\KPOP}[3]{\mathring{K}^{\mathrm{POP}^{#3}}_{{#1},{#2}}}  
+  - \newcommand{\KPOPF}[2]{\mathring{K}^\mathrm{POP_F}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA
+  - \newcommand{\KPOPM}[2]{\mathring{K}^\mathrm{POP_M}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA 
+  - \newcommand{\HSPD}{\mathrm{HSP}^{\neq}}
+  - \newcommand{\HSPS}{\mathrm{HSP}^=}
+  - \newcommand{\POPD}{\mathrm{POP}^{\neq}}
+  - \newcommand{\POPS}{\mathrm{POP}^=}
+  - \newcommand{\KNot}[2]{\mathring{K}^\mathrm{Not}_{{#1},{#2}}}     % number of pairs that are neither HSD or HSS
+  - \newcommand{\KNote}[2]{\mathring{K}^{\mathrm{Not}=_a}_{{#1},{#2}}}
+  - \newcommand{\KNotu}[2]{\mathring{K}^{\mathrm{Not}{\neq}_{a,b}}_{{#1},{#2}}}   
+  - \newcommand{\Hmt}{H_\mathrm{mt}}  % mtDNA haplotype diversity
+  - \newcommand{\Hmts}{H_\mathrm{mt}^{\mathrm{OM}}}  % simulated mtDNA haplotype diversity
+  - \newcommand{\Hmte}{H_\mathrm{mt}^{\mathrm{EM}}}  % mtDNA haplotype diversity assumed in the EM
+  - \newcommand{\Mat}{\mathrm{Mat}}
+  - \newcommand{\Fec}{\mathrm{Fec}}
+  - \DeclareMathAlphabet{\mathbbold}{U}{bbold}{m}{n}
+  - \newcommand{\comment}[1]{\textcolor{red}{#1}}
+  - \newcommand{\ERRO}{\mathrm{ERRO}}
+  - \newcommand{\ETRO}{\mathrm{ETRO}}
+  - \newcommand{\sH}{\mathscr{H}}
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(stargazer)
+library(kableExtra)
+library(gridExtra)
+library(nplyr)
+library(patchwork)
+library(ggh4x)
+library(cowplot)
+library(gridExtra)
+library(grid)
+library(scales)
+library(here)
+
+# caching for quick knitting.  
+#    set cache = FALSE to not cache
+#    set cache.extra to a new value to remove all caches and re-evaluate
+knitr::opts_chunk$set(cache.extra = 4, cache = FALSE) 
+
+source(here("code", "analysis", "results_suppl.R"), local = knitr::knit_global())
+
+
+```
+
+
+\renewcommand{\thefigure}{S\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{S\arabic{table}} \setcounter{table}{0}
+\renewcommand{\theequation}{S\arabic{equation}} \setcounter{equation}{0}
+
+
+
+## Female Breeding Group Switching in the Operating model
+
+Each year, reproducing females spawned with 
+their birth breeding group with probability $\zeta$, interpreted as their spawning 
+group fidelity, set to 0.01. Females that switched breeding groups in a given breeding season 
+(determined through Bernoulli draws with probability 1 - $\zeta$) switched from their 
+birth breeding group $b_0$ to a different group $b_x$ with probability $\psi^{b_0,b_j}$. 
+Probabilities $\psi$ were computed as the normalized inverse Euclidean distance 
+values of a vector consisting of consistent intervals and having the length of 
+the number of distinct breeding groups. This resulted in greater likelihoods of 
+moving to a neighboring breeding group than a more distant one. 
+
+## Assumption of Equifrequent Haplotypes in the Simulations
+
+For the purposes of the simulations we present in this paper, we assume that all
+mtDNA haplotypes are at the same frequency, (i.e., $f_a = 1/n_H$, for all $a \in \sH$, where
+$n_H$ is the number of haplotypes in the set of all mtDNA haplotypes $\sH$). By doing so,
+the simulations are greatly
+simplified, as it is not necessary to track individual mtDNA haplotypes over generations
+across all individuals. Rather, it is sufficient to record whether a sampled pair
+shares the same mtDNA sequence or not. Furthermore, this allows us
+to summarize the genetic variation in the mtDNA in terms of a single number, 
+$\Hmt$, the probability that two mtDNA sequences randomly
+sampled from the population are different in sequence.  
+
+When mtDNA haplotypes are assumed equifrequent, we are able to categorize---without
+loss of information---sampled pairs not by their specific
+haplotypes, $a$ and $b$, but rather by whether
+the pair shares the same haplotype or not, regardless of the specific sequence.
+Thus in the CKMR pseudolikelihood to analyze the simulations we used joint probabilities
+of a pair's type of relationship and whether or not the
+members of the pair have the same mtDNA sequence. This joint probability is easily found
+by summing the probabilities in (8) and (14).
+
+Summing the first case ($a=b$) of (8) over all haplotypes $a\in\sH$ yields
+
+\begin{equation}
+\begin{aligned}
+P(\mathrm{HSP}, \mathrm{mt}^=|c_i,c_j) &= P(\mathrm{HSP}_{F\rightarrow F}|c_i, c_j) \\
+&\qquad + (1-\Hmt) \biggl[P(\mathrm{HSP}_{F\rightarrow M}|c_i, c_j) + P(\mathrm{HSP}_{M\rightarrow M}|c_i, c_j)\biggr]
+\end{aligned}
+\end{equation}
+where $\mathrm{mt}^=$ denotes simply that the pair have the same mtDNA.  
+Summing the
+second case ($a\neq b$) in (8) over all pairs 
+$(a,b),\ a\in\sH,\ b\in\sH,\ a\neq b$, gives
+
+\begin{equation}
+\begin{aligned}
+P(\mathrm{HSP}, \mathrm{mt}^{\neq}|c_i,c_j) &= \Hmt\biggl[P(\mathrm{HSP}_{F\rightarrow M}|c_i, c_j) + P(\mathrm{HSP}_{M\rightarrow M}|c_i, c_j)\biggr].
+\end{aligned}
+\end{equation}
+where $\mathrm{mt}^{\neq}$ denotes that the haplotypes carried by the pair's members
+are of different sequences. 
+
+
+Similarly, for POPs, summing (14) over different haplotypes provides the
+simplification:
+
+\begin{equation}
+\begin{aligned}
+P(\mathrm{POP}, \mathrm{mt}^= | c_i, c_j, g_i=F, s_i) &=  P(\mathrm{POP}_{F\rightarrow F}|c_i, c_j, s_i)\\
+P(\mathrm{POP}, \mathrm{mt}^{\neq} | c_i, c_j, g_i=F, s_i) &= 0 \\
+P(\mathrm{POP}, \mathrm{mt}^=|c_i, c_j, g_i=M, s_i) &=  P(\mathrm{POP}_{F\rightarrow M}|c_i, c_j, s_i) \\
+& + (1-H_\mathrm{mt}) P(\mathrm{POP}_{M\rightarrow M}|c_i, c_j, s_i) \\
+P(\mathrm{POP}, \mathrm{mt}^{\neq}|c_i, c_j, g_i=M, s_i) &=  H_\mathrm{mt} P(\mathrm{POP}_{M\rightarrow M}|c_i, c_j, s_i) \\
+\end{aligned}
+\end{equation}
+
+Both (S2) and (S3)) are easily used in a CKMR pseudolikelihood for
+pairs categorized according to whether the mtDNA of the members matches or not.
+
+## Additional Performance Metrics
+
+In addition to median Percent Relative Error (PRE), we also calculated Normalized Root Mean 
+Squared Error (NRMSE) for every scenario $sc$ as an additional accuracy metric:
+
+\begin{equation}
+\mathrm{NRMSE_{sc}} = \frac{\sqrt{\frac{1}{n_{sc}} \sum_{i=1}^{n_{sc}} (\mathrm{SV}_i - \mathrm{EV}_i)^2}}{\frac{1}{n_{sc}} \sum_{i=1}^{n_{sc}} \mathrm{SV}_i},
+\end{equation}
+
+where $n_sc$ is the number of simulations within a scenario. 
+
+The full set of performance metrics for
+sex-specific abundance and sex ratio are shown in Table \@ref(tab:table2). The pattern
+of NRMSE was generally similar to median PRE in identifying the scenarios with the lowest
+accuracy. However, due to the absolute rather than signed nature of the accuracy measure, error for the
+base OM and EM scenarios appeared higher for NRMSE than PRE across CKMR sampling scenarios. Additionally,
+the parameter estimation option with the lowest accuracy within scenario sometimes differed between
+the two metrics (Figures S10 and S11).
+
+## Investigating the Subsampling Effect
+
+We subsampled each of the simulated populations ten times to create multiple data sets per population
+for analysis. This was done for computational efficiency (it takes several hours to generate each pedigree),
+but it also presents an opportunity to investigate the effect of random chance due to simulated pedigree
+as opposed to random chance due to subsampling each pedigree. We fit generalized linear models (GLMs) and
+generalized linear mixed models (GLMMs) to median percent errors for each simulated dataset, including
+the effects of scenario (both OM and EM, but omitting the 'HSP only in the likelihood' scenario because
+it was essentially the same as the 'base' scenario; total of six scenarios), parameter estimation option 
+(whether or not sex transition function and male reproductive value were estimated in the EM; total of
+four options) and population (of which there were 40 per scenario). The data are shown in 
+(Figures S12 and S13). Population was included as
+a random effect. Models were fitted separately for each sex, and model comparison via AICc was used
+to identify the best fitting ones. The best-fitting model for both sexes included an interaction effect 
+between scenario and parameter estimation option, but the population random effect was only included
+only for females.The estimated marginal mean PREs from the best-fitting models by scenario and parameter 
+estimation option are shown in Figure S14 and highlight the similarities between
+male and female abundance estimate PRE when the sex transition function is assumed known and the
+differences when it is estimated as well as the differences between scenarios.
+
+The estimated variance in PRE due to simulated population for the males was essentially zero, indicating
+no discernible population-level effect for male estimation. This was expected because the only
+difference between populations was stochasticity in recruitment, mortality, and parental assignments.
+In contrast, the population-level effect for the females was unexpectedly high (138). Further investigation 
+revealed that when scenarios where the sex transition function was estimated were omitted, the variance 
+dropped to 25, and the population effect was no longer significant. Since the younger age classes make up the 
+largest proportion of the population and are predominantly female,  stochastic differences in recruitment 
+among populations could contribute to a nonzero population-level variance for females. The dramatic 
+reduction in population-level variance when sex transition estimation was omitted suggests that 
+uncertainty in estimating the sex transition function amplifies population-level variation in female abundance errors.
+
+Figures S12 and S13 highlight the effect of stochasticity due to genetic
+sampling on estimation performance. The IQR of PREs within simulated population was small when the
+sex transition function and male reproductive value were known and there was no model misspecification, 
+but even without model misspecification, the IQRs increased visibly when the transition function 
+and/ or male reproductive value were estimated. This emphasizes the uncertainty due to random
+chance of which individuals are genetically sampled.
+
+
+## Effect of changing the number of males sampled for CKMR
+
+The number of adult males sampled for CKMR in our simulation study was about two orders of
+magnitude smaller than the number of females sampled. This might beg the question what would
+happen if we were to increase the proportion of males in the sample. We conducted additional
+runs on the base and skipped spawning OM scenarios to explore this question. In one set of runs,
+we excluded age 1 females from the sex ratio calculation used to partition the CKMR sample by sex,
+which roughly doubled the number of males sampled (Figure S15 Panel A) and
+in another set, we sampled no males at all. The result was that the number of $\mathrm{POP}^{\neq}$
+found roughly doubled when the number of males sampled doubled and decreased to zero when no males
+were sampled, but the other kinship types were fairly unaffected (Figure S15 Panel B).
+For estimation performance, we found that varying the number of males sampled had no effect 
+(Figure S16), further emphasizing the minimal impact of
+$\mathrm{POPs}$ on our estimator's accuracy and precision. 
+
+## Supplementary Tables
+
+
+```{r table2, echo=FALSE}
+t2_cap <- "Error metrics by scenario. PRE = Percent Relative Error. Median PREs were first calculated
+across years within simulation to obtain a single PRE value per simualated data set. The PRE and IQR
+(interquartile range) values reported in this table represent the median and IQR, respectively, of
+those median PREs, by indicated scenario. NRMSE = Normalized Root Mean Square Error. 
+(normalized by the mean of simulated values). N represents the number of unique data sets analyzed
+for each scenario (400 minus the runs which didn't converge)"
+kableExtra::kable(error_metrics_full, 
+                  booktabs = TRUE, 
+                  caption = t2_cap, 
+                  longtable = TRUE,
+                  linesep = c("", "", "", "\\addlinespace")) %>%
+  add_header_above(c(" " = 3, "Females" = 3, "Males" = 3, "Sex Ratio" = 3)) %>%
+  kable_styling(latex_options = c("hold_position", "repeat_header"), 
+                position = "left", font_size = 9,
+                repeat_header_method = "replace") %>%
+  kableExtra::landscape() %>%
+  kableExtra::row_spec(0, extra_latex = "\\captionsetup{justification=centering, width=\\textwidth}")
+
+```
+
+```{r fig_caps, echo=FALSE}
+
+age_sched_fig_caption <- "Age schedules for natural mortality (dashed line), female probability of reproducing (solid line), 
+and sex transition probability (dotted line) used in operating model simulations. We allowed the terminal age to act as a plus group, 
+rather than killing all indivduals that exceed the maximum age (the default behavior of fishSim) but set the natural mortality for this
+plus group high to avoid building up a large pool of old individuals."
+
+vulnF_plot_fig_caption <- "Fishing-related parameter values used in the simulations.  A) commercial (solid line) and recreational (dotted line) fishing fleet vulnerability at age and B) commercial (solid line) and recreational (dotted line) fishing mortality."
+
+nsamps_plot_fig_caption <- "Number of adult fish CKMR samples collected by sex for the base OM configuration (no skipped spawning, male and female reproductive value are equal) for different sample sizes spread out over three (red) or ten (blue) years of sampling. The percentages refer to multiples of the base sample size, $n_\\mathrm{base} = 10\\sqrt{N}$, see text for details. The box represents the
+interquartile range (IQR), the line is the median, the whiskers extend to 1.5 IQR and outliers fall beyond that."
+
+supplckmrpairs_plot_fig_caption <- "Number of CKMR pairwise relationships observed for the base OM configuration (no skipped spawning, 
+male and female reproductive value are equal) for different sample sizes spread out over three (red) or ten (blue) years of sampling. 
+The percentages refer to multiples of the base sample size, $n_\\mathrm{base} = 10\\sqrt{N}$, see text for details. 
+$\\mathrm{POP}^{\\neq}$ = parent-offspring pairs with different mitochondrial DNA, $\\mathrm{POP}^=$ = parent-offspring pairs with matching mitochondrial DNA, 
+$\\mathrm{HSP}^{\\neq}$ = half-sibling pairs with different mitochondrial DNA, $\\mathrm{HSP}^=$ = half-sibling pairs with matching mitochondrial 
+DNA."
+
+ss_hsp_plot_fig_caption <- "Comparison of runs that did (Panel A) and did not (panel B) use POPs in the EM likelihood 
+for the skipped spawning OM scenario, by whether or not sex transition 
+($P^{\\mathrm{F}\\rightarrow \\mathrm{M}}$) and male reproductive value 
+($\\mathrm{RV}_{M}$) functions are assumed known (fixed). Y-axis truncated to improve readability."
+
+supplckmrpairs2_plot_fig_caption <- "Number of CKMR pairwise relationships for three years of CKMR sampling at the base sample size, 
+$n_\\mathrm{base} = 10\\sqrt{N}$, by EM scenario. $\\mathrm{POP}^{\\neq}$ = parent-offspring pairs with different mitochondrial DNA, $\\mathrm{POP}^=$ = parent-offspring pairs with matching mitochondrial DNA, 
+$\\mathrm{HSP}^{\\neq}$ = half-sibling pairs with different mitochondrial DNA, $\\mathrm{HSP}^=$ = half-sibling pairs with matching mitochondrial 
+DNA."
+
+parnll_plot_fig_caption <- "Estimated parameters by EM scenario (relationship types used and mitochondrial haplotype diversity conditions) and whether or not the sex transition function standard deviation, $\\mathrm{STF}_{SD}$ of the sex transition and male the exponent of the reproductive value 
+(RV) functions are assumed known (fixed).
+trans = sex transition function, mRV = male reproductive value. Y-axis for mean recruitment and Male RV function exponent truncated to improve readability."
+
+par_plot_fig_caption <- "Estimated parameters by OM scenario (simulated male contribution to reproductive success and skipped spawning) and whether or not the sex transition function standard deviation and male reproductive value are assumed known (fixed). trans = sex transition function, mRV = male reproductive value. Y-axis for mean recruitment and Male RV function exponent truncated to improve readability."
+
+cor_plot_fig_caption <- "Correlation Between key estimated parameter pairs when both the sex transition function standard deviation and male reproductive value (RV) are estimated. Fct = function."
+
+fac_plot_fig_caption <- "Comparison of accuracy metrics for female abundance estimates, by OM
+and EM scenario, and whether the sex transition function and male reproductive value were fixed or 
+estimated in the model. PRE = Percent Relative Error, NRMSE = Normalized Root Mean Squared Error. RMSE was normalized by dividing by the mean of simulated values."
+
+mac_plot_fig_caption <- "Comparison of accuracy metrics for male abundance estimates, by OM
+and EM scenario, and whether the sex transition function and male reproductive value were fixed or 
+estimated in the model. PRE = Percent Relative Error, NRMSE = Normalized Root Mean Squared Error. RMSE was normalized by dividing by the mean of simulated values."
+
+fpr_plot_fig_caption <- "Percent Relative Error for female abundance estimates by simulated population, EM and OM
+scenario, and whether the sex transition function and male reproductive value were fixed or estimated. Notice
+the different scales between panels. Two high outliers omitted for scenario 'est Hmt < sim Hmt'."
+
+mpr_plot_fig_caption <- "Percent Relative Error for male abundance estimates by simulated population, EM and OM
+scenario, and whether the sex transition function and male reproductive value were fixed or estimated. Notice
+the different scales between panels. Two high outliers omitted for scenario 'est Hmt < sim Hmt'."
+
+emmeans_plot_fig_caption <- "Marginal mean Percent Relative Error (PRE) in female and male abundance estimates as 
+estimated by sex-specific models. The models estimated an interaction effect between scenario and whether or not 
+the sex transition function and/or male reproductive value were fixed or estimated. The model for females additionally 
+included a random effect for simulated population, while the best-fitting model for the males did not."
+
+sbys_plot1_fig_caption <- "Number of individuals sampled (Panel A) and number of kin pairs found (Panel B) for
+the Base and skipped spawning OM scenarios when varying the proportion of males in the adult CKMR sample. When all
+ages are included in calculating true sex ratio used to partition the sample by sex (base male sampling; red), 
+fewer males are sampled than when age 1s (who are all female) are excluded from the sex ratio calculation (green)."
+
+sbys_plot2_fig_caption <- "Percent relative error in female (Panel A) and male (Panel B) abundance estimation
+for the Base and skipped spawning OM scenarios, by parameter estimation scenario, when varying the proportion of 
+males in the adult CKMR sample. When all
+ages are included in calculating true sex ratio used to partition the sample by sex (base male sampling; red), 
+fewer males are sampled than when age 1s (who are all female) are excluded from the sex ratio calculation (green)."
+
+```
+
+## Supplementary Figures
+
+```{r age-sched-plot, echo=FALSE, fig.align='center', fig.height=3, fig.cap = age_sched_fig_caption, fig.width=5, message=FALSE, warning=FALSE}
+age_schedule_plot
+```
+
+```{r vulnF-plot, echo=FALSE, fig.align='center', fig.height=6, fig.width=5, fig.cap = vulnF_plot_fig_caption, message=FALSE, warning=FALSE}
+F_vul_plot
+```
+
+```{r nsamps-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = nsamps_plot_fig_caption, message=FALSE, warning=FALSE}
+nsamps_plot
+```
+
+```{r supplckmrpairs-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = supplckmrpairs_plot_fig_caption, message=FALSE, warning=FALSE}
+suppl_ckmr_pairs_plot
+```
+
+```{r ss-hsp-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = ss_hsp_plot_fig_caption, message=FALSE, warning=FALSE}
+ckmr_hsp_plot
+```
+
+```{r supplckmrpairs2-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = supplckmrpairs2_plot_fig_caption, message=FALSE, warning=FALSE}
+suppl_ckmr_pairs_plot2
+```
+
+```{r parnll-plot, echo=FALSE, fig.align='center', fig.height=8, fig.width=10, fig.cap = parnll_plot_fig_caption, message=FALSE, warning=FALSE}
+para_res_plot_nll 
+```
+
+```{r par-plot, echo=FALSE, fig.align='center', fig.height=8, fig.width=10, fig.cap = par_plot_fig_caption, message=FALSE, warning=FALSE}
+para_res_plot 
+```
+
+```{r cor-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = cor_plot_fig_caption, message=FALSE, warning=FALSE}
+cor_plot 
+```
+
+```{r fac-plot, echo=FALSE, fig.align='center', fig.height=9, fig.width=9, fig.cap = fac_plot_fig_caption, message=FALSE, warning=FALSE}
+f_ac_plot 
+```
+
+```{r mac-plot, echo=FALSE, fig.align='center', fig.height=9, fig.width=9, fig.cap = mac_plot_fig_caption, message=FALSE, warning=FALSE}
+m_ac_plot 
+```
+
+```{r fpr-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = fpr_plot_fig_caption, message=FALSE, warning=FALSE, out.extra='angle=90', out.width = "8in", out.height="10in"}
+fpr_plot
+```
+
+```{r mpr-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = mpr_plot_fig_caption, message=FALSE, warning=FALSE, out.extra='angle=90', out.width = "8in", out.height="10in"}
+mpr_plot
+```
+
+```{r emmeans-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=7, fig.cap = emmeans_plot_fig_caption, message=FALSE, warning=FALSE}
+emmeans_plot
+```
+
+```{r sbys-plot1, echo=FALSE, fig.align='center', fig.height=8, fig.width=7, fig.cap = sbys_plot1_fig_caption, message=FALSE, warning=FALSE}
+male_samps_suppl_plot1
+```
+
+```{r sbys-plot2, echo=FALSE, fig.align='center', fig.height=5, fig.width=7, fig.cap = sbys_plot2_fig_caption, message=FALSE, warning=FALSE}
+male_samps_suppl_plot2
+```

@@ -1,0 +1,8 @@
+local/
+cellar/
+lock/
+python/
+sandbox/
+library/
+staging/
+settings.json

@@ -1,0 +1,179 @@
+#if !defined(_CKMR_)
+#  define _CKMR_
+
+class model_data : public ad_comm{
+  init_adstring datafile;
+  init_adstring ctlfile;
+  data_int fyr;
+  data_int lyr;
+  data_int fage_adult;
+  data_int fage;
+  data_int lage;
+  dvector ages;
+  data_int fckmr;
+  data_int nckmr;
+  data_matrix Strue;
+  data_vector Af;
+  data_vector Fec;
+  data_vector Rt;
+  data_number rsd;
+  data_matrix comps;
+  data_vector vulr;
+  data_vector vulc;
+  data_vector Mage;
+  data_vector c1;
+  data_vector c2;
+  data_vector s1;
+  data_vector g1;
+  data_vector PO;
+  data_vector MO;
+  data_vector HSD;
+  data_vector HSS;
+  data_vector Not;
+  data_number mtHZ_est;
+  data_int et;
+  data_int ef;
+  data_number comps_weight;
+  data_number index_weight;
+  data_number ckmr_weight;
+  data_int nll_type;
+  data_int eof;
+  int iter;
+  data_number irbar;
+  data_number ifbarr;
+  data_number ifbarc;
+  data_number itinfl;
+  data_number itsd;
+  data_number imfec_exp;
+  data_int eofc;
+  ~model_data();
+  model_data(int argc,char * argv[]);
+  friend class model_parameters;
+};
+
+class model_parameters : public model_data ,
+  public function_minimizer
+{
+public:
+  ~model_parameters();
+  void preliminary_calculations(void);
+  void set_runtime(void);
+  static int mc_phase(void)
+  {
+    return initial_params::mc_phase;
+  }
+  static int mceval_phase(void)
+  {
+    return initial_params::mceval_phase;
+  }
+  static int hessian_phase(void)
+  {
+    return initial_params::in_hessian_phase;
+  }
+  static int sd_phase(void)
+  {
+    return initial_params::sd_phase;
+  }
+  static int current_phase(void)
+  {
+    return initial_params::current_phase;
+  }
+  static int last_phase(void)
+  {
+    return (initial_params::current_phase
+      >=initial_params::max_number_phases);
+  }
+  static prevariable current_feval(void)
+  {
+    return *objective_function_value::pobjfun;
+  }
+private:
+  dvariable adromb(dvariable(model_parameters::*f)(const dvariable&), double a, double b, int ns)
+  {
+    using namespace std::placeholders;
+    _func func = std::bind(f, this, _1);
+    return function_minimizer::adromb(func, a, b, ns);
+  }
+  ivector integer_control_flags;
+  dvector double_control_flags;
+  param_init_bounded_number log_rbar;
+  param_init_bounded_number log_fbarc;
+  param_init_bounded_number log_fbarr;
+  param_init_bounded_number log_tinfl;
+  param_init_bounded_number log_tsd;
+  param_init_bounded_number log_mfec_exp;
+  param_init_bounded_vector wt;
+  param_init_bounded_vector log_ftc_dev;
+  param_init_bounded_vector log_ftr_dev;
+  param_number prior_function_value;
+  param_number likelihood_function_value;
+  objective_function_value nll;
+  param_number fbarc;
+  param_number fbarr;
+  param_number tinfl;
+  param_number tsd;
+  param_number mfec_exp;
+  param_number q;
+  param_vector lxf;
+  param_vector ftc;
+  param_vector ftr;
+  param_vector ft;
+  param_matrix Z;
+  param_matrix S;
+  param_matrix Frec;
+  param_matrix Fcom;
+  param_matrix Nfta;
+  param_matrix Nmta;
+  param_matrix Nta;
+  param_matrix Nt;
+  param_stddev_vector Nft;
+  param_stddev_vector Nmt;
+  param_stddev_vector ANft;
+  param_stddev_vector ANt;
+  param_matrix Rf;
+  param_matrix Rm;
+  param_vector Pfm;
+  param_vector Imp;
+  param_vector FecM;
+  param_vector NF;
+  param_vector NM;
+  param_matrix pahat;
+  param_number Pffcc;
+  param_number Pfmcc;
+  param_number Pmmcc;
+  param_number Ppopffcc;
+  param_number Ppopfmcc;
+  param_number Ppopmmcc;
+  param_number PHSS;
+  param_number PHSD;
+  param_number PPHSS;
+  param_number PPHSD;
+  param_vector Ef_denom;
+  param_vector Em_denom;
+  param_vector Pffcc_vec;
+  param_vector Pfmcc_vec;
+  param_vector Pmmcc_vec;
+  param_vector PHSS_vec;
+  param_vector PHSD_vec;
+  param_vector Ppopffcc_vec;
+  param_vector Ppopfmcc_vec;
+  param_vector Ppopmmcc_vec;
+  param_vector PPHSD_vec;
+  param_vector PPHSS_vec;
+  param_stddev_vector rt_hat;
+  param_vector rt_resid;
+public:
+  virtual void userfunction(void);
+  virtual void report(const dvector& gradients);
+  virtual void final_calcs(void);
+  model_parameters(int sz,int argc, char * argv[]);
+  virtual void initializationfunction(void){}
+  void initialization(void);
+  void statedynamics(void);
+  void fisheries_obs_model(void);
+  void ckmr_obs_model(void);
+  void objective_function(void);
+  void mcmc_output(void);
+
+};
+#endif
