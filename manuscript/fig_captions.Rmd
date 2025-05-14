@@ -1,0 +1,154 @@
+
+---
+title             : "Application of Close-kin mark–recapture (CKMR) to Protogynous Fishes"
+subtitle          : "Figure Captions"
+author            : 
+  - Claudia Friess, Eric C. Anderson, Lisa E. Ailloud, David S. Portnoy, and
+  - Susan K. Lowerre-Barbieri
+
+bibliography      : ["citations_abbrev.bib", "r-references.bib"]
+csl               : "elsevier-harvard.csl"
+
+floatsintext      : yes
+linenumbers       : no
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+always_allow_html : true
+
+documentclass     : article
+output            : pdf_document
+geometry          : margin=1in
+linestretch       : 1.5
+fontsize          : 12pt
+header-includes   : 
+  - \raggedright 
+  - \usepackage{color}
+  - \usepackage{tipa}
+  - \usepackage{wasysym}
+  - \usepackage{fancyhdr}
+  - \usepackage{mathrsfs}
+  - \thispagestyle{empty}
+  - \usepackage{hanging}
+  - \usepackage{setspace}
+  - \usepackage{caption} 
+  - \setlength{\baselineskip}{1.5\baselineskip}
+  - \newcommand{\tprob}{P^{F\rightarrow M}}
+  - \newcommand{\wt}[1]{\omega_#1}  % recruitment deviations
+  - \newcommand{\rbar}{\bar{R}}  % mean recruitment
+  - \newcommand{\fbarr}{{\bar{F}_\mathrm{rec}}}  % mean fishing mortality from rec fishery
+  - \newcommand{\frecdev}[1]{fdev^\mathrm{rec}_#1}  % annual deviations from mean mortality from rec fishery
+  - \newcommand{\fbarc}{{\bar{F}_\mathrm{com}}}  % mean fishing mortality from commercial fishery
+  - \newcommand{\fcomdev}[1]{fdev^\mathrm{com}_#1}  % annual deviations from mean mortality from rec fishery
+  - \newcommand{\Mage}[1]{\dot{M}_#1}  % age-specific instantaneous natural mortality
+  - \newcommand{\vulr}[1]{\dot{v}^\mathrm{rec}_#1}  % age-specific vulnerability to recreational fishery
+  - \newcommand{\vulc}[1]{\dot{v}^\mathrm{com}_#1}  % age-specific vulnerability to commercial fishery
+  - \newcommand{\dFec}[1]{\dot{Fec}_#1}    % age-specific relative fecundity
+  - \newcommand{\Af}[1]{\dot{Mat}_#1}    % age-specific fraction of females mature
+  - \newcommand{\Pfm}[1]{\dot{P}^{\mathrm{F}\rightarrow\mathrm{M}}_#1}    % age-specific prob of transitioning from female to male
+  - \newcommand{\Imp}[1]{\dot{P}^\mathrm{M}_#1}    % equilibrium proportion of males amongst age a fish
+  - \newcommand{\It}[1]{\mathring{I}_{#1}}   % recruitment index in year t
+  - \newcommand{\pacom}[2]{\mathring{p}^\mathrm{com}_{#1,#2}}   % relative abundance of age a females in year t
+  - \newcommand{\pacr}[3]{\mathring{p}^\mathrm{ckmr}_{#1,#2,#3}}   % relative abundance of age a males in year t
+  - \newcommand{\Z}[2]{Z_{#1,#2}}   % total instantaneous mortality at time t for age a fish 
+  - \newcommand{\AS}[2]{S_{#1,#2}}   % total annual survival
+  - \newcommand{\lxf}[1]{s_{#1}}     % survivorship
+  - \newcommand{\Nf}[2]{N^\mathrm{fem}_{{#1}, {#2}}}  % number of females of age a at time t
+  - \newcommand{\Nm}[2]{N^\mathrm{mal}_{{#1}, {#2}}}  % number of males of age a at time t
+  - \newcommand{\K}[4]{\mathring{K}^{\mathrm{#1},{{#4}}}_{{#2},{#3}}}
+  - \newcommand{\KHS}[3]{\mathring{K}^{\mathrm{HSP},{{#3}}}_{{#1},{#2}}}
+  - \newcommand{\KHSs}[2]{\mathring{K}^{\mathrm{HSP},{{#2}}}_{{#1}}}
+  - \newcommand{\KPOPT}[3]{\mathring{K}^{\mathrm{POP},{{#3}}}_{{#1},{#2}}}
+  - \newcommand{\KHSD}[2]{\mathring{K}^{\mathrm{HSP}^{\neq _{a,b}}}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with different mtDNA 
+  - \newcommand{\KHSS}[2]{\mathring{K}^{\mathrm{HSP}^{=_a}}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA
+  - \newcommand{\KPOP}[3]{\mathring{K}^{\mathrm{POP}^{#3}}_{{#1},{#2}}}  
+  - \newcommand{\KPOPF}[2]{\mathring{K}^\mathrm{POP_F}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA
+  - \newcommand{\KPOPM}[2]{\mathring{K}^\mathrm{POP_M}_{{#1},{#2}}}   % number of half-sibling pairs (born c1 and c2) with same mtDNA 
+  - \newcommand{\HSPD}{\mathrm{HSP}^{\neq}}
+  - \newcommand{\HSPS}{\mathrm{HSP}^=}
+  - \newcommand{\POPD}{\mathrm{POP}^{\neq}}
+  - \newcommand{\POPS}{\mathrm{POP}^=}
+  - \newcommand{\KNot}[2]{\mathring{K}^\mathrm{Not}_{{#1},{#2}}}     % number of pairs that are neither HSD or HSS
+  - \newcommand{\KNote}[2]{\mathring{K}^{\mathrm{Not}=_a}_{{#1},{#2}}}
+  - \newcommand{\KNotu}[2]{\mathring{K}^{\mathrm{Not}{\neq}_{a,b}}_{{#1},{#2}}}   
+  - \newcommand{\Hmt}{H_\mathrm{mt}}  % mtDNA haplotype diversity
+  - \newcommand{\Hmts}{H_\mathrm{mt}^{\mathrm{OM}}}  % simulated mtDNA haplotype diversity
+  - \newcommand{\Hmte}{H_\mathrm{mt}^{\mathrm{EM}}}  % mtDNA haplotype diversity assumed in the EM
+  - \newcommand{\Mat}{\mathrm{Mat}}
+  - \newcommand{\Fec}{\mathrm{Fec}}
+  - \DeclareMathAlphabet{\mathbbold}{U}{bbold}{m}{n}
+  - \newcommand{\comment}[1]{\textcolor{red}{#1}}
+  - \newcommand{\ERRO}{\mathrm{ERRO}}
+  - \newcommand{\ETRO}{\mathrm{ETRO}}
+  - \newcommand{\sH}{\mathscr{H}}
+---
+
+
+
+**Figure 1.** Schematic overview of the simulation routine. The
+operating model (OM) concerns the simulation of individuals in the population, with four
+different scenarios listed. Observed kin pair data are obtained by sampling (sampling model) from the simulated population with different scenarios varying by the number of CKMR sampling years and 
+number of samples collected. Finally, several estimation model (EM) configurations were specified. Estimated abundance and sex ratio 
+were compared to simulated values by calculating percent relative error. The scenarios in each submodel highlighted by bold font are the base case.
+RV = reproductive value, P(\male $\rightarrow$ \female) = sex transition probability. $\Hmts$ = simulated mitochondrial 
+haplotype diversity, $\Hmte$ = mitochondrial haplotype diversity assumed in the estimation model.
+
+\vspace{1em} 
+**Figure 2.** Overview of annual steps simulated in the individual-based operating model.
+
+\vspace{1em} 
+**Figure 3.** Simulated A) reproductive value (RC) at age and B) probability of skipping spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RC, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
+shown in blue and green, respectively. Note that age 4 is the youngest age at which a female can turn into a male in our OM.
+
+\vspace{1em} 
+**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RC steeper than female, green = male RC flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
+
+\vspace{1em} 
+**Figure 5.** Number of CKMR pairwise relationships for three years of CKMR sampling at $10\sqrt{N}$ by OM scenario. 
+$\mathrm{POP}^{\neq}$ = parent-offspring pairs with different mitochondrial DNA, $\mathrm{POP}^=$ = parent-offspring pairs with matching mitochondrial DNA, 
+$\mathrm{HSP}^{\neq}$ = half-sibling pairs with different mitochondrial DNA, $\mathrm{HSP}^=$ = half-sibling pairs with matching mitochondrial 
+DNA. In the base OM scenario, there is no skipped spawning, male and female reproductive value (RV) are equal. The box represents the interquartile range (IQR), the line is the median, 
+the whiskers extend to 1.5 IQR and outliers fall beyond that.
+
+\vspace{1em} 
+**Figure 6.** Percent relative error in estimated male and female abundance time series 
+summarized across years, by number of CKMR sampling years (red = 3, blue = 10), CKMR sample size, and whether or not sex transition 
+($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
+($\mathrm{RV}_{M}$) functions are were assumed known (fixed). Results are shown for the base OM scenario and without
+any model misspecification. Y-axis truncated to improve readability.
+
+\vspace{1em} 
+**Figure 7.** Percent relative error in estimated male and female abundance time series
+summarized across years, by CKMR information availability and whether or not sex transition 
+($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
+($\mathrm{RV}_{M}$) functions are assumed known (fixed). Results are shown for the base CKMR sampling scenario. In the base EM, both half-sibling
+pairs and parent-offspring-pairs were used in the likelihood and the assumed mitochondrial haplotype diversity,
+$\Hmte$ (set to 1), is equal to the simulated haplotype diversity, $\Hmts$. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
+Notice the different y-axis scale for panel C. Y-axis truncated to improve readability.
+
+\vspace{1em} 
+**Figure 8.** Percent relative error in estimated sex ratio 
+(number of estimated males divided by total number of age 3+ year-olds) summarized across years 
+under different OM and EM configurations and by whether or not sex transition 
+($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
+($\mathrm{RV}_{M}$) functions are assumed known (fixed). In the Base case there is no skipped spawning, male and female RV are
+equal, and $\Hmte = \Hmts = 1$. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
+Notice the different y-axis scale for panel D. Y-axis truncated to improve readability.
+
+\vspace{1em} 
+**Figure 9.** Estimated sex transition and male reproductive value (RV) functions under different OM and EM configurations.
+The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9.
+
+\vspace{1em} 
+**Figure 10.** Percent relative error in estimated male and female abundance time series 
+summarized across years for the OM scenarios exploring the effect of male reproductive output and by
+whether or not sex transition 
+($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
+($\mathrm{RV}_{M}$) functions are assumed known (fixed). When $P^{\mathrm{F}\rightarrow \mathrm{M}}$ was
+fixed, it was fixed at the true value. When $\mathrm{RV}_{M}$ was fixed, however, it was fixed at the same
+value as that of females. Consequently when $\mathrm{RV}_M$ is fixed (red and blue), it is misspecified in the EM when
+$\mathrm{RV}_M^\mathrm{OM}$ differs from $\mathrm{RV}_F^\mathrm{OM}$ (panels C and D). In the base OM, there is no skipped spawning and male
+and female RV are equal. Y-axis truncated to improve readability.

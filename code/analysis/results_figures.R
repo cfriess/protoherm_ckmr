@@ -214,7 +214,7 @@ sig_plot <- ggplot(pspawn_sigmoid) +
 
 mRC_plot <- p_fec + sl_plot + plot_layout(nrow = 1) +
   plot_annotation(tag_levels = 'A')
-
+ggsave(here("manuscript", "figures", "Figure_3.pdf"), plot = mRC_plot, width = 7, height = 3)
 
 
 #--------------------------------
@@ -246,6 +246,7 @@ sim_pop_plot <- ggplot(sim_pop2) +
   ylab("Abundance (Age 3+)") +
   theme(legend.position = "none")
 
+ggsave(here("manuscript", "figures", "Figure_4.pdf"), plot = sim_pop_plot, width = 8, height = 5)
 
 
 #--------------------------------
@@ -282,6 +283,7 @@ main_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_scenario_TEX) +
         strip.text.x = element_text(size = 16)) +
   guides(fill = guide_legend(title = "OM Scenario"))
 
+ggsave(here("manuscript", "figures", "Figure_5.pdf"), plot = main_ckmr_pairs_plot, width = 8, height = 6)
 
 
 #--------------------------------
@@ -371,6 +373,8 @@ ckmr_sampling_plot <- ytitle + sp1 + sp2 + sp3 + sp4 + xtitle +
         axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"),
         axis.title = element_blank())
+
+ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 9, height = 9)
 
 ### stats for text:
 
@@ -546,20 +550,25 @@ em_p4 <-
         plot.title = element_text(hjust = 0.5)) +
   labs(tag = "D")
 
-ckmr_nll_plot <- ytitle + em_p1 + em_p2 + em_p3 + em_p4 +
-  plot_layout(#axis_titles = "collect",
-    guides = "collect",
-    design = layout1,
-    widths = c(0.05,0.475,0.475)) &
-  theme(legend.position = "bottom",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.title = element_blank(),
-        #axis.text.x = element_text(angle = 45, hjust = 1),
-        #strip.text.y = element_blank(),
-        axis.text.x = element_blank()) &
-  guides(fill = guide_legend(title = "EM Scenario", nrow = 2,
-                             byrow = T))
+ckmr_nll_plot <- (ytitle + em_p1 + em_p2 + em_p3 + em_p4 +
+                    plot_layout(
+                      guides = "collect",
+                      design = layout1,
+                      widths = c(0.05, 0.475, 0.475)
+                    ) &
+                    theme(
+                      legend.position = "bottom",
+                      legend.justification = "center",  # <-- This centers the legend
+                      axis.line.x = element_line(color = "grey20"),
+                      axis.ticks.x = element_line(color = "grey20"),
+                      axis.title = element_blank(),
+                      axis.text.x = element_blank()
+                    ) &
+                    guides(fill = guide_legend(title = "EM Scenario", nrow = 2, byrow = TRUE))
+                  ) +
+  plot_annotation()  # Ensures the patchwork layout processes all theme elements
+
+ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = ckmr_nll_plot, width = 9, height = 9)
 
 # err_emsc1_2 %>% 
 #   filter(em_sc %in% c("est Hmt < sim Hmt")) %>%
@@ -765,20 +774,29 @@ sr6 <- ggplot(sr_error_sum %>% filter(om_sc == "mRV steeper"), # 533 omitted by 
   labs(tag = "F")
 
 sr_plot <- ytitle + sr1 + sr2 + sr3 + sr4 + sr5 + sr6 +
-  plot_layout(axis = "collect",
-              guides = "collect",
-              design = layout3,
-              widths = c(0.05,0.315,0.315,0.32)) &
-  theme(legend.position = "bottom",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.title = element_blank(),
-        #axis.text.x = element_text(angle = 45, hjust = 1),
-        #strip.text.y = element_blank(),
-        axis.text.x = element_blank()) &
-  guides(fill = guide_legend(title = "EM Scenario", nrow = 2,
-                             byrow = T))
+  plot_layout(
+    axis = "collect",
+    guides = "collect",
+    design = layout3,
+    widths = c(0.05, 0.315, 0.315, 0.32)
+  ) &
+  theme(
+    axis.line.x = element_line(color = "grey20"),
+    axis.ticks.x = element_line(color = "grey20"),
+    axis.title = element_blank(),
+    axis.text.x = element_blank()
+  ) &
+  guides(fill = guide_legend(title = "EM Scenario", nrow = 2, byrow = TRUE))
 
+sr_plot_final <- sr_plot +
+  plot_annotation() &
+  theme(
+    legend.position = "bottom",
+    legend.justification = "center"
+  )
+
+
+ggsave(here("manuscript", "figures", "Figure_8.pdf"), plot = sr_plot_final, width = 8, height = 8)
 
 
 #--------------------------------
@@ -896,7 +914,7 @@ est_fun_plot <- st_plot + me_plot + plot_layout(axis_titles = "collect_x", axes 
   theme(axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"))
 
-
+ggsave(here("manuscript", "figures", "Figure_9.pdf"), plot = est_fun_plot, width = 11, height = 12)
 
 
 #--------------------------------
@@ -1010,6 +1028,16 @@ male_role_plot <- ytitle + om_p1 + om_p2 + om_p3 + om_p4 +
         axis.text.x = element_blank()) &
   guides(fill = guide_legend(title = "EM Scenario", nrow = 2,
                              byrow = T))
+
+male_role_plot_final <- male_role_plot +
+  plot_annotation() &
+  theme(
+    legend.position = "bottom",
+    legend.justification = "center"
+  )
+
+ggsave(here("manuscript", "figures", "Figure_10.pdf"), plot = male_role_plot_final, width = 9, height = 9)
+
 
 # mr_res %>%
 #   filter(om_sc == "Base", data == "Females") %>%

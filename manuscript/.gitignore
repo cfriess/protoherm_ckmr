@@ -6,3 +6,12 @@ supplement_files
 supplement_cache
 supplement.pdf
 manuscript.aux
+elsevier-harvard2.csl
+wos_abbrev_table.csv
+fig_captions.pdf
+bib_title_abbrev.R
+Friess_et_al_Suppl.pdf
+Friess_et_al_ProtogynousHermaphroditeCKMR.pdf
+figures/*
+!figures/Figure_1.pdf
+!figures/Figure_2.pdf

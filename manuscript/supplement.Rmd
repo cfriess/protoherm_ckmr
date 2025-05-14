@@ -5,8 +5,8 @@ author            :
   - Claudia Friess, Eric C. Anderson, Lisa E. Ailloud, David S. Portnoy, and
   - Susan K. Lowerre-Barbieri
 
-bibliography      : ["citations.bib", "r-references.bib"]
-csl               : "cjfas.csl"
+bibliography      : ["citations_abbrev.bib", "r-references.bib"]
+csl               : "elsevier-harvard.csl"
 
 floatsintext      : yes
 linenumbers       : no
