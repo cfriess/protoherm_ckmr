@@ -997,7 +997,7 @@ which greatly improved this manuscript. We would like to thank Rob Ahrens whose
 ADMB model code provided as part of his excellent fishery stock assessment class
 served as the basis for the assessment model developed in this paper.
 A portion of the writing and code development for this paper occurred while
-CF and ECA were scientists-in-residence with Matthew G.~DeSaix at the
+CF and ECA were scientists-in-residence with Matthew G. DeSaix at the
 mobile High Altitude Venue for Ecological Analysis, Genetics and
 Statistics on location in Moab, Utah
 during April 2023.  This is contribution mHAVEAGAS-004.  
