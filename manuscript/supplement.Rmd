@@ -33,7 +33,8 @@ header-includes   :
   - \thispagestyle{empty}
   - \usepackage{hanging}
   - \usepackage{setspace}
-  - \usepackage{caption} 
+  - \usepackage{caption}
+  - \usepackage{pdflscape}
   - \setlength{\baselineskip}{1.5\baselineskip}
   - \newcommand{\tprob}{P^{F\rightarrow M}}
   - \newcommand{\wt}[1]{\omega_#1}  % recruitment deviations
@@ -366,49 +367,75 @@ age_schedule_plot
 F_vul_plot
 ```
 
+\newpage
+\begin{landscape}
 ```{r nsamps-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = nsamps_plot_fig_caption, message=FALSE, warning=FALSE}
 nsamps_plot
 ```
+
+\newpage
 
 ```{r supplckmrpairs-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = supplckmrpairs_plot_fig_caption, message=FALSE, warning=FALSE}
 suppl_ckmr_pairs_plot
 ```
 
-```{r ss-hsp-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = ss_hsp_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage
+
+```{r ss-hsp-plot, echo=FALSE, fig.align='center', fig.height=6, fig.width=8.5, fig.cap = ss_hsp_plot_fig_caption, message=FALSE, warning=FALSE}
 ckmr_hsp_plot
 ```
+
+\newpage
 
 ```{r supplckmrpairs2-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=8, fig.cap = supplckmrpairs2_plot_fig_caption, message=FALSE, warning=FALSE}
 suppl_ckmr_pairs_plot2
 ```
 
-```{r parnll-plot, echo=FALSE, fig.align='center', fig.height=8, fig.width=10, fig.cap = parnll_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage
+
+```{r parnll-plot, echo=FALSE, fig.align='center', fig.height=6.5, fig.width=8, fig.cap = parnll_plot_fig_caption, message=FALSE, warning=FALSE}
 para_res_plot_nll 
 ```
 
-```{r par-plot, echo=FALSE, fig.align='center', fig.height=8, fig.width=10, fig.cap = par_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage
+
+```{r par-plot, echo=FALSE, fig.align='center', fig.height=6.5, fig.width=8, fig.cap = par_plot_fig_caption, message=FALSE, warning=FALSE}
 para_res_plot 
 ```
 
-```{r cor-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = cor_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage
+
+```{r cor-plot, echo=FALSE, fig.align='center', fig.height=6.5, fig.width=8, fig.cap = cor_plot_fig_caption, message=FALSE, warning=FALSE}
 cor_plot 
 ```
 
-```{r fac-plot, echo=FALSE, fig.align='center', fig.height=9, fig.width=9, fig.cap = fac_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage
+
+```{r fac-plot, echo=FALSE, fig.align='center', fig.height=6, fig.width=7.5, fig.cap = fac_plot_fig_caption, message=FALSE, warning=FALSE}
 f_ac_plot 
 ```
 
-```{r mac-plot, echo=FALSE, fig.align='center', fig.height=9, fig.width=9, fig.cap = mac_plot_fig_caption, message=FALSE, warning=FALSE}
+\newpage 
+
+```{r mac-plot, echo=FALSE, fig.align='center', fig.height=6, fig.width=7.5, fig.cap = mac_plot_fig_caption, message=FALSE, warning=FALSE}
 m_ac_plot 
 ```
 
-```{r fpr-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = fpr_plot_fig_caption, message=FALSE, warning=FALSE, out.extra='angle=90', out.width = "8in", out.height="10in"}
+\newpage
+
+```{r fpr-plot, echo=FALSE, fig.align='center', fig.height=7.5, fig.width=10, fig.cap = fpr_plot_fig_caption, message=FALSE, warning=FALSE, out.width = "8.5in", out.height="6.375in"}
 fpr_plot
 ```
 
-```{r mpr-plot, echo=FALSE, fig.align='center', fig.height=7, fig.width=9, fig.cap = mpr_plot_fig_caption, message=FALSE, warning=FALSE, out.extra='angle=90', out.width = "8in", out.height="10in"}
+\newpage
+
+```{r mpr-plot, echo=FALSE, fig.align='center', fig.height=7.5, fig.width=10, fig.cap = mpr_plot_fig_caption, message=FALSE, warning=FALSE, out.width = "8.5in", out.height="6.375in"}
 mpr_plot
 ```
+\end{landscape}
+
+
+
 
 ```{r emmeans-plot, echo=FALSE, fig.align='center', fig.height=5, fig.width=7, fig.cap = emmeans_plot_fig_caption, message=FALSE, warning=FALSE}
 emmeans_plot
