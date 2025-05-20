@@ -198,7 +198,7 @@ heavily-fished serranid groupers in the Gulf of Mexico (GOM) and Caribbean Sea.
 
 Two current areas of active research in fisheries stock assessment are defining and measuring 
 reproductive potential for protogynous hermaphrodites [@alonzo2008importance; @brooks2008stock;
-@alonzo2005sex] and incorporating genetic data into integrated models [@punt2020essential; @punt2024including].
+@alonzo2005sex] and incorporating genetic data into integrated models [@punt2020essential; @punt2024including; @fisch2025expected].
 Of particular interest is Close-Kin Mark-Recapture (CKMR) [@nielsen2001statistical;
 @julius2001allele; @bravington2016close], a method that
 uses genetic data to identify kin pairs in a sample and treats those
