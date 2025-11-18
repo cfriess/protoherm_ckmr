@@ -64,9 +64,9 @@ res <- res_raw %>%
       hzt == 1 & hze == 1 & nll_type == 0 ~ "EM_S18",
     TRUE ~ "check me"
   )) %>%
-  filter(!scenario == "OM_S1") 
+  filter(!scenario %in% c("OM_S1","EM_S3","EM_S14","EM_S15","EM_S18")) 
 sort(unique(res$scenario))
-(N <- nrow(res)) # 67200; 83200 with the extra figure for HSPs only and skipped spawning and sample_by_sex 2|3
+(N <- nrow(res)) # 57600; 64000 with the extra figure for sample_by_sex 2|3
 
 res <- res %>%
   mutate(
@@ -138,7 +138,7 @@ res_compn <- res %>%
          admb_run_res = map(data, "admb_run_res")
          ) 
 
-table(res_compn$admb_exit) # 2792 failures, so ~3.4%
+table(res_compn$admb_exit) # 2276 failures, so ~3.5%
 
 sort(round(((table(res_compn$admb_exit, res_compn$scenario)[2,] / table(res_compn$scenario)) * 100), digits = 1))
 table(res_compn$admb_exit, res_compn$ckmr_ssmult)
@@ -176,11 +176,11 @@ length(unique(paras$id))
 table(paras$par_name)
 
 bounds_exclude_ids <- unique(paras$id[paras$bounds_flag == 1])
-length(bounds_exclude_ids)/N # 5.7% excluded due to bounds
+length(bounds_exclude_ids)/N # 7.1% excluded due to bounds
 summary(res_compn$max_grad[res_compn$admb_exit != 1 & !res_compn$id %in% bounds_exclude_ids])
 # which of the remaining runs have high max gradients
 max_grad_thresh <- 0.1 # set to 1e8 for no gradient filtering or 0.1 for more restrictive gradient filtering
-sum(res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad) & !res_compn$id %in% bounds_exclude_ids) # 311
+sum(res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad) & !res_compn$id %in% bounds_exclude_ids) # 241
 
 high_grad_runs <- res_compn$id[res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad) & !(res_compn$id %in% bounds_exclude_ids)] 
 length(high_grad_runs)/N # 0.4%

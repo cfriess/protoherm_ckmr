@@ -100,17 +100,17 @@ haplotype diversity, $\Hmte$ = mitochondrial haplotype diversity assumed in the 
 **Figure 2.** Overview of annual steps simulated in the individual-based operating model.
 
 \vspace{1em} 
-**Figure 3.** Simulated A) reproductive value (RC) at age and B) probability of skipping spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RC, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
+**Figure 3.** Simulated A) reproductive value (RC) at age and B) probability of female skipped spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RC, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
 shown in blue and green, respectively. Note that age 4 is the youngest age at which a female can turn into a male in our OM.
 
 \vspace{1em} 
-**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RC steeper than female, green = male RC flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
+**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RV steeper than female, green = male RC flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
 
 \vspace{1em} 
 **Figure 5.** Number of CKMR pairwise relationships for three years of CKMR sampling at $10\sqrt{N}$ by OM scenario. 
 $\mathrm{POP}^{\neq}$ = parent-offspring pairs with different mitochondrial DNA, $\mathrm{POP}^=$ = parent-offspring pairs with matching mitochondrial DNA, 
 $\mathrm{HSP}^{\neq}$ = half-sibling pairs with different mitochondrial DNA, $\mathrm{HSP}^=$ = half-sibling pairs with matching mitochondrial 
-DNA. In the base OM scenario, there is no skipped spawning, male and female reproductive value (RV) are equal. The box represents the interquartile range (IQR), the line is the median, 
+DNA. In the base OM scenario, there is no skipped spawning, male and female reproductive value (RV) are equal. In this figure and all other boxplot figures in this manuscript, the box represents the interquartile range (IQR), the line is the median, 
 the whiskers extend to 1.5 IQR and outliers fall beyond that.
 
 \vspace{1em} 
@@ -118,37 +118,30 @@ the whiskers extend to 1.5 IQR and outliers fall beyond that.
 summarized across years, by number of CKMR sampling years (red = 3, blue = 10), CKMR sample size, and whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
 ($\mathrm{RV}_{M}$) functions are were assumed known (fixed). Results are shown for the base OM scenario and without
-any model misspecification. Y-axis truncated to improve readability.
+any model misspecification. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
 **Figure 7.** Percent relative error in estimated male and female abundance time series
-summarized across years, by CKMR information availability and whether or not sex transition 
+summarized across years, for the base sampling case ($10\sqrt{N}$ samples collected over 3 years)
+for all OM and EM scenarios and by whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
-($\mathrm{RV}_{M}$) functions are assumed known (fixed). Results are shown for the base CKMR sampling scenario. In the base EM, both half-sibling
-pairs and parent-offspring-pairs were used in the likelihood and the assumed mitochondrial haplotype diversity,
-$\Hmte$ (set to 1), is equal to the simulated haplotype diversity, $\Hmts$. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
-Notice the different y-axis scale for panel C. Y-axis truncated to improve readability.
+($\mathrm{RV}_{M}$) functions are assumed known (fixed). In the base case, the assumed mitochondrial haplotype diversity,
+$\Hmte$ (set to 1), is equal to the simulated haplotype diversity, $\Hmts$, there is no skipped spawning and male
+and female RV are equal. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9. When $P^{\mathrm{F}\rightarrow \mathrm{M}}$ was fixed, it was fixed at the true value. When $\mathrm{RV}_{M}$ was fixed, however, it was fixed at the same
+value as that of females. Consequently when $\mathrm{RV}_M$ is fixed (red and blue), it is misspecified in the EM when
+$\mathrm{RV}_M^\mathrm{OM}$ differs from $\mathrm{RV}_F^\mathrm{OM}$ (panels E and F). In the base OM, . Y-axis truncated to improve readability. Notice the different y-axis scale for panel C. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
 **Figure 8.** Percent relative error in estimated sex ratio 
 (number of estimated males divided by total number of age 3+ year-olds) summarized across years 
-under different OM and EM configurations and by whether or not sex transition 
+for all OM and EM scenarios and by whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
 ($\mathrm{RV}_{M}$) functions are assumed known (fixed). In the Base case there is no skipped spawning, male and female RV are
 equal, and $\Hmte = \Hmts = 1$. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
-Notice the different y-axis scale for panel D. Y-axis truncated to improve readability.
+Notice the different y-axis scale for panel B. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
 **Figure 9.** Estimated sex transition and male reproductive value (RV) functions under different OM and EM configurations.
-The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9.
+The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9. Panel 
+numbering refers to each row of plots.
 
-\vspace{1em} 
-**Figure 10.** Percent relative error in estimated male and female abundance time series 
-summarized across years for the OM scenarios exploring the effect of male reproductive output and by
-whether or not sex transition 
-($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
-($\mathrm{RV}_{M}$) functions are assumed known (fixed). When $P^{\mathrm{F}\rightarrow \mathrm{M}}$ was
-fixed, it was fixed at the true value. When $\mathrm{RV}_{M}$ was fixed, however, it was fixed at the same
-value as that of females. Consequently when $\mathrm{RV}_M$ is fixed (red and blue), it is misspecified in the EM when
-$\mathrm{RV}_M^\mathrm{OM}$ differs from $\mathrm{RV}_F^\mathrm{OM}$ (panels C and D). In the base OM, there is no skipped spawning and male
-and female RV are equal. Y-axis truncated to improve readability.

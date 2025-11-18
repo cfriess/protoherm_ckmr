@@ -48,7 +48,7 @@ source(here("code", "main_sim", "sim_inputs.R")) # simulation inputs
 et_levels <- c("fixed trans & mRV", 
                "fixed trans & est mRV", "est trans & fixed mRV", "est trans & mRV")
 om_sc_levels <- c("Base", "skipped spawning", "mRV flatter", "mRV steeper")
-em_sc_levels <- c("Base", "HSPs only", "est Hmt < sim Hmt", "sim Hmt < est Hmt")
+em_sc_levels <- c("Base", "est Hmt < sim Hmt", "sim Hmt < est Hmt")
 
 # simulated population
 sim_pop <- readRDS(file.path(here(), path, "sim_pop_final.rds"))
@@ -68,7 +68,7 @@ sim_pars$et <- factor(sim_pars$et, levels = et_levels)
 sim_pars$om_sc <- factor(sim_pars$om_sc, levels = om_sc_levels)
 sim_pars$em_sc <- factor(sim_pars$em_sc, levels = em_sc_levels)
 sim_pars$scenario <- as.factor(sim_pars$scenario)
-sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(22,18:21,1,10:17,2:9)])
+sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(19,16:18,1,9:15,2:8)])
 
 sim_pars <- sim_pars %>%
   mutate(par_name_long = case_when(
@@ -123,6 +123,11 @@ xtitle <- ggdraw() + draw_label("CKMR Sample Size",
 layout1 <- "
 ABC
 ADE
+"
+
+layout3 <- "
+ABCD
+AEFG
 "
 
 fyrplot <- 75
@@ -199,7 +204,7 @@ sl <- data.frame(PropMale = prop_male, Response = resp)
 
 sl_plot <- ggplot(sl) +
   geom_line(aes(x = PropMale, y = 1-Response)) +
-  theme_bw() + ylab("Probability of Skipping Spawning") +
+  theme_bw() + ylab("Probability of Female Skipped Spawning") +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   xlab("Relative Proportion Male")
@@ -457,7 +462,7 @@ ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot,
 
 
 #--------------------------------
-# Figure 7: PRE by CKMR NLL Issues
+# Figure 7: PRE by EM and OM scenario
 
 
 err_emsc1_2 <- abund_res %>%
@@ -465,6 +470,15 @@ err_emsc1_2 <- abund_res %>%
          ckmr_ssmult == base_ckmr_ssmult, om_sc == "Base") %>%
   group_by(em_sc, et, data, id) %>%
   summarize(perror = median(perror))
+
+mr_res <- abund_res %>%
+  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
+         ckmr_ssmult == base_ckmr_ssmult, em_sc == "Base") %>%
+  group_by(om_sc, et, data, id) %>%
+  summarize(perror = median(perror)) %>%
+  ungroup()
+
+mrole_y_upper <- 100
 
 em_p1 <- 
   ggplot(err_emsc1_2 %>%
@@ -478,7 +492,7 @@ em_p1 <-
   scale_fill_discrete(
     labels = em_labels
   ) +
-  ggtitle("Base EM") +
+  ggtitle("Base") +
   ylab("Percent Relative Error") +
   coord_cartesian(ylim = c(-75,100)) +
   guides(fill = guide_legend(title = "EM Scenario"))  +
@@ -487,26 +501,68 @@ em_p1 <-
         plot.title = element_text(hjust = 0.5)) +
   labs(tag = "A")
 
-em_p2 <- 
-  ggplot(err_emsc1_2 %>%
-           filter(em_sc %in% "HSPs only"), 
+om_p3 <-
+  ggplot(mr_res %>% filter(om_sc == "mRV flatter"), 
          aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
                outlier.shape = 21, outlier.stroke = 0.3) +
   facet_wrap(~data) +
+  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
+  ylab("Percent Relative Error") +
   scale_fill_discrete(
     labels = em_labels
   ) +
-  ggtitle("HSPs only") +
-  ylab("Percent Relative Error") +
-  coord_cartesian(ylim = c(-75,100)) +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
-  labs(tag = "B")
+  coord_cartesian(ylim = c(-75,mrole_y_upper)) +
+  guides(fill = guide_legend(title = "EM Scenario")) +
+  ggtitle(expression(bold(RV[M]^{"OM"} ~ "flatter than" ~ RV[F]^{"OM"}))) +
+  labs(tag = "E")
+
+om_p4 <-
+  ggplot(mr_res %>% filter(om_sc == "mRV steeper"), 
+         aes(x = et, y = perror)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(aes(fill = et),
+               outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.3) +
+  facet_wrap(~data) + 
+  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
+  ylab("Percent Relative Error") +
+  scale_fill_discrete(
+    labels = em_labels
+  ) +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(hjust = 0.5)) +
+  coord_cartesian(ylim = c(-75,mrole_y_upper)) +
+  guides(fill = guide_legend(title = "EM Scenario")) +
+  ggtitle(expression(bold(RV[M]^{"OM"} ~ "steeper than" ~ RV[F]^{"OM"}))) +
+  labs(tag = "F")
+
+om_p2 <-
+  ggplot(mr_res %>% filter(om_sc == "skipped spawning"), 
+         aes(x = et, y = perror)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(aes(fill = et),
+               outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.3) +
+  facet_wrap(~data) +
+  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
+  ylab("Percent Relative Error") +
+  scale_fill_discrete(
+    labels = em_labels
+  ) +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title = element_text(hjust = 0.5)) +
+  coord_cartesian(ylim = c(-75,mrole_y_upper)) + # omits 26
+  guides(fill = guide_legend(title = "EM Scenario")) +
+  ggtitle("Skipped spawning") +
+  labs(tag = "D")
 
 em_p3 <- 
   ggplot(err_emsc1_2 %>%
@@ -548,13 +604,13 @@ em_p4 <-
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
-  labs(tag = "D")
+  labs(tag = "B")
 
-ckmr_nll_plot <- (ytitle + em_p1 + em_p2 + em_p3 + em_p4 +
+scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
                     plot_layout(
                       guides = "collect",
-                      design = layout1,
-                      widths = c(0.05, 0.475, 0.475)
+                      design = layout3,
+                      widths = c(0.05, 0.315, 0.315, 0.32)
                     ) &
                     theme(
                       legend.position = "bottom",
@@ -568,7 +624,7 @@ ckmr_nll_plot <- (ytitle + em_p1 + em_p2 + em_p3 + em_p4 +
                   ) +
   plot_annotation()  # Ensures the patchwork layout processes all theme elements
 
-ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = ckmr_nll_plot, width = 9, height = 9)
+ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = scen_pre_plot, width = 10, height = 9)
 
 # err_emsc1_2 %>% 
 #   filter(em_sc %in% c("est Hmt < sim Hmt")) %>%
@@ -650,11 +706,6 @@ sr_error_sum <- sr_error %>%
 sryll <- -95
 sryul <- 150
 
-layout3 <- "
-ABCD
-AEFG
-"
-
 
 sr1 <- ggplot(sr_error_sum %>% filter(om_sc == "Base", em_sc == "Base"), 
               aes(x = et, y = prerror)) +
@@ -693,7 +744,7 @@ sr2 <- ggplot(sr_error_sum %>% filter(om_sc == "skipped spawning"),
         axis.title = element_blank(),
         #axis.text.y = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
-  labs(tag = "B")
+  labs(tag = "E")
 
 sr3 <- ggplot(sr_error_sum %>% filter(em_sc == "est Hmt < sim Hmt"), 
               aes(x = et, y = prerror)) +
@@ -732,7 +783,7 @@ sr4 <- ggplot(sr_error_sum %>% filter(em_sc == "sim Hmt < est Hmt"),
         axis.title = element_blank(),
         #axis.text.y = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
-  labs(tag = "D")
+  labs(tag = "B")
 
 sr5 <- ggplot(sr_error_sum %>% filter(om_sc == "mRV flatter"), 
               aes(x = et, y = prerror)) +
@@ -773,7 +824,7 @@ sr6 <- ggplot(sr_error_sum %>% filter(om_sc == "mRV steeper"), # 533 omitted by 
         plot.title = element_text(hjust = 0.5, size = 12)) +
   labs(tag = "F")
 
-sr_plot <- ytitle + sr1 + sr2 + sr3 + sr4 + sr5 + sr6 +
+sr_plot <- ytitle + sr1 + sr4 + sr3 + sr2 + sr5 + sr6 +
   plot_layout(
     axis = "collect",
     guides = "collect",
@@ -836,6 +887,13 @@ est_tf$Age <- as.numeric(gsub("est_tfun_", "", est_tf$Age))
 est_tf$sim_value <- rep(pnorm(q=1:33, mean=t1, sd=t2), nrow(est_tf)/33)
 
 # Plotting
+
+labels_df <- est_tf %>%
+  group_by(sc3) %>%
+  summarize(Age = 2, y = 0.8) %>%
+  mutate(label = c("A","B","C","D","E","F"),
+         et = "mRV estimated")
+
 st_plot <- ggplot(est_tf) +
   geom_line(aes(x = Age, y = est_value, group = id2, color = sc3), alpha = 0.1) +
   geom_line(data = est_tf %>%
@@ -845,6 +903,13 @@ st_plot <- ggplot(est_tf) +
               group_by(et, sc3, Age) %>% summarize(median_val = median(est_value)),
             aes(x = Age, y = median_val), linewidth = 0.8) +
   facet_grid(sc3~ et) +
+  geom_text(
+    data = labels_df,
+    aes(x = Age, y = y, label = label),
+    inherit.aes = FALSE,
+    fontface = "bold",
+    hjust = 0
+  ) +
   scale_y_continuous(breaks = c(0,0.5,1)) +
   theme(legend.position = "none",
         strip.text.y = element_blank(),
@@ -915,131 +980,3 @@ est_fun_plot <- st_plot + me_plot + plot_layout(axis_titles = "collect_x", axes 
         axis.ticks.x = element_line(color = "grey20"))
 
 ggsave(here("manuscript", "figures", "Figure_9.pdf"), plot = est_fun_plot, width = 11, height = 12)
-
-
-#--------------------------------
-# Figure 10: PRE by male reproductive value scenarios
-
-mr_res <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, em_sc == "Base") %>%
-  group_by(om_sc, et, data, id) %>%
-  summarize(perror = median(perror)) %>%
-  ungroup()
-
-mrole_y_upper <- 100
-
-om_p1 <-
-  ggplot(mr_res %>% filter(om_sc == "Base"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) +
-  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
-  ylab("Percent Relative Error") +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Scenario")) +
-  ggtitle("Base OM") +
-  labs(tag = "A")
-
-om_p2 <-
-  ggplot(mr_res %>% filter(om_sc == "skipped spawning"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) +
-  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
-  ylab("Percent Relative Error") +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  theme(axis.text = element_blank(),
-        axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  coord_cartesian(ylim = c(-75,mrole_y_upper)) + # omits 26
-  guides(fill = guide_legend(title = "EM Scenario")) +
-  ggtitle("Skipped spawning") +
-  labs(tag = "B")
-
-om_p3 <-
-  ggplot(mr_res %>% filter(om_sc == "mRV flatter"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) +
-  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
-  ylab("Percent Relative Error") +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Scenario")) +
-  ggtitle(expression(bold(RV[M]^{"OM"} ~ "flatter than" ~ RV[F]^{"OM"}))) +
-  labs(tag = "C")
-
-om_p4 <-
-  ggplot(mr_res %>% filter(om_sc == "mRV steeper"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) + 
-  scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
-  ylab("Percent Relative Error") +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  theme(axis.text = element_blank(),
-        axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Scenario")) +
-  ggtitle(expression(bold(RV[M]^{"OM"} ~ "steeper than" ~ RV[F]^{"OM"}))) +
-  labs(tag = "D")
-
-male_role_plot <- ytitle + om_p1 + om_p2 + om_p3 + om_p4 +
-  #plot_annotation(tag_levels = 'A') +
-  plot_layout(#axis_titles = "collect",
-    guides = "collect",
-    design = layout1,
-    widths = c(0.05,0.475,0.475)) &
-  theme(legend.position = "bottom",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.title = element_blank(),
-        #axis.text.x = element_text(angle = 45, hjust = 1),
-        #strip.text.y = element_blank(),
-        axis.text.x = element_blank()) &
-  guides(fill = guide_legend(title = "EM Scenario", nrow = 2,
-                             byrow = T))
-
-male_role_plot_final <- male_role_plot +
-  plot_annotation() &
-  theme(
-    legend.position = "bottom",
-    legend.justification = "center"
-  )
-
-ggsave(here("manuscript", "figures", "Figure_10.pdf"), plot = male_role_plot_final, width = 9, height = 9)
-
-
-# mr_res %>%
-#   filter(om_sc == "Base", data == "Females") %>%
-#   summarize(med = median(perror))
-

@@ -48,7 +48,7 @@ source(here("code", "main_sim", "sim_inputs.R")) # simulation inputs
 et_levels <- c("fixed trans & mRV", 
                "fixed trans & est mRV", "est trans & fixed mRV", "est trans & mRV")
 om_sc_levels <- c("Base", "skipped spawning", "mRV flatter", "mRV steeper")
-em_sc_levels <- c("Base", "HSPs only", "est Hmt < sim Hmt", "sim Hmt < est Hmt")
+em_sc_levels <- c("Base", "est Hmt < sim Hmt", "sim Hmt < est Hmt")
 
 # parameter correlations
 cor_res_et <- readRDS(file.path(here(), path, "cor_res_et_final.rds"))
@@ -277,9 +277,9 @@ suppl_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_sampling_TEX) +
   guides(color = guide_legend(title = "Number of CKMR Sampling Years")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "none",
-        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
         axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)),
-        strip.text.x = element_text(size = 16)
+        strip.text.x = element_text(size = 12)
   ) +
   xlab("CKMR Sample Size")
 
@@ -289,73 +289,8 @@ suppl_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_sampling_TEX) +
 #   spread(pair_type, medN)
 
 
-
-
 #--------------------------------
-# Figure S5: PRE for POPs + HSPs vs HSPs only for base and skipped spawning
-
-
-err_hsps <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, om_sc == "skipped spawning") %>%
-  group_by(om_sc, em_sc, et, data, id) %>%
-  summarize(perror = median(perror))
-
-em_hsps_p1 <- 
-  ggplot(err_hsps %>% filter(em_sc %in%  "Base"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  ggtitle("Base EM (HSPs + POPs)") +
-  ylab("Percent Relative Error") +
-  coord_cartesian(ylim = c(-55,100)) +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  labs(tag = "A")
-
-em_hsps_p2 <- 
-  ggplot(err_hsps %>% filter(em_sc %in% "HSPs only"), 
-         aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
-  geom_boxplot(aes(fill = et),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
-  facet_wrap(~data) +
-  scale_fill_discrete(
-    labels = em_labels
-  ) +
-  ggtitle("HSPs only") +
-  ylab("Percent Relative Error") +
-  coord_cartesian(ylim = c(-55,100)) +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
-  labs(tag = "B")
-
-
-ckmr_hsp_plot <- em_hsps_p1 + em_hsps_p2 +
-  plot_layout(axis_titles = "collect",
-              guides = "collect") &
-  theme(legend.position = "bottom",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.text.x = element_blank()) &
-  guides(fill = guide_legend(title = "EM Scenario", nrow = 2,
-                             byrow = T))
-
-
-
-#--------------------------------
-# Figure S6: ckmr pairs by EM scenario
+# Figure S5: ckmr pairs by EM scenario
 
 
 ckmr_pairs_by_scenario2 <- ckmr_obs_samps_long %>% 
@@ -378,7 +313,6 @@ suppl_ckmr_pairs_plot2 <- ggplot(ckmr_pairs_by_scenario2_TEX) +
   scale_fill_discrete(
     labels = c(
       "Base" = "Base",
-      "HSPs only" = "HSPs only",
       "est Hmt < sim Hmt" = expression(H[mt]^{"EM"} < H[mt]^{"OM"}),
       "sim Hmt < est Hmt" = expression(H[mt]^{"OM"} < H[mt]^{"EM"})
     )
@@ -395,7 +329,7 @@ suppl_ckmr_pairs_plot2 <- ggplot(ckmr_pairs_by_scenario2_TEX) +
 
 
 #--------------------------------
-# Figure S7: estimated parameters by EM scenario
+# Figure S6: estimated parameters by EM scenario
 
 layout3 <- "
 BCF
@@ -417,11 +351,11 @@ par_est_nll <- pars_nll %>%
       geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
       geom_boxplot(aes(fill = em_sc),
                    outlier.size = 0.8, outlier.fill = NULL, 
-                   outlier.shape = 21, outlier.stroke = 0.3) +
+                   outlier.shape = 21, outlier.stroke = 0.3,
+                   linewidth = 0.2) +
       scale_fill_discrete(
         labels = c(
           "Base" = "Base",
-          "HSPs only" = "HSPs only",
           "est Hmt < sim Hmt" = expression(H[mt]^{"EM"} < H[mt]^{"OM"}),
           "sim Hmt < est Hmt" = expression(H[mt]^{"OM"} < H[mt]^{"EM"})
         )
@@ -453,7 +387,7 @@ para_res_plot_nll <- wrap_plots(par_est_nll, design = layout3) + guide_area() +
 
 
 #--------------------------------
-# Figure S8: estimated parameters by OM scenario
+# Figure S7: estimated parameters by OM scenario
 
 pars_mRV <- sim_pars %>%
   filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
@@ -471,7 +405,8 @@ par_est <- pars_mRV %>%
       geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
       geom_boxplot(aes(fill = om_sc),
                    outlier.size = 0.8, outlier.fill = NULL, 
-                   outlier.shape = 21, outlier.stroke = 0.3) +
+                   outlier.shape = 21, outlier.stroke = 0.3,
+                   linewidth = 0.2) +
       scale_fill_discrete(
         labels = om_labels
       ) +
@@ -501,7 +436,7 @@ para_res_plot <- wrap_plots(par_est, design = layout3) + guide_area() +
 
 
 #--------------------------------
-# Figure S9: parameter correlations
+# Figure S8: parameter correlations
 
 cor_dat <- cor_res_et %>%
   filter(scenario %in% c(paste0("EM_S", c(5,7,9,17))), nsampyrs == base_ckmr_nsampyrs) %>%
@@ -522,8 +457,9 @@ cor_plot <- ggplot(cor_dat) +
   ) +
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)),
-        axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0))) +
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
+        axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)),
+        strip.text.x = element_text(size = 10)) +
   xlab("CKMR Sample Size") +
   guides(fill = guide_legend(title = "OM Scenario", nrow = 2, byrow = T)) +
   ylab("Correlation")
@@ -531,12 +467,11 @@ cor_plot <- ggplot(cor_dat) +
 
 
 #--------------------------------
-# Figures A10-A13: PRE and NRMSE comparison
+# Figures A9-A10: PRE and NRMSE comparison
 
 error_metrics_scens <- abund_res %>%
   filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult,
-         !(om_sc == "skipped spawning" & em_sc == "HSPs only")) %>%
+         ckmr_ssmult == base_ckmr_ssmult) %>%
   mutate(sc3 = case_when(
     em_sc != "Base" ~ em_sc,
     om_sc == "Base" ~ "Base",
@@ -579,12 +514,12 @@ error_metrics <- error_metrics_scens %>%
   ungroup()
 
 error_metrics$sc3 <- as.factor(error_metrics$sc3)
-error_metrics$sc3 <- factor(error_metrics$sc3, levels(error_metrics$sc3)[c(6, 5,4,1,3,2,8,7,11,12,9,10)])
+error_metrics$sc3 <- factor(error_metrics$sc3, levels(error_metrics$sc3)[c(6, 5,4,1,3,2,7,10,11,8,9)])
 
 summary(error_metrics$N)
 summary(error_metrics$nrmse)
 
-# Figure S10: accuracy metrics plots for the females
+# Figure S9: accuracy metrics plots for the females
 f_ac_plot <- ggplot(error_metrics %>%
                       filter(data == "Females") %>%
                       dplyr::select(sc3, et, med_PRE, nrmse) %>%
@@ -595,11 +530,13 @@ f_ac_plot <- ggplot(error_metrics %>%
            position = position_dodge2()) +
   facet_wrap(~metric, ncol = 1, scales = "free_y") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
-  guides(fill = guide_legend(title = "Parameter Estimation")) + 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
+        legend.position = "bottom",
+        legend.text = element_text(size = 10)) +
+  guides(fill = guide_legend(title = "Parameter Estimation", nrow = 2, byrow = T)) + 
   xlab("Scenario") + ylab("Metric Value")
 
-# Figure S11: accuracy metrics plots for the males
+# Figure S10: accuracy metrics plots for the males
 m_ac_plot <- ggplot(error_metrics %>%
                       filter(data == "Males") %>%
                       dplyr::select(sc3, et, med_PRE, nrmse) %>%
@@ -610,10 +547,11 @@ m_ac_plot <- ggplot(error_metrics %>%
            position = position_dodge2()) +
   facet_wrap(~metric, ncol = 1, scales = "free_y") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
-  guides(fill = guide_legend(title = "Parameter Estimation")) + 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
+        legend.position = "bottom",
+        legend.text = element_text(size = 10)) +
+  guides(fill = guide_legend(title = "Parameter Estimation", nrow = 2, byrow = T)) + 
   xlab("Scenario") + ylab("Metric Value")
-
 
 
 # ------------------------------------
@@ -692,14 +630,13 @@ names(error_metrics_full)[4:12] <- rep(c("PRE", "IQR", "NRMSE"), 3)
 
 
 #--------------------------------
-# Figures A12-A14: PRE by simulated pedigree
+# Figures S11-S12: PRE by simulated pedigree
 
 # female data
 
 fdat <- abund_res %>%
   filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
          ckmr_ssmult == base_ckmr_ssmult,
-         !(om_sc == "skipped spawning" & em_sc == "HSPs only"),
          data == "Females",
   ) %>%
   mutate(sc3 = case_when(
@@ -715,8 +652,7 @@ fdat <- abund_res %>%
   mutate(ped_rep = as.factor(ped_rep),
          #perror = scale(perror),
          #rmse = scale(rmse)
-  ) %>%
-  filter(sc3 != "HSPs only") # nothing interesting here, so don't need to show this
+  ) 
 dim(fdat)
 summary(fdat$Nyears)
 
@@ -742,7 +678,6 @@ fdat <- fdat %>% droplevels()
 mdat <- abund_res %>%
   filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
          ckmr_ssmult == base_ckmr_ssmult,
-         !(om_sc == "skipped spawning" & em_sc == "HSPs only"),
          data == "Males",
   ) %>%
   mutate(sc3 = case_when(
@@ -758,8 +693,7 @@ mdat <- abund_res %>%
   mutate(ped_rep = as.factor(ped_rep),
          #perror = scale(perror),
          #rmse = scale(rmse)
-  ) %>%
-  filter(sc3 != "HSPs only") # nothing interesting here, so don't need to show this
+  ) 
 
 mdat$sc3 <- factor(mdat$sc3,
                    levels = c("Base",
@@ -775,7 +709,7 @@ mdat <- mdat %>% group_by(ped_rep, et, sc3) %>%
 mdat <- mdat %>% filter(N > 3)
 mdat <- mdat %>% droplevels()
 
-### Figure S12: female plot
+### Figure S11: female plot
 
 fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
                    aes(x = ped_rep, y = perror, fill = et)) +
@@ -796,7 +730,7 @@ fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hm
   guides(fill = guide_legend(title = "EM Scenario"))
 
 
-### Figure S13: male plot
+### Figure S12: male plot
 
 mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
                    aes(x = ped_rep, y = perror, fill = et)) +
@@ -817,7 +751,7 @@ mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hm
   guides(fill = guide_legend(title = "EM Scenario"))
 
 
-### Figure S14: Marginal means plot for scenario effect
+### Figure S13: Marginal means plot for scenario effect
 
 library(glmmTMB)
 library(MuMIn)
@@ -925,7 +859,7 @@ emmeans_plot <- ggplot(full_emm, aes(x = et, y = the.emmean, color = sc3, group 
 
 
 #--------------------------------
-# Figure S15: number sampled and kin pairs found when
+# Figure S14: number sampled and kin pairs found when
 # varying the proportion of males in the CKMR sample
 
 samp_sum_suppl_plot <- ggplot(samp_summary %>%
@@ -992,7 +926,7 @@ male_samps_suppl_plot1 <- samp_sum_suppl_plot + pairs_plot_suppl_plot +
 
 
 #--------------------------------
-# Figure S16: PRE for varying the proportion of males in the CKMR sample
+# Figure S15: PRE for varying the proportion of males in the CKMR sample
 
 samps_bysex <- abund_res %>%
   filter(nsampyrs == base_ckmr_nsampyrs, ckmr_ssmult == base_ckmr_ssmult,
