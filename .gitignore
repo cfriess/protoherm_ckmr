@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 .snakemake
-
+.DS_Store
