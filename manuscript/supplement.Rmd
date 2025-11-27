@@ -267,16 +267,50 @@ $\mathrm{POPs}$ on our estimator's accuracy and precision.
 ## Supplementary Tables
 
 
-```{r table2, echo=FALSE, warning=FALSE}
-t2_cap <- "Error metrics by scenario. PRE = Percent Relative Error. Median PREs were first calculated
+```{r tableS1, echo=FALSE, warning=FALSE, results='asis'}
+tS1_cap <- "Median number of adult males and females sampled and number of observed related pairs found by OM and EM 
+scenario as well as the number of CKMR
+sampling years (Yrs) and CKMR sample size (N; proportion of base sample size, see main text for details). The 
+number in parentheses is the interquartile range. sHmt = simulated mitochondrial haplotype diversity,
+eHmt = mitochondrial haplotype diversity assumed in the EM."
+
+tab_tex <- knitr::kable(
+  samps_table_data, 
+  booktabs  = TRUE, 
+  caption   = tS1_cap, 
+  longtable = TRUE
+) %>%
+  add_header_above(c(" " = 4, "Number Sampled" = 2, "CKMR Pairs Found" = 5)) %>%
+  kable_styling(
+    latex_options          = c("hold_position", "repeat_header"),
+    position               = "left", 
+    font_size              = 10,
+    repeat_header_method   = "replace"
+  ) %>%
+  kableExtra::landscape() %>%
+  kableExtra::row_spec(
+    0,
+    extra_latex = "\\captionsetup{justification=centering, width=\\textwidth}"
+  )
+
+# Remove all addlinespace lines
+tab_tex <- gsub("\\\\addlinespace\n", "", tab_tex)
+
+cat(tab_tex)
+
+```
+
+
+```{r tableS2, echo=FALSE, warning=FALSE, results='asis'}
+tS2_cap <- "Error metrics by scenario. PRE = Percent Relative Error. Median PREs were first calculated
 across years within simulation to obtain a single PRE value per simualated data set. The PRE and IQR
 (interquartile range) values reported in this table represent the median and IQR, respectively, of
 those median PREs, by indicated scenario. NRMSE = Normalized Root Mean Square Error. 
 (normalized by the mean of simulated values). N represents the number of unique data sets analyzed
 for each scenario (400 minus the runs which didn't converge)"
-kableExtra::kable(error_metrics_full, 
+tab_tex <- knitr::kable(error_metrics_full, 
                   booktabs = TRUE, 
-                  caption = t2_cap, 
+                  caption = tS2_cap, 
                   longtable = TRUE,
                   linesep = c("", "", "","", "\\addlinespace") # this doesn't work
                   ) %>%
@@ -287,7 +321,13 @@ kableExtra::kable(error_metrics_full,
   kableExtra::landscape() %>%
   kableExtra::row_spec(0, extra_latex = "\\captionsetup{justification=centering, width=\\textwidth}")
 
+# Remove all addlinespace lines
+tab_tex <- gsub("\\\\addlinespace\n", "", tab_tex)
+
+cat(tab_tex)
+
 ```
+
 
 ```{r fig_caps, echo=FALSE}
 

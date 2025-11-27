@@ -627,6 +627,61 @@ error_metrics_full <- error_metrics %>%
 
 names(error_metrics_full)[4:12] <- rep(c("PRE", "IQR", "NRMSE"), 3)
 
+#--------------------------------
+# CKMR sampling table
+
+# n for each of these is 400
+obs_summary <- ckmr_obs_samps_long %>% 
+  filter(sample_by_sex == samp_sex_base, et == base_et) %>%
+  group_by(om_sc, em_sc, nsampyrs, ckmr_ssmult, pair_type) %>%
+  summarize(median_count = round(median(count),0),
+            #min_count = min(count),
+            #max_count = max(count),
+            iqr_count = round(IQR(count),0)#,
+            #n = n()
+  ) %>%
+  mutate(count = paste0(format(median_count, big.mark = ",", scientific = FALSE), " (", 
+                        format(iqr_count, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
+  dplyr::select(-median_count, -iqr_count) %>%
+  pivot_wider(id_cols = c(em_sc, om_sc, nsampyrs, ckmr_ssmult), 
+              names_from = pair_type, 
+              values_from = c("count"))
+
+# n for each of these is 400
+sample_summary <- samp_summary %>%
+  filter(sample_by_sex == samp_sex_base, et == base_et, LifeStage == "Adult") %>%
+  group_by(om_sc, em_sc, nsampyrs, ckmr_ssmult, Sex) %>%
+  summarize(median_N = round(median(N),0),
+            #min_N = min(N),
+            #max_N = max(N),
+            iqr_N = round(IQR(N),0)#,
+            #n = n()
+  ) %>%
+  mutate(count = paste0(format(median_N, big.mark = ",", scientific = FALSE), " (", 
+                        format(iqr_N, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
+  dplyr::select(-median_N, -iqr_N) %>%
+  pivot_wider(id_cols = c(em_sc, om_sc, nsampyrs, ckmr_ssmult), 
+              names_from = Sex, 
+              values_from = c("count"))
+
+
+samps_table_data <- sample_summary %>%
+  left_join(obs_summary, 
+            by = c("em_sc", "om_sc", "nsampyrs", "ckmr_ssmult")
+  ) %>%
+  relocate(om_sc, em_sc, nsampyrs, ckmr_ssmult, 
+           F, M, POS, POD, HSS, HSD, Unrelated
+  )
+
+names(samps_table_data) <- c("OM", "EM", "Yrs", "N", "Females", "Males", "POD",
+                             "POS", "HSD", "HSS", "Unrelated")
+samps_table_data$Yrs <- as.character(samps_table_data$Yrs)
+samps_table_data$OM <- as.character(samps_table_data$OM)
+samps_table_data$EM <- as.character(samps_table_data$EM)
+samps_table_data$Yrs <- ifelse(samps_table_data$Yrs == "03 Yrs", 3, 10)
+samps_table_data$EM[samps_table_data$EM == "est Hmt < sim Hmt"] <- "eHmt < sHmt"
+samps_table_data$EM[samps_table_data$EM == "sim Hmt < est Hmt"] <- "sHmt < eHmt"
+samps_table_data$OM[samps_table_data$OM == "skipped spawning"] <- "skip spawn"
 
 
 #--------------------------------

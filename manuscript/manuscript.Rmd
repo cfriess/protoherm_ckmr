@@ -42,11 +42,11 @@ authornote: ""
 abstract: |
   Abundance estimates for marine fish are difficult to obtain and typically rely on 
   stock assessment models that assume only females matter to productivity. Many fished 
-  species, however, are sequential hermaphrodites for which preferential harvest for certain size classes can drastically 
+  species, however, are protogynous hermaphrodites for which preferential harvest for certain size classes can drastically 
   skew sex ratios. This raises concerns about sustainability, especially if managed based 
   on female-only reference points. There is a growing interest in integrating Close-Kin Mark-Recapture 
   (CKMR) into stock assessments to reduce uncertainty in abundance estimates, but this 
-  has not previously been done for sequential hermaphrodites. Here we derive the CKMR kinship probabilities 
+  has not previously been done for protogynous hermaphrodites. Here we derive the CKMR kinship probabilities 
   for protogynous hermaphrodites and include them in an integrated stock assessment framework
   for estimating abundance. Using simulation, we evaluate the robustness of this approach to 
   uncertainty in male contribution to reproductive success and genetic data availability. 
@@ -193,10 +193,14 @@ by processes that result in optimal mean reproductive success for the population
 advantage model predicts that a fish will change sex when reproductive success at age is greater for
 the terminal sex [@ghiselin1969evolution; @warner1975reproductive; @munoz2003new]. 
 Fisheries target larger animals, truncating population age and size structure [@barnett2017old], 
-which disproportionately increases the risk of overexploitation for males in protogynous species.
-Yet, many protogynous species support important fisheries, 
+which disproportionately increases the risk of overexploitation for males in protogynous species. Protogynous species 
+vary in their ability to adapt to heavy fishing pressure and the selective removal of males. Those that form harems 
+with an alpha male typically exhibit rapid sex change which can mitigate fishing-induced male depletion [@warner1982mating]. In contrast, species that form leks or spawning aggregations may be more vulnerable because their sex-change dynamics and response 
+to male removal remain poorly understood, and some evidence from exploited stocks suggests frequent male 
+depletion under fishing pressure [@lowerre2020testing; @alonzo2004effects; @alonzo2005sex].
+Many protogynous species support important fisheries, 
 such as the keystone predator California sheephead, *Bodianus pulcher*, [@alonzo2004status; @hamilton2015exploitation] and 
-heavily-fished serranid groupers in the Gulf of Mexico (GOM) and Caribbean Sea. 
+heavily-fished serranid groupers in the Gulf of Mexico (GOM) and Caribbean Sea.
 
 Two current areas of active research in fisheries stock assessment are defining and measuring 
 reproductive potential for protogynous hermaphrodites [@alonzo2008importance; @brooks2008stock;
@@ -244,12 +248,14 @@ to investigate the robustness of these estimators to uncertainty in
 key reproductive and genetic parameters. 
 One focal question was whether the CKMR data contain sufficient information to estimate 
 the shapes of the sex-transition and male age-specific reproductive-output functions used 
-in the CKMR likelihood. Gag is of particular interest because its limited plasticity in sex 
-change has led to extreme male scarcity under heavy fishing pressure. This has lead to concerns 
+in the CKMR likelihood. Gag are of particular interest because their spatial ecology, 
+sexual segregation, and lek-like reproductive unit have resulted in extreme male scarcity 
+under heavy fishing pressure and limited plasticity in sex change [@lowerre2020testing]. This has raised concerns 
 about depensation at low abundance due to sperm limitation. Our study underscores 
 the importance of using simulation to evaluate the effectiveness of a CKMR study prior to 
 implementation, and identify research priorities to resolve uncertainties most likely to 
-obscure or invalidate results. 
+obscure or invalidate results. While the paper focuses on Gag, the CKMR estimators and general 
+simulation framework are adaptable to a wide range of protogynous hermaphrodites.
 
 # 2. Methods
 
@@ -319,7 +325,7 @@ and then moving offshore to spawn as they mature. Individuals undergoing sex tra
 during, and after the spawning season and in both nearshore all-female 
 pre-spawning aggregations and in offshore spawning grounds [@lowerre2020testing].
 Gag spawn at the shelf edge from February to mid-April. While being polygamous, gag likely 
-spawn in pairs, unlike other aggregating groupers that broadcast release their gamtes. 
+spawn in pairs, unlike other aggregating groupers that broadcast release their gametes. 
 They produce pelagic eggs that settle in estuaries after 35 to 45 days [@fitzhugh2005spatial].
 Males are thought to remain in deeper waters on the shelf edge year-round whereas some females return to 
 nearshore structure after the spawning season. All gag start life as females, and
@@ -335,6 +341,10 @@ in the 2022 stock assessment was about 2% of unfished levels, and the sex ratio 
 estimated 32% male in unfished conditions to between 1 and 5% male in recent years 
 [@lowerre2020testing; @SEDAR2022]. Additionally, it has been shown that skipped spawning is relatively common in female gag,
 and this is thought to be linked to low male abundance [@lowerre2022spawning].
+
+Gag make an excellent case study for sperm limitation, as their spatial ecology (offshore spawning estuarine nursery grounds), sexual segregation, and lek-like reproductive unit results in  decreased male recruitment with little change in the size and age at transition (Lowerre-Barbieri et al. 2020).
+
+
 It is unknown to what extent sperm limitation 
 is responsible for the continued decline of the gag population [@lowerre2021gag]. 
 
@@ -473,9 +483,7 @@ describing the age-specific probability of a female producing offspring in a giv
 
 In the third and fourth OM configurations, we allowed male reproductive value (RV) to differ 
 from that of females—--either much flatter (nearly age-invariant) or steeper (with older 
-individuals contributing substantially more than younger ones; Figure 3A). We note again here 
-that the specific OM configurations explored in simulation should be informed by the biology 
-of the model species and the specific research questions at hand. 
+individuals contributing substantially more than younger ones; Figure 3A).
 
 ## 2.5. Sampling Model
 Three types of observations were generated from the OM for use in the
@@ -489,8 +497,8 @@ Samples for CKMR were drawn
 during the final years of the simulation, from all dead individuals in the population, 
 sampling age 1 for juveniles and ages 4+ for adults.
 The kin relationship between every pair of sampled individuals was identified from the pedigree, 
-and mtDNA identity by descent was determined based on whether the shared parent was the mother 
-or the father (i.e., from the sex of the parent in POPs and the shared parent in HSPs).
+and mtDNA identity by descent was determined based on whether the parent or the shared parent 
+was the mother or the father (i.e., from the sex of the parent in POPs and the shared parent in HSPs).
 Pairs that did not share mtDNA identical-by-descent were assigned matching
 mtDNA with probability $1-H_\mathrm{mt}$. These observations were tallied according
 to both individuals' birth years as well as the first-born's sampling year and sex at time of sampling.
@@ -515,10 +523,9 @@ OM configuration (the subsampling effect is explored in the Supplement).
 The simulated traditional fisheries data consisted of a relative recruitment index and age-composition data, 
 both generated with negligible sampling error. These data were made essentially deterministic to isolate 
 uncertainty arising from the CKMR and hermaphroditic components of the model, without confounding effects 
-from traditional fisheries data uncertainty. We note that fully operational simulation studies would typically 
-include stochasticity in all sampled data.
+from traditional fisheries data uncertainty. 
 
-Catch data were not generated because these data are often highly uncertain for protogynous 
+Catch data were not generated because the absolute scale of landings and discards is highly uncertain for protogynous 
 species in the Southeastern U.S. and Caribbean. The assessment model thus had to rely on the CKMR data 
 alone to estimate scale (i.e., total abundance).
 
@@ -533,10 +540,7 @@ is spread out affects the number of related pairs found and EM performance.
 The base CKMR sample size, $n_\mathrm{base}$ was equal to the $10\sqrt{N}$
 heuristic. The EM was additionally run with 50% and 150% of that base sample size. To limit the 
 complexity of the present study, we did not include any further sampling scenarios but note the 
-importance of sampling assumptions on simulation results [see, e.g., @conn2020robustness]. If the OM 
-includes detailed spatial dynamics, the sampling model might explore more fully the effects
-of spatio-temporal sampling variability and age-specific sampling selectivity on estimation 
-performance.
+importance of sampling assumptions on simulation results [see, e.g., @conn2020robustness]. 
 
 ## 2.6. Estimation Model
 
@@ -544,7 +548,7 @@ We employed a standard age-structured deterministic fishery population dynamics
 model and integrated the CKMR estimators derived in the Appendix to see how well the 
 simulated sex-specific abundances could be estimated, given the data generated from the OM. 
 All life history and fishery vulnerability parameters except sex change probability, $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$, 
-and age-specific male reproductive value (male RV), were fixed at the true value (i.e., assumed known). 
+and age-specific male reproductive value ($\mathrm{RV}_M$), were fixed at the true value (i.e., assumed known). 
 The inflection point of the two-parameter 
 cumulative normal distribution $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$
 function was always assumed known but the standard
@@ -573,9 +577,10 @@ prior to sampling.
 
 Mitochondrial haplotype diversity ($\Hmt$) must be estimated 
 outside the integrated assessment model, and we tested the effect of 
-getting it wrong. This quantity affects both the POP and
-HSP calculations because it represents the chance of incorrectly assigning
-related pairs (Equations A8 and A14-A16, Supplemental Information on assumption on 
+getting it wrong. This quantity is often used in HSP calculations because the sex of the 
+shared parent is not observed.  In sex-changing species, the sex of the parent at the offspring's time 
+of birth in a POP might also be uncertain, necessitating the use of mtDNA for 
+POPs as well.  (Equations A8 and A14-A16, Supplemental Information on assumption on 
 equifrequent haplotypes). To illustrate the importance of correctly specifying $\Hmt$, we focus
 here on HSPs. Given that HSPs sharing a
 mother are going to be much more rare than HSPs sharing a father under extreme sex ratio skew toward females,
@@ -595,19 +600,19 @@ meaning it will discount the true number of HSPs sharing a mother and overestima
 abundance. 
 
 All estimation was performed under four options 
-of treating male RV and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ as fixed or estimated. Either both quantities 
+of treating $\mathrm{RV}_M$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ as fixed or estimated. Either both quantities 
 where fixed, both were estimated, or one was fixed and one estimated. This was done to explore the 
 information content of the CKMR data and how the model behaves and attempts to compensate for different 
 types of misspecification (skipped spawning, wrong $\mathrm{RV}_M$, wrong $\Hmt$).
-Importantly, when male RV 
-was fixed, it was always fixed at the value corresponding to female RV, mimicking real world stock assessment assumptions.
-Consequently, male RV was misspecified in the EM for the OM scenarios where it differed from that of the females, allowing 
-us to explore the consequences of getting male RV wrong in the assessment. 
+Importantly, when $\mathrm{RV}_M$ 
+was fixed, it was always fixed at the value corresponding to female reproductive value ($\mathrm{RV}_F$), mimicking real world stock assessment assumptions.
+Consequently, $\mathrm{RV}_M$ was misspecified in the EM for the OM scenarios where it differed from that of the females, allowing 
+us to explore the consequences of getting $\mathrm{RV}_M$ wrong in the assessment. 
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was fixed, on the other hand, it was always fixed at the true value. Allowing 
 the model to attempt to estimate $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was done to determine if the CKMR data 
 could allow estimating the sex ratio.
 
-We illustrate the expected effect of misspecifying male RV for the case where $\mathrm{RV}_M^\mathrm{OM}$ is steeper than $\mathrm{RV}_F^\mathrm{OM}$. Here, younger males in the simulated population contribute fewer offspring and the older 
+We illustrate the expected effect of misspecifying $\mathrm{RV}_M$ for the case where $\mathrm{RV}_M^\mathrm{OM}$ is steeper than $\mathrm{RV}_F^\mathrm{OM}$. Here, younger males in the simulated population contribute fewer offspring and the older 
 males (of which there are
 fewer) contribute more to reproduction. Consequently, more HSPs sharing a father should be found than what the EM expects. 
 This would signal to the EM that there are
@@ -619,17 +624,17 @@ sharing a father decreases, causing an overestimation of male abundance.
 ## 2.6. Scenarios
 
 From the above-described OM, sampling model, and EM configurations, we summarize the following scenarios. In the base case, the
-OM set male RV equal to that of females and did not simulate sperm limitation; the sampling model collected 
-$10\sqrt{N}$ samples over three years; and the EM fixed $\Hmt$, male RV, and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ at the 
+OM set $\mathrm{RV}_M$ equal to that of females and did not simulate sperm limitation; the sampling model collected 
+$10\sqrt{N}$ samples over three years; and the EM fixed $\Hmt$, $\mathrm{RV}_M$, and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ at the 
 true values (Figure 1). To explore the effect of CKMR data information content and structure, we (1) extended the 
 sampling timeframe to 10 years and varied CKMR sample sizes to 50% and 150% of the base case, and 
 (2) evaluated the effect of genetic 
 marker resolution by misspecifying $\Hmt$ in two scenarios ($\Hmte$ greater and smaller than $\Hmts$). To evaluate uncertainty in 
-male contribution to reproductive success, we (3) simulated skipped spawning in the OM and (4) simulated male RV differing 
+male contribution to reproductive success, we (3) simulated skipped spawning in the OM and (4) simulated $\mathrm{RV}_M$ differing 
 from that of females in two scenarios---with greater and lower contrast in reproductive contribution between younger and older 
-ages than for the females. Finally, to examine whether male RV and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ could be estimated, and to assess 
-the effect of misspecifying male RV, we ran each scenario fixing or estimating these quantities. 
-When fixed, male RV was always fixed at the same values as female RV, which resulted in misspecification for (4).
+ages than for the females. Finally, to examine whether $\mathrm{RV}_M$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ could be estimated, and to assess 
+the effect of misspecifying $\mathrm{RV}_M$, we ran each scenario fixing or estimating these quantities. 
+When fixed, $\mathrm{RV}_M$ was always fixed at the same values as $\mathrm{RV}_F$, which resulted in misspecification for (4).
 
 ## 2.7.  Model Evaluation
 For every assessment year $t$ and simulated observed data set $k$, we calculated percent relative error ($\mathrm{PRE}$)
@@ -658,7 +663,7 @@ sperm limitation in the final 35-40 years of the simulation (Figure 4).
 
 ## 3.2. Simulated CKMR Samples
 The number of females sampled was about two magnitudes higher than the number of
-males sampled (Figure S3). Additionally, slightly fewer overall 
+males sampled (Table S1, Figure S3). Additionally, slightly fewer overall 
 female CKMR samples were collected when sampling was spread out over the longer period.
 This is because 10 years of sampling included years of lower abundance that lowered
 the average abundance on which CKMR sample size was based. Conversely, the number
@@ -673,7 +678,7 @@ For adult females, the number sampled ranged from a median of 1480 ($\mathrm{IQR
 150% of $n_\mathrm{base}$ and three sampling years (Figure S3).
 
 The number of CKMR pairs found was higher when sampling was conducted
-over a shorter time period (Figure S4). Additionally, the number
+over a shorter time period (Table S1, Figure S4). Additionally, the number
 of HSPs with different mtDNA ($\HSPD$) was about an order of magnitude higher than
 the number of HSPs sharing mtDNA ($\HSPS$). The median number of pairs found for $\HSPD$ ranged
 from 166 ($\mathrm{IQR} = 52$) for low CKMR sample size to to 1,481 ($\mathrm{IQR} = 440$) for
@@ -798,7 +803,7 @@ data (Figure 7B). It does this by underestimating mean recruitment (Figure S6)
 along with changing the shape of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M^\mathrm{EM}$,
 if allowed (Figure 9D).
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ is fixed, thereby locking in the sex ratio, the EM can only reduce the expected
-number of females by also lowering the expected number of males, and it does this by
+number of females by also lowering the expected number of males (Figure 7B), and it does this by
 flattening the estimated $\mathrm{RV}_M$ function (Figure 9D). This also reduces
 the expected number of $\HSPD$, in contradiction to what the genetic data for the
 males are indicating. When allowed, the EM will flatten the estimated $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ which
@@ -887,9 +892,6 @@ in structure from the estimation model, we were able to confirm that the CKMR es
 we developed were correct when the base assumptions of the data-generating model were met.
 From that point, one can systematically start violating these assumptions to explore
 which of them, in isolation or combined, have the largest impact on estimation performance.
-This exercise underscores the importance of using simulation to evaluate the effectiveness 
-of a CKMR study prior to implementation, and identify research priorities to resolve 
-uncertainties most likely to obscure or invalidate results. 
 
 We showed that sex-specific abundance for protogynous hermaphrodites can be estimated in
 an integrated stock assessment model and that even key parameters used to calculate expected relative reproductive output, 
@@ -932,7 +934,7 @@ would be extremely difficult, in practice, for gag due to the expectation of low
 of POPs sharing a father in real-world sampling.
 
 Gag are unusual in the extreme sex ratio skew they exhibit as a consequence of high exploitation rates. 
-Other protogynous hermaphrodites have shown more plasticity in sex change (REFS?), where females start 
+Other protogynous hermaphrodites have shown more plasticity in sex change [@warner1982mating; @hamilton2007size], where females start 
 transitioning at younger ages as males become scarce. Simulation studies for those species would include 
 compensation in sex change in the OM. We did not include such compensation in the OM for this study 
 because there is no evidence for a strong compensatory response in sex change for gag.
@@ -961,7 +963,9 @@ but the extent of this effect depends on the degree of year-to-year variability 
 is currently unknown. Gag are fished in all areas they occur, except for protected spawning grounds, but the
 various fishing fleets would need to be sampled appropriately in order to counter the spatial biases
 in fishing and not violate the CKMR assumption of equal sampling probability for all animals.
-Future simulations could address these issues. 
+Future simulations might explore more fully the effects of spatio-temporal sampling variability and 
+age-specific sampling selectivity on estimation performance. 
+
 An additional factor our simulation model did not consider but could be included in future studies 
 is variability of size-at-age and consequent size-based effects on individual reproductive output for 
 individuals of the same age. Furthermore, we assumed perfect
@@ -969,8 +973,9 @@ fisheries data, with a highly accurate and precise index of juvenile abundance a
 combined-sex, composition data. In reality, the age-0 gag index is composed of multiple data streams 
 whose spatio-temporal footprints have shifted through time, making the index prone to bias and uncertainty
 [@ingram2021juvenile]. Additionally, composition data are highly uncertain and particularly sparse for the private
-recreational fleet [@SEDAR2022], which comprises the majority of the catch.
-The effect of uncertainty in fisheries data can also be examined in future simulation studies. 
+recreational fleet [@SEDAR2022], which comprises the majority of the catch. Fully operational simulation studies 
+would typically include stochasticity in all sampled data, and the effect of uncertainty in fisheries data 
+when combined with CKMR should be examined in future simulation studies. 
 
 We made simplifying assumptions for our CKMR estimators that will need to be addressed in any
 practical applications, specifically the ability to age sampled fish without error and to perfectly 
@@ -1002,7 +1007,12 @@ and catch data provide conflicting information about scale and trends, similar t
 for composition and index data, that would complicate model fitting; this scenario could be explored
 in future simulations. We note that many species for which management advice is needed in the
 Southestern U.S. and Caribbean are data-poor and for some [e.g., Goliath grouper, *Epinephelus itajara*, 
-@porch2006catch], catch data are missing entirely. For these, the prospect of incorporating CKMR into catch-free assessment models is highly promising.
+@porch2006catch], catch data are missing entirely. For these, the prospect of incorporating CKMR into catch-free assessment models is highly promising. The costs of conducting genetic analyses have declined significantly in recent 
+years and will likely continue to drop, making routine genetic data collection from both 
+fishery-dependent and fishery-independent sources an increasingly attractive option. Ultimately, 
+cost-benefit analyses of incorporating genetic data into stock assessments will need to be conducted 
+on a case-by-case basis, taking into account required sample sizes, sequencing costs, and expected gains, 
+such as improvements in assessment performance.
 
 
 \newpage

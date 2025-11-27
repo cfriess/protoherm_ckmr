@@ -143,7 +143,10 @@ equal, and $\Hmte = \Hmts = 1$. When $\Hmte \neq \Hmts$, one was set to 1 and th
 Notice the different y-axis scale for panel B. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
-**Figure 9.** Estimated sex transition and male reproductive value (RV) functions under different OM and EM configurations.
+**Figure 9.** Estimated sex transition and male reproductive value ($RV_M$) functions under different OM and EM configurations.
 The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9. Panel 
-numbering refers to each row of plots.
+lettering refers to each row of plots: a) Base (no skipped spawning, $RV_M$ = $RV_F$, $H_\mathrm{mt}^{EM} = H_\mathrm{mt}^{OM}$); 
+b) skipped spawning; c) $H_\mathrm{mt}^{EM} < H_\mathrm{mt}^{OM}$; d) $H_\mathrm{mt}^{OM} < H_\mathrm{mt}^{EM}$; 
+e) $RV_M$ flatter than $RV_F$; f) $RV_M$ steeper than $RV_F$.
+
 
