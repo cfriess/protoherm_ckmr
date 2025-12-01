@@ -42,14 +42,14 @@ authornote: ""
 abstract: |
   Abundance estimates for marine fish are difficult to obtain and typically rely on 
   stock assessment models that assume only females matter to productivity. Many fished 
-  species, however, are protogynous hermaphrodites for which preferential harvest for certain size classes can drastically 
+  species, however, are protogynous hermaphrodites for which preferential harvest of certain size classes can drastically 
   skew sex ratios. This raises concerns about sustainability, especially if managed based 
   on female-only reference points. There is a growing interest in integrating Close-Kin Mark-Recapture 
   (CKMR) into stock assessments to reduce uncertainty in abundance estimates, but this 
   has not previously been done for protogynous hermaphrodites. Here we derive the CKMR kinship probabilities 
-  for protogynous hermaphrodites and include them in an integrated stock assessment framework
+  for protogynous fishes and include them in an integrated stock assessment framework
   for estimating abundance. Using simulation, we evaluate the robustness of this approach to 
-  uncertainty in male contribution to reproductive success and genetic data availability. 
+  uncertainty in male contribution to reproductive success and CKMR data information content and structure. 
   We model our simulation after Gulf of Mexico Gag whose population has experienced large 
   declines and considerable shifts in sex ratios over the last half century.
   We show that CKMR can produce unbiased abundance and sex ratio estimates only 
@@ -195,9 +195,9 @@ the terminal sex [@ghiselin1969evolution; @warner1975reproductive; @munoz2003new
 Fisheries target larger animals, truncating population age and size structure [@barnett2017old], 
 which disproportionately increases the risk of overexploitation for males in protogynous species. Protogynous species 
 vary in their ability to adapt to heavy fishing pressure and the selective removal of males. Those that form harems 
-with an alpha male typically exhibit rapid sex change which can mitigate fishing-induced male depletion [@warner1982mating]. In contrast, species that form leks or spawning aggregations may be more vulnerable because their sex-change dynamics and response 
-to male removal remain poorly understood, and some evidence from exploited stocks suggests frequent male 
-depletion under fishing pressure [@lowerre2020testing; @alonzo2004effects; @alonzo2005sex].
+with an alpha male typically exhibit rapid sex change which can mitigate fishing-induced male depletion [@warner1982mating]. By contrast, species that form leks or spawning aggregations may be more vulnerable because their sex-change dynamics and response 
+to male removal remain poorly understood, and evidence from exploited stocks suggests frequent male 
+depletion under fishing pressure [@lowerre2020testing; @alonzo2004effects; @alonzo2005sex; @provost2015impacts].
 Many protogynous species support important fisheries, 
 such as the keystone predator California sheephead, *Bodianus pulcher*, [@alonzo2004status; @hamilton2015exploitation] and 
 heavily-fished serranid groupers in the Gulf of Mexico (GOM) and Caribbean Sea.
@@ -225,9 +225,9 @@ the probability that a pair of samples are close kin, given the size of the popu
 additional information that describes the likelihood of an individual surviving and
 reproducing over time relative to other individuals with similar demographic characteristics. 
 
-To date, nearly all CKMR applications have been to gonochoristic species and have 
-assumed fecundity drives reproductive success and that this success scales
-equally between males and females. The life history of protogynous hermaphrodites 
+To date, nearly all CKMR applications have been to gonochoristic species in which 
+it has been either assumed or observed that fecundity drives reproductive success 
+and that this success scales equally between males and females. The life history of protogynous hermaphrodites 
 complicates application of CKMR because 
 sex ratios are typically skewed toward females, and, amongst half-sibling
 pairs, one fish's mother could be another's father. In fact, CKMR kinship probabilities 
@@ -254,17 +254,18 @@ under heavy fishing pressure and limited plasticity in sex change [@lowerre2020t
 about depensation at low abundance due to sperm limitation. Our study underscores 
 the importance of using simulation to evaluate the effectiveness of a CKMR study prior to 
 implementation, and identify research priorities to resolve uncertainties most likely to 
-obscure or invalidate results. While the paper focuses on Gag, the CKMR estimators and general 
-simulation framework are adaptable to a wide range of protogynous hermaphrodites.
+obscure or invalidate results. While this study focuses on Gag, the CKMR estimators and general 
+simulation framework are adaptable to a wide range of protogynous fishes.
 
 # 2. Methods
 
 ## 2.1. Overview
 
-We start out this section by describing the CKMR kinship probabilities for protogynous hermaphrodites (Section 2.2).
+We start out this section describing the model species (Section 2.2), 
+followed by an overview of the CKMR kinship probabilities for protogynous hermaphrodites (Section 2.3).
 We then present the different components of the simulation study to test this model.
 We use an individual-based operating model (OM; Section 2.4) to generate pedigrees for a population 
-of protogynous hermaphrodites, modeled after the biology of Gag (Section 2.3). Each simulation creates millions of
+of protogynous hermaphrodites. Each simulation creates millions of
 fish _in silico_ with known birth and death dates, sex, and mortality causes, and a known pedigree 
 that connects them all. The simulated population experiences increasing fishing 
 mortality, resulting in population decline and growing sex-ratio skew, consistent with trends observed in the 
@@ -279,14 +280,44 @@ under different scenarios (Section 2.6). The first group of scenarios explores t
 content and structure and the second group addresses reproductive process uncertainty focused on the male contribution 
 to reproductive success.
 
-## 2.2. CKMR Model
+## 2.2. Model Species
+
+We parameterized our simulation model based on life history data for Gag 
+in the GOM. Gag live to be over 30 years old and 
+mature around age 4. Gag exhibit clear depth preferences with life stage, sex, 
+and spawning. They use estuarine nursery habitat as young of the year, 
+then move to nearshore sites with structure as young females (~ages 1 to 4) 
+and offshore to spawn as they mature. Individuals undergoing sex transition occur before, 
+during, and after the spawning season and in both nearshore all-female 
+pre-spawning aggregations and in offshore spawning grounds [@lowerre2020testing].
+Gag spawn at the shelf edge from February to mid-April in lek-like reproductive units and produce pelagic eggs that settle 
+in estuaries after 35 to 45 days [@fitzhugh2005spatial; @lowerre2020testing].
+Males are thought to remain in deeper waters on the shelf edge year-round whereas some females return to 
+nearshore structure after the spawning season. All Gag start life as females, and
+a subset of them change sex to male as they age. Although a male as young as four years 
+old has been observed, age at 50% male is approximately 12 years old. 
+
+Gag are highly sought after in both the commercial and recreational fisheries in 
+the GOM. The majority of the catch quota is allocated to the recreational 
+sector, and estimates of recreational landings are considered highly uncertain [@SEDAR2022; @NOAA2023]. 
+Gag have been estimated to be overfished and experiencing overfishing almost 
+consistently since the late 1960’s [@SEDAR2022]. The spawning stock biomass estimated 
+in the 2022 stock assessment was about 2% of unfished levels, and the sex ratio has declined from an 
+estimated 32% male in unfished conditions to between 1 and 5% male in recent years 
+[@lowerre2020testing; @SEDAR2022], with little observed change in the size and age at sex transition [@lowerre2020testing]. 
+Additionally, it has been shown that skipped spawning is relatively common in female Gag,
+and this is thought to be linked to low male abundance [@lowerre2022spawning]. 
+It is unknown to what extent sperm limitation due to reduced male recruitment 
+is responsible for the continued decline of the Gag population [@lowerre2021gag]. 
+
+## 2.3. CKMR Model
 
 There are several close kin relationships that could be included. For simplicity, we
 limit this study to half-sibling pairs (HSPs) and parent-offspring pairs (POPs) and
 assume that these can be identified without error. We furthermore assume that ages of 
 sampled individuals are known without error, sampling is conducted on dead
 individuals, and age-specific survival is independent of sex. We assume the species is monandric (i.e., all males
-originate from females) and that sex change, if it occurs, happens at the
+originate from females) and that sex change happens at the
 beginning of the annual interval, followed by reproduction, then mortality/fishing/sampling. 
 The full CKMR model derivation can be found in Appendix A. The probabilities of observing
 HSPs (Equations A1-A7) account for the unknown age and sex of the shared parent as
@@ -311,42 +342,8 @@ in the Supplement. An $\Hmt$ of 1 would indicate a 100% certainty
 that two HSPs with the same mtDNA sequence shared a mother, while any value <1 means there is
 a chance (which equals $1 - \Hmt$) that their mtDNA sequence is the same even though they did not
 share a mother. We incorporate uncertainty due to $\Hmt$ into our CKMR model
-equations (Equations A8, and A14-A17) and in the simulation, we explore the effects of 
-misspecifying both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\Hmt$ in the estimation model (Section 2.5.1).
-
-## 2.3. Model Species
-
-We parameterized our simulation model based on life history data for Gag 
-in the GOM. Gag live to be over 30 years old and 
-mature around age 4. Gag exhibit clear depth preferences with life stage, sex, 
-and spawning, utilizing estuarine nursery habitat as young of the year, 
-moving to nearshore sites with structure as young females (~ages 1 to 4), 
-and then moving offshore to spawn as they mature. Individuals undergoing sex transition occur before, 
-during, and after the spawning season and in both nearshore all-female 
-pre-spawning aggregations and in offshore spawning grounds [@lowerre2020testing].
-Gag spawn at the shelf edge from February to mid-April. While being polygamous, gag likely 
-spawn in pairs, unlike other aggregating groupers that broadcast release their gametes. 
-They produce pelagic eggs that settle in estuaries after 35 to 45 days [@fitzhugh2005spatial].
-Males are thought to remain in deeper waters on the shelf edge year-round whereas some females return to 
-nearshore structure after the spawning season. All gag start life as females, and
-a subset of them change sex to male as they age. Although a male as young as four years 
-old has been observed, age at 50% male is approximately 12 years old. 
-
-Gag are highly sought after in both the commercial and recreational fisheries in 
-the GOM. The majority of the catch quota is allocated to the recreational 
-sector, and estimates of recreational landings are considered highly uncertain [@SEDAR2022; @NOAA2023]. 
-Gag have been estimated to be overfished and experiencing overfishing almost 
-consistently since the late 1960’s [@SEDAR2022]. The spawning stock biomass estimated 
-in the 2022 stock assessment was about 2% of unfished levels, and the sex ratio has declined from an 
-estimated 32% male in unfished conditions to between 1 and 5% male in recent years 
-[@lowerre2020testing; @SEDAR2022]. Additionally, it has been shown that skipped spawning is relatively common in female gag,
-and this is thought to be linked to low male abundance [@lowerre2022spawning].
-
-Gag make an excellent case study for sperm limitation, as their spatial ecology (offshore spawning estuarine nursery grounds), sexual segregation, and lek-like reproductive unit results in  decreased male recruitment with little change in the size and age at transition (Lowerre-Barbieri et al. 2020).
-
-
-It is unknown to what extent sperm limitation 
-is responsible for the continued decline of the gag population [@lowerre2021gag]. 
+equations (Equations A8 and A14) and in the simulation, we explore the effects of 
+misspecifying both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\Hmt$ in the estimation model (Section 2.6.1).
 
 ## 2.4. Operating Model
 
@@ -355,10 +352,10 @@ package [@R-fishSim]. We modified the package functions to accommodate
 our study needs (e.g., by adding the ability to model protogynous hermaphrodite 
 life histories) and rewrote the slower-running R functions in C++ using the 'Rcpp' 
 package [@eddelbuettel2013seamless] to increase computational efficiency. The basic
-annual sequence, modeled loosely on gag life history,
+annual sequence, modeled loosely on Gag life history,
 was that sex transition and then spawning occurred at the beginning
-of the year, followed by mortality, CKMR sampling, and age incrementation (Figure 2).
-For computational efficiency, the simulation starts at age 1, given that most age-0 gag
+of a year $t$, followed by mortality, CKMR sampling, and age incrementation (Figure 1).
+For computational efficiency, the simulation starts at age 1, given that most age-0 Gag
 are not available to the fishery and suffer high rates of natural mortality.
 
 Probability of reproducing in a given year was described by a logistic function, 
@@ -370,15 +367,15 @@ breeding group. All offspring were female
 at birth and entered the population at age 1 as members of their parents’ breeding 
 group. Females were allowed to switch breeding groups (see Supplement for details). Males 
 did not switch breeding groups but instead remained in the breeding group of their 
-sex transition year until death, consistent with the view that male gag stay on the 
+sex transition year until death, consistent with the view that male Gag stay on the 
 spawning grounds year-round while females migrate between spawning and feeding areas.
 
 Simulated reproductive value for females and males of age $a$, denoted as  $\mathrm{RV}_{a,F}$ and
 $\mathrm{RV}_{a,M}$, respectively, were used to produce age-1 offspring and assign parentage.
 $\mathrm{RV}_{a,F}$ represents the age-specific expected number 
 of age-1 offspring produced per female. This was modeled as a power function 
-(Figure 3A) derived 
-from female gag batch fecundity-at-age data, and scaled to achieve a stable population in 
+(Figure 2A) derived 
+from female Gag batch fecundity-at-age data, and scaled to achieve a stable population in 
 the absence of fishing. To help produce recruitment variability, $\mathrm{RV}_{a,F}$ 
 was randomly scaled up or down annually by sampling a reproductive value, 
 $\mathrm{RV}_{a,t,F,b}$ for each breeding group, $b$, from a $\mathrm{Uniform}(0,1)$ 
@@ -388,24 +385,24 @@ across all ages and breeding groups remains consistent.
 The realized number of age-1 offspring in a given year $t$
 for a given female of age $a$ in breeding group $b$ was a Poisson random draw from 
 $\mathrm{RV}_{a,t,F,b}$. Thus, all females of the same age, in the same year, and in the same breeding group
-had the same probability of reproducing. All males were considered mature, and $\mathrm{RV}_M$ 
+had the same probability of reproducing. All males were considered mature, and $\mathrm{RV}_{a,M}$ 
 was used as the age-specific probability of being the father
 to any age-1 offspring produced by females in the male's breeding group. The true shape and 
-parameter values of $\mathrm{RV}_M$ are unknown. Here, we modeled it as a power function, and in 
-the base OM its exponent was set equal to that of $\mathrm{RV}_F$ (Figure 3A), 
-which corresponds to assuming age-specific $\mathrm{RV}_M$ equals that of the females (the current
-assumption of the gag stock assessment). Mating was assumed to 
+parameter values of $\mathrm{RV}_{a,M}$ are unknown. Here, we modeled it as a power function, and in 
+the base OM its exponent was set equal to that of $\mathrm{RV}_{a,F}$ (Figure 2A), 
+which corresponds to assuming $\mathrm{RV}_{a,M}$ equals $\mathrm{RV}_{a,F}$ (the current
+assumption of the Gag stock assessment). Mating was assumed to 
 be fully random within breeding groups. 
 
 Gag life history data and age schedules, including sex change, (Figure S1) were 
-taken from the 2022 gag stock assessment [@SEDAR2022]. Sex change probability was assumed to be 
-invariant because there is no strong evidence for sex change plasticity in gag. We note 
-here that this is not typical for protognous hermaphrodites. Simulation studies modeled on species 
-that exhibit phenotypic plasticity in sex change should allow females to transition at younger ages 
+taken from the 2022 Gag stock assessment [@SEDAR2022]. Sex change probability was assumed to be 
+invariant because there is no strong evidence for sex change plasticity in Gag. We note 
+here that simulation studies modeled on species that exhibit phenotypic plasticity in sex change 
+should allow females to transition at younger ages 
 as males become scarce in the population.
 
 To simulate total
-annual survival probability at age, we followed the fisheries modelling approach 
+annual survival probability at age, we followed the fisheries modeling approach 
 of separating survival into age-specific, instantaneous natural
 and fishing mortality components, $M$ and $F$, respectively.
 Fishing mortality was further separated by fishing fleet. Traditional fisheries models
@@ -430,7 +427,7 @@ S_{a,t} =
 \end{cases}
 \end{equation}
 where $F_{t,f}$ is the mortality due to fleet $f$ and $v_{a,f}$ is the
-vulnerability of age-$a$ fish to fleet $f$. In the real-world gag fishery, there are
+vulnerability of age-$a$ fish to fleet $f$. In the real-world Gag fishery, there are
 multiple recreational and commercial hook-and-line fleets, where the recreational
 fleets tend to select for smaller individuals and the commercial fleets for larger
 fish. We simulated a single recreational and a single commercial fishery for simplicity.
@@ -439,15 +436,15 @@ and fish availability) for the recreational fleet was modeled as a dome-shaped
 gamma function while commercial vulnerability was specified as a logistic function 
 (Figure S2A), meaning the oldest individuals are only selected 
 for by the commercial fleet. The simulated fishing mortality time series (Figure 
-S2B) followed the trend estimated by the 2022 gag
+S2B) followed the trend estimated by the 2022 Gag
 stock assessment, which was intended to result in overfishing and stock
-depletion, mimicking the fate of the real gag population. 
+depletion, mimicking the fate of the real Gag population. 
 
 Mortality, sex transition and whether a female reproduced in a given spawning 
 season were simulated by drawing random values from uniform distributions 
 between zero and one. These random draws were compared to the corresponding probabilities 
-(such as the probability of a female of age $a$ reproducing), with the event (e.g., reproduction) 
-occurring if the random draw was less than the probability.
+(such as the probability of a female of age $a$ reproducing). The event (e.g., reproduction) 
+was considered to occur if the random draw fell below that probability.
 Mortality source was determined for each individual 
 that died in a given year. The probability of having died from natural mortality, 
 commercial fishing, or recreational fishing was equal to the normalized instantaneous rates
@@ -460,14 +457,14 @@ unique whole-population pedigrees.
 
 ### 2.4.1. OM Configurations
 
-The true $\mathrm{RV}_M$ in protogynous hermaphrodites, including gag,
-is unknown. For gag, it is assumed that sperm limitation exists but it has not been
+The true $\mathrm{RV}_{a,M}$ in protogynous hermaphrodites, including Gag,
+is unknown. For Gag, it is assumed that sperm limitation exists but it has not been
 measured. We simulated four alternative versions of 'reality' in our OM to explore the
 effect of uncertainty about male contribution to reproductive success. In
 the base case, declining male abundance had no effect (meaning all eggs produced
 by females will get fertilized, regardless of sex ratio) and the male and female (age-specific) 
-reproductive value functions ($\mathrm{RV}_M^\mathrm{EM}$ and $\mathrm{RV}_M^\mathrm{OM}$, 
-respectively) were equal. This corresponds to current gag stock assessment model assumptions.
+reproductive value functions ($\mathrm{RV}_{a,M}^\mathrm{OM}$ and $\mathrm{RV}_{a,F}^\mathrm{OM}$, 
+respectively) were equal. This corresponds to current Gag stock assessment model assumptions.
 
 In the second configuration, we simulated the effect of sperm limitation 
 by increasing the likelihood of female skipped spawning as the male sex ratio
@@ -475,15 +472,15 @@ declines. Note that a female skipping spawning was independent between years and
 skipped spawning such as alternate year spawning. The relationship between the 
 current proportion of males in a breeding group relative to unfished levels, $p_M$,
 and the probability of females in that breeding group skipping spawning was
-modeled as an exponential function of the form $1-\exp(-{\tau p_M})$ (Figure
-3B), where $\tau$ controls the slope of the curve. We used a sigmoid
+modeled as an exponential function of the form $1-\exp(-{\tau p_M})$ (Figure 2B), 
+where $\tau$ controls the slope of the curve. We used a sigmoid
 function to map probability of spawning to age, such that skipped spawning was more likely
 in younger females. Thus, skipped spawning serves as a de facto modifier of the vector 
 describing the age-specific probability of a female producing offspring in a given year. 
 
-In the third and fourth OM configurations, we allowed male reproductive value (RV) to differ 
-from that of females—--either much flatter (nearly age-invariant) or steeper (with older 
-individuals contributing substantially more than younger ones; Figure 3A).
+In the third and fourth OM configurations, we allowed $\mathrm{RV}_{a,M}^\mathrm{OM}$ to differ 
+from $\mathrm{RV}_{a,F}^\mathrm{OM}$---either much flatter (nearly age-invariant) or steeper (with older 
+individuals contributing substantially more than younger ones; Figure 2A).
 
 ## 2.5. Sampling Model
 Three types of observations were generated from the OM for use in the
@@ -505,14 +502,16 @@ to both individuals' birth years as well as the first-born's sampling year and s
 Only pairs of samples with different birth years ("cross-cohort
 comparisons") were included in the CKMR likelihood to minimize the effect of
 interannual and inter-individual variation in the number of offspring [@waples2022close],
-but all samples were used for both HSPs and POPs.
-The total number of CKMR samples collected across all sampling years (Section 2.5.1) was chosen as various multiples of the
-$10\sqrt{N}$ guideline from @bravington2016close for a single sample of a
-roughly equal mix of juveniles and adults. We used the average simulated abundance of
+but all samples were used for both HSPs and POPs. The total number of CKMR samples collected across 
+all sampling years (Section 2.5.1) was chosen as various multiples of the
+$10\sqrt{N}$ heuristic from @bravington2016close.  We note that this heuristic was developed in the context of 
+using POPs for CKMR and that considerably more refined approaches for the design of CKMR experiments are 
+available; nonetheless, this heuristic could be easily applied to thousands of simulated data sets to ensure 
+that sampling effort was appropriate to the simulated abundance. We used the average simulated abundance of
 age 2+ individuals over the CKMR sampling period as $N$ in the total sample
 size calculation and the average sex ratio using all ages to partition samples between males and females.
+Thus, the sample sizes varied across simulation replicates of the OM. 
 The effect of increasing or decreasing the relative proportion of males sampled is explored in the supplement.
-Thus, the sample sizes varied across simulation replicates of the OM.
 The total genetic samples
 were spread out over the CKMR sampling period, such that if there were fewer
 sampling years, more samples per year would be collected. For each of the 40
@@ -523,9 +522,8 @@ OM configuration (the subsampling effect is explored in the Supplement).
 The simulated traditional fisheries data consisted of a relative recruitment index and age-composition data, 
 both generated with negligible sampling error. These data were made essentially deterministic to isolate 
 uncertainty arising from the CKMR and hermaphroditic components of the model, without confounding effects 
-from traditional fisheries data uncertainty. 
-
-Catch data were not generated because the absolute scale of landings and discards is highly uncertain for protogynous 
+from traditional fisheries data uncertainty. Catch data were not generated because the absolute scale of 
+landings and discards is highly uncertain for protogynous 
 species in the Southeastern U.S. and Caribbean. The assessment model thus had to rely on the CKMR data 
 alone to estimate scale (i.e., total abundance).
 
@@ -547,15 +545,15 @@ importance of sampling assumptions on simulation results [see, e.g., @conn2020ro
 We employed a standard age-structured deterministic fishery population dynamics
 model and integrated the CKMR estimators derived in the Appendix to see how well the 
 simulated sex-specific abundances could be estimated, given the data generated from the OM. 
-All life history and fishery vulnerability parameters except sex change probability, $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$, 
-and age-specific male reproductive value ($\mathrm{RV}_M$), were fixed at the true value (i.e., assumed known). 
+All life history and fishery vulnerability parameters except $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$, 
+and $\mathrm{RV}_{a,M}$, were fixed at the true value (i.e., assumed known). 
 The inflection point of the two-parameter 
 cumulative normal distribution $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$
 function was always assumed known but the standard
 deviation, $\mathrm{STF}_{SD}$, which controls the function's shape was estimated in some EM runs. 
 The exponent of the $\mathrm{RV}$
 power function was assumed known in the EM only for females 
-($\mathrm{RV}_F^\mathrm{OM} = \mathrm{RV}_F^\mathrm{EM}$, more on this in Section 2.5.1). Additional estimated parameters were mean
+($\mathrm{RV}_F^\mathrm{OM} = \mathrm{RV}_F^\mathrm{EM}$, more on this in Section 2.6.1). Additional estimated parameters were mean
 recruitment $\rbar$ and fleet-specific fishing mortality rates $F$ as well as annual
 deviations for each. No stock-recruitment relationship was simulated or attempted
 to be estimated, and unfished abundance was also not estimated since the focus of
@@ -565,7 +563,7 @@ Full equations
 for the total objective function and its components are presented in Appendix B. 
 The estimation model was implemented in AD Model Builder (ADMB) [@fournier2012ad].
 
-### 2.5.1. EM Configurations
+### 2.6.1. EM Configurations
 
 EM configurations focused on the estimability and/ or misspecification of key reproductive and 
 genetic parameters. In the base EM configuration,
@@ -573,11 +571,9 @@ the degree of mitochondrial haplotype diversity in the population ($\Hmt$) was a
 In two alternative configurations, $\Hmt$ was misspecified (fixed either higher 
 or lower than what was specified in the OM). $\Hmt$ affects our ability
 to correctly infer the sex of an unobserved parent, or of an observed parent at a time
-prior to sampling. 
-
-Mitochondrial haplotype diversity ($\Hmt$) must be estimated 
+prior to sampling. It must be estimated 
 outside the integrated assessment model, and we tested the effect of 
-getting it wrong. This quantity is often used in HSP calculations because the sex of the 
+getting it wrong. $\Hmt$ is often used in HSP calculations because the sex of the 
 shared parent is not observed.  In sex-changing species, the sex of the parent at the offspring's time 
 of birth in a POP might also be uncertain, necessitating the use of mtDNA for 
 POPs as well.  (Equations A8 and A14-A16, Supplemental Information on assumption on 
@@ -600,41 +596,47 @@ meaning it will discount the true number of HSPs sharing a mother and overestima
 abundance. 
 
 All estimation was performed under four options 
-of treating $\mathrm{RV}_M$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ as fixed or estimated. Either both quantities 
+of treating $\mathrm{RV}_{a,M}$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ as fixed or estimated. Either both quantities 
 where fixed, both were estimated, or one was fixed and one estimated. This was done to explore the 
 information content of the CKMR data and how the model behaves and attempts to compensate for different 
-types of misspecification (skipped spawning, wrong $\mathrm{RV}_M$, wrong $\Hmt$).
-Importantly, when $\mathrm{RV}_M$ 
-was fixed, it was always fixed at the value corresponding to female reproductive value ($\mathrm{RV}_F$), mimicking real world stock assessment assumptions.
-Consequently, $\mathrm{RV}_M$ was misspecified in the EM for the OM scenarios where it differed from that of the females, allowing 
-us to explore the consequences of getting $\mathrm{RV}_M$ wrong in the assessment. 
+types of misspecification (skipped spawning, wrong $\mathrm{RV}_{a,M}$, wrong $\Hmt$).
+Importantly, when $\mathrm{RV}_{a,M}$ 
+was fixed, it was always fixed at the value corresponding to female reproductive value ($\mathrm{RV}_{a,F}$), mimicking real world stock assessment assumptions.
+Consequently, $\mathrm{RV}_{a,M}$ was misspecified in the EM for the OM scenarios where it 
+differed from that of the females, allowing 
+us to explore the consequences of getting $\mathrm{RV}_{a,M}$ wrong in the assessment. 
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was fixed, on the other hand, it was always fixed at the true value. Allowing 
-the model to attempt to estimate $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was done to determine if the CKMR data 
+the model to attempt to estimate $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was done to determine whether the CKMR data 
 could allow estimating the sex ratio.
 
-We illustrate the expected effect of misspecifying $\mathrm{RV}_M$ for the case where $\mathrm{RV}_M^\mathrm{OM}$ is steeper than $\mathrm{RV}_F^\mathrm{OM}$. Here, younger males in the simulated population contribute fewer offspring and the older 
-males (of which there are
+We illustrate the expected effect of misspecifying $\mathrm{RV}_{a,M}$ for the case where 
+$\mathrm{RV}_{a,M}^\mathrm{OM}$ is steeper than $\mathrm{RV}_{a,F}^\mathrm{OM}$ 
+(but $\mathrm{RV}_{a,F}^\mathrm{EM}$ = $\mathrm{RV}_{a,M}^\mathrm{EM}$). Here, younger males in 
+the simulated population contribute fewer offspring and the older males (of which there are
 fewer) contribute more to reproduction. Consequently, more HSPs sharing a father should be found than what the EM expects. 
 This would signal to the EM that there are
-fewer males in the population and male abundance should be underestimated. When $\mathrm{RV}_M^\mathrm{OM}$
-is flatter (i.e., more age-invariant) than $\mathrm{RV}_M^\mathrm{EM}$, the opposite would be the case: younger males would
+fewer males in the population and male abundance should be underestimated. When $\mathrm{RV}_{a,M}^\mathrm{OM}$
+is flatter (i.e., more age-invariant) than $\mathrm{RV}_{a,F}^\mathrm{OM}$ 
+(but $\mathrm{RV}_{a,F}^\mathrm{EM}$ = $\mathrm{RV}_{a,M}^\mathrm{EM}$), the opposite would be the case: younger males would
 contribute almost as many offspring as older males, and so the probability of finding HSPs
 sharing a father decreases, causing an overestimation of male abundance.
 
 ## 2.6. Scenarios
 
 From the above-described OM, sampling model, and EM configurations, we summarize the following scenarios. In the base case, the
-OM set $\mathrm{RV}_M$ equal to that of females and did not simulate sperm limitation; the sampling model collected 
-$10\sqrt{N}$ samples over three years; and the EM fixed $\Hmt$, $\mathrm{RV}_M$, and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ at the 
-true values (Figure 1). To explore the effect of CKMR data information content and structure, we (1) extended the 
+OM set $\mathrm{RV}_{a,M}$ equal to $\mathrm{RV}_{a,F}$ and did not simulate sperm limitation; the sampling model collected 
+$10\sqrt{N}$ samples over three years; and the EM fixed $\Hmt$, $\mathrm{RV}_{a,M}$, and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ at the 
+true values (Figure 3). To explore the effect of CKMR data information content and structure, we (1) extended the 
 sampling timeframe to 10 years and varied CKMR sample sizes to 50% and 150% of the base case, and 
 (2) evaluated the effect of genetic 
 marker resolution by misspecifying $\Hmt$ in two scenarios ($\Hmte$ greater and smaller than $\Hmts$). To evaluate uncertainty in 
-male contribution to reproductive success, we (3) simulated skipped spawning in the OM and (4) simulated $\mathrm{RV}_M$ differing 
-from that of females in two scenarios---with greater and lower contrast in reproductive contribution between younger and older 
-ages than for the females. Finally, to examine whether $\mathrm{RV}_M$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ could be estimated, and to assess 
-the effect of misspecifying $\mathrm{RV}_M$, we ran each scenario fixing or estimating these quantities. 
-When fixed, $\mathrm{RV}_M$ was always fixed at the same values as $\mathrm{RV}_F$, which resulted in misspecification for (4).
+male contribution to reproductive success, we (3) simulated skipped spawning in the OM and (4) 
+simulated $\mathrm{RV}_{a,M}^\mathrm{OM}$ differing 
+from $\mathrm{RV}_{a,F}^\mathrm{OM}$ in two scenarios---with greater and lower contrast in 
+reproductive contribution between younger and older 
+males than for the females. Finally, to examine whether $\mathrm{RV}_{a,M}$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ could be estimated, and to assess 
+the effect of misspecifying $\mathrm{RV}_{a,M}$, we ran each scenario fixing or estimating these quantities. 
+When fixed, $\mathrm{RV}_{a,M}$ was always fixed at the same values as $\mathrm{RV}_{a,F}$, which resulted in misspecification for (4).
 
 ## 2.7.  Model Evaluation
 For every assessment year $t$ and simulated observed data set $k$, we calculated percent relative error ($\mathrm{PRE}$)
@@ -644,8 +646,8 @@ adult abundance and sex ratio as:
 \mathrm{PRE}_{t,k} = \frac{(\mathrm{EV}_{t,k}-\mathrm{SV}_{t,k})}{\mathrm{SV}_{t,k}}\times 100,
 \end{equation}
 where $\mathrm{EV}$ = estimated value and $\mathrm{SV}$ = simulated value. For every $k$, 
-the median PRE was calculated across years, and these medians were used to calculate median and interquartile
-range ($\mathrm{IQR_{sc}}$) of $\mathrm{PRE_{sc}}$ to compare accuracy and precision of estimates, respectively, by tested scenario (sc). 
+the median PRE was calculated across years, and these medians were used to calculate median ($\mathrm{PRE_{sc}}$) and interquartile
+range ($\mathrm{IQR_{sc}}$) to compare accuracy and precision of estimates, respectively, by tested scenario (sc). 
 We also calculated $\mathrm{PRE}$ for the main model parameters for every $k$. Sex ratio was
 defined as the number of males divided by the total number of 3+ year-olds. We include calculation 
 and discussion of an additional metric, the normalized root mean squared error, in the Supplement.
@@ -670,20 +672,20 @@ the average abundance on which CKMR sample size was based. Conversely, the numbe
 of males sampled tended to be slightly higher for the 10-year sampling time period, because
 the sex ratio used to partition sampling by sex was higher for the longer time period.
 The median number of males sampled for the base OM scenario ranged from 15
-individuals ($\mathrm{IQR} = 3$) when CKMR sample size was 50% of $n_\mathrm{base}$ and sampling was
-conducted over three years to 50 individuals ($\mathrm{IQR} = 10$) when CKMR sample size was
+individuals ($\mathrm{IQR_{sc}} = 3$) when CKMR sample size was 50% of $n_\mathrm{base}$ and sampling was
+conducted over three years to 50 individuals ($\mathrm{IQR_{sc}} = 10$) when CKMR sample size was
 150% of $n_\mathrm{base}$ and samples were collected over ten years.
-For adult females, the number sampled ranged from a median of 1480 ($\mathrm{IQR} = 100$) for
-50% of $n_\mathrm{base}$ and ten sampling years to a median of 4664 ($\mathrm{IQR} = 497$) for
-150% of $n_\mathrm{base}$ and three sampling years (Figure S3).
+For adult females, the number sampled ranged from a median of 1480 ($\mathrm{IQR_{sc}} = 100$) for
+50% of $n_\mathrm{base}$ and ten sampling years to a median of 4664 ($\mathrm{IQR_{sc}} = 497$) for
+150% of $n_\mathrm{base}$ and three sampling years (Table S1; Figure S3).
 
 The number of CKMR pairs found was higher when sampling was conducted
 over a shorter time period (Table S1, Figure S4). Additionally, the number
 of HSPs with different mtDNA ($\HSPD$) was about an order of magnitude higher than
 the number of HSPs sharing mtDNA ($\HSPS$). The median number of pairs found for $\HSPD$ ranged
-from 166 ($\mathrm{IQR} = 52$) for low CKMR sample size to to 1,481 ($\mathrm{IQR} = 440$) for
+from 166 ($\mathrm{IQR_{sc}} = 52$) for low CKMR sample size to to 1,481 ($\mathrm{IQR_{sc}} = 440$) for
 high CKMR sample size (when averaged across number of sampling years),
-compared to a median of 10 ($\mathrm{IQR} = 6$) to 83 ($\mathrm{IQR} = 34$) pairs for
+compared to a median of 10 ($\mathrm{IQR_{sc}} = 6$) to 83 ($\mathrm{IQR_{sc}} = 34$) pairs for
 $\HSPS$ (Figure S4). The HSP pattern of observed frequencies by
 mtDNA sharing was reversed for POPs. The number of POPs sharing mtDNA ($\POPS$)
 was only slightly lower than the number of $\HSPS$ pairs (a median of 7 for low CKMR sampling
@@ -702,15 +704,15 @@ was higher for the skipped spawning scenario because younger females
 were more likely to skip spawning than older ones, meaning comparatively fewer
 females contributed offspring and the likelihood of finding
 HSPs sharing a mother increased.
-The next major effect was that of $\mathrm{RV}_M^\mathrm{OM}$ on $\HSPD$.
-When $\mathrm{RV}_M^\mathrm{OM}$ increased more steeply with age, as would be
+The next major effect was that of $\mathrm{RV}_{a,M}^\mathrm{OM}$ on $\HSPD$.
+When $\mathrm{RV}_{a,M}^\mathrm{OM}$ increased more steeply with age, as would be
 expected based on the size advantage model, the number of $\HSPD$ more than doubled
 compared to the base case.
 The explanation is analogous to finding more $\HSPS$ when there is skipped spawning. 
-If $\mathrm{RV}_M^\mathrm{OM}$ is steeper,
+If $\mathrm{RV}_{a,M}^\mathrm{OM}$ is steeper,
 older males (of which there are fewer than younger males) are much more successful at fathering offspring and
 hence the chance of finding $\HSPD$ increases.
-The opposite is seen when $\mathrm{RV}_M^\mathrm{OM}$ varies little with age. Here,
+The opposite is seen when $\mathrm{RV}_{a,M}^\mathrm{OM}$ varies little with age. Here,
 we only found about two-thirds the number of $\HSPD$ compared to the base case
 (Figure 5)
 because now younger males are also very successful and the offspring are more
@@ -728,7 +730,7 @@ weights, for  2,276  runs (3.5%). Thirty-eight of the failed runs were for the s
 runs while only 26% were for the largest sample size. 
 An additional 4,519 EM runs (7.1%) were excluded because
 parameters were estimated at bounds. Most of these were due
-to the $\mathrm{RV}_M^\mathrm{EM}$ function exponent parameter. Finally, 241 additional runs (0.4%) were excluded
+to the $\mathrm{RV}_{a,M}^\mathrm{EM}$ function exponent parameter. Finally, 241 additional runs (0.4%) were excluded
 because the maximum parameter gradient exceeded 0.1.
 Overall, 89% of the simulated data sets produced model fits
 that were used in subsequent analyses. Fourteen percent of runs converged and passed
@@ -743,25 +745,25 @@ and $\mathrm{RV}_M^\mathrm{OM} = \mathrm{RV}_F^\mathrm{OM}$.
 
 ### 3.4.1. CKMR sample size and number of sampling years
 
-When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M$ were assumed known, median abundance estimates
+When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were assumed known, median abundance estimates
 had no (median $\mathrm{PRE_{sc}} < \pm 1\%$) or low (median $\mathrm{PRE_{sc}} < \pm 2\%$) bias, with no difference between
 male and female estimates. Precision was relatively high, with $\mathrm{IQR_{sc}}$
 ranging from 5% to 13% across all tested CKMR sample sizes and numbers of CKMR sampling 
-years (Figure 6A, Table S1). There was no difference
+years (Figure 6A, Table S2). There was no difference
 in median bias between three and ten years of CKMR sampling and precision
 was only slightly lower for ten years of sampling. 
 Precision ($\mathrm{IQR_{sc}}$) increased by a relatively small amount (28%) when sample
 size was increased from 100% to 150% of $n_\mathrm{base}$ and more significantly
 (${\approx}67\%$) when the sample size increased from 50% to 100% of $n_\mathrm{base}$ (Figure 6A).
 
-When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and/or $\mathrm{RV}_M$ were free to be estimated, median bias remained low
+When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and/or $\mathrm{RV}_{a,M}$ were free to be estimated, median bias remained low
 ($\mathrm{PRE_{sc}}$ ranging between -3% to 7% across CKMR sampling scenarios)
 but precision decreased ($\mathrm{IQR_{sc}}$ ranging from 5% to 51%) and some individual runs had high error.
-$\mathrm{IQR_{sc}}$ was similar between males and females when $\mathrm{RV}_M$ was estimated
+$\mathrm{IQR_{sc}}$ was similar between males and females when $\mathrm{RV}_{a,M}$ was estimated
 (Figure 6C and 6D) but smaller for males than females
 when only $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was estimated (Figure 6B). The number
 of sampling years continued having only a minor impact on estimation. Generally, $\mathrm{IQR_{sc}}$ increased when
-sampling was spread out over ten years (an exception was male estimation performance when both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M$ were estimated). The largest increase (by ${\approx}11\%$) was observed for
+sampling was spread out over ten years (an exception was male estimation performance when both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were estimated). The largest increase (by ${\approx}11\%$) was observed for
 females at 50% of $n_\mathrm{base}$ when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was estimated
 (Figure 6B and 6D). CKMR sample size continued to
 impact precision more than the median of the abundance estimates. $\mathrm{IQR_{sc}}$ increased from 29% to 41% when sample
@@ -773,19 +775,19 @@ meaning $10\sqrt{N}$ samples collected over three years.
 ### 3.4.2. Uncertainty in mitochondrial DNA haplotype diversity
 
 In the base OM and EM configuration ($\Hmte$ = $\Hmts$, no skipped spawning, 
-$\mathrm{RV}_M^\mathrm{OM}$ = $\mathrm{RV}_F^\mathrm{OM}$), male and female abundance were estimated very well
-(Figure 7A, Table S1). Estimates for both sexes had negligible bias
-($\mathrm{PRE_{sc}} < \pm 2\%$) regardless of whether $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M$ were estimated or
+$\mathrm{RV}_{a,M}^\mathrm{OM}$ = $\mathrm{RV}_{a,F}^\mathrm{OM}$), male and female abundance were estimated very well
+(Figure 7A, Table S2). Estimates for both sexes had negligible bias
+($\mathrm{PRE_{sc}} < \pm 2\%$) regardless of whether $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were estimated or
 fixed. Precision, however, was higher when both these functions were assumed
 known ($\mathrm{IQR_{sc}} {\approx} 7\%$). Precision was lowest for males when both functions were estimated
 ($\mathrm{IQR_{sc}} = 33\%$)(Figure 7A). 
 
 Misspecifying $\Hmt$ in the EM had major effects on abundance estimation
-performance, but only when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M$ were not both 
+performance, but only when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were not both 
 assumed known (Figure 7B and 7C).
 When one or both of these parameters were allowed to be estimated, the
 resulting biases were in the direction we predicted for the females (overestimation when $\Hmte$ < $\Hmts$
-and underestimation when $\Hmts$ < $\Hmte$) but, for the males, results
+and underestimation when $\Hmts$ < $\Hmte$), but for the males results
 were more nuanced. When only $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was assumed known, male
 bias mirrored that of the females (Figure 7B and 7C)
 resulting in unbiased sex ratio estimates (Figure 8B and 8C)
@@ -793,26 +795,26 @@ despite high bias in absolute abundance estimates. This highlights the near-tota
 control the sex transition function in the EM has over estimated
 sex ratios---when it was assumed known, sex ratios were almost always unbiased and precise (Figure 8). Allowing
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ to be estimated when $\Hmt$ was misspecified in the EM resulted in highly
-biased sex ratio estimates (Figure 8B and 8C) that became slightly less biased for the $\Hmts < \Hmte$ scenario when $\mathrm{RV}_M$ was also allowed to be estimated (Figure 8B).
+biased sex ratio estimates (Figure 8B and 8C) that became slightly less biased for the $\Hmts < \Hmte$ scenario when $\mathrm{RV}_{a,M}$ was also allowed to be estimated (Figure 8B).
 
 When $\Hmts < \Hmte$, the observed number of $\HSPS$ was higher than when $\Hmts = \Hmte$
 (Figure S5). Thus when the EM sees more $\HSPS$ than it expects
 in the case of $\Hmts$ < $\Hmte$,
 it attempts to reduce the number of expected females to match what it sees in the genetic
 data (Figure 7B). It does this by underestimating mean recruitment (Figure S6)
-along with changing the shape of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M^\mathrm{EM}$,
+along with changing the shape of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}^\mathrm{EM}$,
 if allowed (Figure 9D).
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ is fixed, thereby locking in the sex ratio, the EM can only reduce the expected
 number of females by also lowering the expected number of males (Figure 7B), and it does this by
-flattening the estimated $\mathrm{RV}_M$ function (Figure 9D). This also reduces
+flattening the estimated $\mathrm{RV}_{a,M}$ function (Figure 9D). This also reduces
 the expected number of $\HSPD$, in contradiction to what the genetic data for the
 males are indicating. When allowed, the EM will flatten the estimated $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ which
-results in females turning into males at a younger age, reducing the bias in $\mathrm{RV}_M^\mathrm{EM}$
+results in females turning into males at a younger age, reducing the bias in $\mathrm{RV}_{a,M}^\mathrm{EM}$
 required to reconcile observed and expected numbers
 (Figure 9D). The opposite is true when the EM sees fewer
 $\HSPS$ than it expects in the data for the $\Hmte$ < $\Hmts$ scenario: recruitment is now
 overestimated (Figure S6) and the estimated
-$P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_M$ functions are steeper to create
+$P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ functions are steeper to create
 more expected females (Figure 9C).
 
 ## 3.5. Effect of Uncertainty about Male Contribution to Reproductive Success
@@ -825,62 +827,62 @@ between-sex comparisons in this section on the case when $P_a^{\mathrm{F}\righta
 ### 3.5.1. Skipped spawning
 When skipped spawning was simulated but not accounted for in the EM, younger females were more likely to skip spawning
 than older ones. Fewer younger females are
-contributing offspring, effectively shifting $\mathrm{RV}_F^\mathrm{OM}$ to the right, towards older ages. 
+contributing offspring, effectively shifting $\mathrm{RV}_{a,F}^\mathrm{OM}$ to the right, towards older ages. 
 Given that fewer females contribute to reproduction, the
 chance of encountering $\HSPS$ increases against the EM's expectation and female abundance is underestimated (Figure 7D).
 Under a known $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$, the negative bias for both sexes was
-low ($\mathrm{PRE_{sc}} < 5\%$) when $\mathrm{RV}_M$ was also known but increased
-when $\mathrm{RV}_M$ was estimated ($\mathrm{PRE_{sc}} <20\%$; Figure 7D).
+low ($\mathrm{PRE_{sc}} < 5\%$) when $\mathrm{RV}_{a,M}$ was also known but increased
+when $\mathrm{RV}_{a,M}$ was estimated ($\mathrm{PRE_{sc}} <20\%$; Figure 7D).
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was estimated, it was estimated to be slightly less steep than simulated
 (Figure 9B), and the resulting female negative bias increased to 
 ${\approx} 28\% \mathrm{PRE_{sc}}$ but male bias decreased ($\mathrm{PRE_{sc}} <5\%$; Figure 7D).
 This is because a less steep $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ would turn more young females into males, thereby increasing
 the number of males estimated. Consequently, male sex ratios when skipped spawning was simulated
 were positively biased when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was allowed to be estimated
-(known $\mathrm{RV}_M^\mathrm{EM}$: $\mathrm{PRE_{sc}} = 38\%$, $\mathrm{IQR_{sc}} = 30\%$;
-estimated $\mathrm{RV}_M^\mathrm{EM}$: $\mathrm{PRE_{sc}} = 34\%$, $\mathrm{IQR_{sc}} = 49\%$;
-Figure 8D; Table S1).
+(known $\mathrm{RV}_{a,M}^\mathrm{EM}$: $\mathrm{PRE_{sc}} = 38\%$, $\mathrm{IQR_{sc}} = 30\%$;
+estimated $\mathrm{RV}_{a,M}^\mathrm{EM}$: $\mathrm{PRE_{sc}} = 34\%$, $\mathrm{IQR_{sc}} = 49\%$;
+Figure 8D; Table S2).
 
 ### 3.5.2. Differing simulated reproductive value between the sexes
-When the EM assumed that $\mathrm{RV}_M$ equalled $\mathrm{RV}_F$ but the OM simulated them to be different, bias in male abundance
-estimates was as predicted: positive when simulated $\mathrm{RV}_M^\mathrm{OM}$ was flatter and negative when
-it was steeper than $\mathrm{RV}_F^\mathrm{OM}$ (Figure 7E and 7F). Female bias
+When the EM assumed that $\mathrm{RV}_{a,M}$ equaled $\mathrm{RV}_{a,F}$ but the OM simulated them to be different, bias in male abundance
+estimates was as predicted: positive when simulated $\mathrm{RV}_{a,M}^\mathrm{OM}$ was flatter and negative when
+it was steeper than $\mathrm{RV}_{a,F}^\mathrm{OM}$ (Figure 7E and 7F). Female bias
 matched that of the males when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was known, but when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was allowed to be
 estimated, median female abundance estimates were fairly unbiased, driven by compensation
-for any erroneous $\mathrm{RV}_M^\mathrm{EM}$ in the estimated shape of $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$
-(Figures 9E&F and S7). When $\mathrm{RV}_M^\mathrm{EM}$ was
+for any erroneous $\mathrm{RV}_{a,M}^\mathrm{EM}$ in the estimated shape of $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$
+(Figures 9E&F and S7). When $\mathrm{RV}_{a,M}^\mathrm{EM}$ was
 allowed to be estimated, male abundance estimates became much less biased:
-for the scenario where $\mathrm{RV}_M^\mathrm{OM}$ flatter than $\mathrm{RV}_F^\mathrm{OM}$,
+for the scenario where $\mathrm{RV}_{a,M}^\mathrm{OM}$ was flatter than $\mathrm{RV}_{a,F}^\mathrm{OM}$,
 $\mathrm{PRE_{sc}}$ was reduced to ${\approx}{5}\%$ from ${\approx}{55}\%$, and for the
-scenario wehre $\mathrm{RV}_M^\mathrm{OM}$ steeper than $\mathrm{RV}_F^\mathrm{OM}$,
+scenario where $\mathrm{RV}_{a,M}^\mathrm{OM}$ was steeper than $\mathrm{RV}_{a,F}^\mathrm{OM}$,
 $\mathrm{PRE_{sc}}$ was reduced to ${\approx}{-6}\%$ from ${\approx}{-64}\%$ (Figure 7E and 7F).
 Sex ratios were most biased when
-the transition function was allowed to be estimated but $\mathrm{RV}_M$ continued to be
-misspecified ($\mathrm{PRE{sc}} = 51\%$ and $\mathrm{IQR_{sc}} = 37\%$ for $\mathrm{RV}_M^\mathrm{OM}$ flatter than 
-$\mathrm{RV}_F^\mathrm{OM}$;
-$\mathrm{PRE{sc}} = -65\%$ and $\mathrm{IQR_{sc}} = 11\%$ for $\mathrm{RV}_M^\mathrm{OM}$ steeper than 
-$\mathrm{RV}_F^\mathrm{OM}$; Figure 8E and 8F).
+$P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was allowed to be estimated but $\mathrm{RV}_{a,M}$ continued to be
+misspecified ($\mathrm{PRE_{sc}} = 51\%$ and $\mathrm{IQR_{sc}} = 37\%$ for $\mathrm{RV}_{a,M}^\mathrm{OM}$ flatter than 
+$\mathrm{RV}_{a,F}^\mathrm{OM}$;
+$\mathrm{PRE_{sc}} = -65\%$ and $\mathrm{IQR_{sc}} = 11\%$ for $\mathrm{RV}_{a,M}^\mathrm{OM}$ steeper than 
+$\mathrm{RV}_{a,F}^\mathrm{OM}$; Figure 8E and 8F).
 
 ## 3.6. Ability to estimate sex transition and male reproductive value
 The sex transition function shape was overall well estimated with little variability in
-estimated shapes, except when $\mathrm{RV}_M^\mathrm{OM}$ was steeper than 
-$\mathrm{RV}_F^\mathrm{OM}$ and $\mathrm{RV}_M$ was also estimated (Figure 9F). 
-The $\mathrm{RV}_M$ function was much more variable (Figures 9 and S7).
+estimated shapes, except when $\mathrm{RV}_{a,M}^\mathrm{OM}$ was steeper than 
+$\mathrm{RV}_{a,F}^\mathrm{OM}$ and $\mathrm{RV}_{a,M}$ was also estimated (Figure 9F). 
+The $\mathrm{RV}_{a,M}$ function was much more variable (Figures 9 and S7).
 The median was estimated fairly well except when $\Hmt$ was misspecified in the EM 
 but $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ remained fixed (Figure 9C&D)
-and when $\mathrm{RV}_M^\mathrm{OM}$ was flatter than $\mathrm{RV}_F^\mathrm{OM}$ and $\mathrm{RV}_M$ 
-(Figure 9E). Generally, the median estimated $\mathrm{RV}_M$ shapes matched the simulated curvatures,
+and when $\mathrm{RV}_{a,M}^\mathrm{OM}$ was flatter than $\mathrm{RV}_{a,F}^\mathrm{OM}$ 
+(Figure 9E). Generally, the median estimated $\mathrm{RV}_{a,M}$ shapes matched the simulated curvatures,
 with the notable exception of when $\Hmts < \Hmte$.
 Even so, in almost all scenarios, some runs estimated incorrect curvatures (i.e., estimated
-$\mathrm{RV}_M$ increased at an increasing rate with age when it was simulated
+$\mathrm{RV}_{a,M}$ increased at an increasing rate with age when it was simulated
 to increase at a decreasing rate with age, and *vice versa*).
 
 The standard deviation of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$
-($\mathrm{STF}_{SD}$) and $\mathrm{RV}_M^\mathrm{EM}$ were
+($\mathrm{STF}_{SD}$) and the exponent of $\mathrm{RV}_{a,M}^\mathrm{EM}$ were
 strongly positively correlated, meaning as the estimated $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ function
-became flatter, $\mathrm{RV}_M^\mathrm{EM}$ became steeper. This correlation increased
-with increasing CKMR sampling in all scenarios except when $\mathrm{RV}_M^\mathrm{OM}$
-was close to age-invariant (Figure S8).
+became flatter, $\mathrm{RV}_{a,M}^\mathrm{EM}$ became steeper (Figure S8). This correlation increased
+with increasing CKMR sampling in all scenarios except when $\mathrm{RV}_{a,M}^\mathrm{OM}$
+was close to age-invariant.
 $\mathrm{STF}_{SD}$ was moderately negatively correlated with mean recruitment
 but this correlation decreased with increasing CKMR sampling (Figure S8).
 
@@ -904,11 +906,11 @@ which describes the probability that two randomly sampled mtDNA sequences are di
 Even though this quantity can be easily and accurately estimated by typing the mtDNA of
 a large sample of individuals,
 our results underscore the importance of estimating mtDNA haplotype diversity well in order to be able to
-estimate $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ and $\mathrm{RV}_M$. Previous studies
-have estimated $\Hmt$ for gag on the West Florida Shelf to be ~0.84-0.98 [@jue2015shelf]. In that study, 
+estimate $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ and $\mathrm{RV}_{a,M}$. Previous studies
+have estimated $\Hmt$ for Gag on the West Florida Shelf to be ~0.84-0.98 [@jue2015shelf]. In that study, 
 sample size was quite low ($N=83$) and the sequencing targeted between 562 and 781 bp of the D-loop
 portion of the mtDNA molecule, with the variation in sequence length and in $\Hmt$ reflecting whether
-or not indels were included in the diversity measure. If gag mtDNA haplotypes are not in fact, as we assumed,
+or not indels were included in the diversity measure. If Gag mtDNA haplotypes are not in fact, as we assumed,
 equifrequent, haplotype frequencies will need to be estimated, incorporated into the EM as data, and
 accounted for in the likelihood. The implications for CKMR estimators of rare and common haplotypes 
 in the population could be explored in future simulation studies.
@@ -921,23 +923,23 @@ hermaphrodites, it is common practice to assume that reproductive value scales i
 between males and females, although there is no evidence to support this assumption. In fact,
 the size advantage model of sex allocation suggests the opposite [@warner1988sex]. In our simulations we
 included two scenarios with shapes for male reproductive value at age that differed from that of the
-females.  When the EM falsely assumed $\mathrm{RV}_M = \mathrm{RV}_F$, this resulted in significant estimation bias, but
-we were encouraged to see that there was enough information in the data to allow $\mathrm{RV}_M$ to be estimated with no or little bias
+females.  When the EM falsely assumed $\mathrm{RV}_{a,M} = \mathrm{RV}_{a,F}$, this resulted in significant estimation bias, but
+we were encouraged to see that there was enough information in the data to allow $\mathrm{RV}_{a,M}$ to be estimated with no or little bias
 when the sex transition
 function was known. This is good news because data exist to estimate $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$
 outside the stock assessment model. This is, in fact, what is usually done [@SEDAR2022], even though 
 those estimates are also uncertain [@lowerre2021gaggrouper]. By contrast, it is unclear how one would 
-go about attempting to measure $\mathrm{RV}_{M}$ in the gag population. Theoretically, one could obtain 
+go about attempting to measure $\mathrm{RV}_{a,M}$ in the Gag population. Theoretically, one could obtain 
 it by dividing the sample age composition of adult males by the sample age composition of 
 male parents which allows separating $\mathrm{RV}$ from selectivity-at-age [@davies2017advice], but this 
-would be extremely difficult, in practice, for gag due to the expectation of low numbers 
+would be extremely difficult, in practice, for Gag due to the expectation of low numbers 
 of POPs sharing a father in real-world sampling.
 
 Gag are unusual in the extreme sex ratio skew they exhibit as a consequence of high exploitation rates. 
 Other protogynous hermaphrodites have shown more plasticity in sex change [@warner1982mating; @hamilton2007size], where females start 
 transitioning at younger ages as males become scarce. Simulation studies for those species would include 
 compensation in sex change in the OM. We did not include such compensation in the OM for this study 
-because there is no evidence for a strong compensatory response in sex change for gag.
+because there is no evidence for a strong compensatory response in sex change for Gag.
 
 The mechanism by which extremely low sex ratios in protogynous hermaphrodites might compromise
 reproductive resilience is unknown. In our simulation model, we assumed it would result in some females 
@@ -950,7 +952,7 @@ but often the data to allow their estimation are not available.
 As with all simulation studies, there are known and unknown unknowns and when combined, these
 could result in unexpected outcomes, conceivably even reversing the direction of observed effects. 
 Our simulation model, although fairly complex, did not account for all factors believed 
-to be important to gag population dynamics. The most crucial of these are probably spatial effects. 
+to be important to Gag population dynamics. The most important of these is likely spatial effects. 
 @conn2020robustness showed that CKMR estimators can be biased when there is limited dispersal and 
 variation in spatial sampling probabilities. Assessing biases in spatial sampling in marine fish is
 challenging given that drivers of spawning site selection, fidelity, and dispersal are rarely known. 
@@ -970,7 +972,7 @@ An additional factor our simulation model did not consider but could be included
 is variability of size-at-age and consequent size-based effects on individual reproductive output for 
 individuals of the same age. Furthermore, we assumed perfect
 fisheries data, with a highly accurate and precise index of juvenile abundance and perfect, though
-combined-sex, composition data. In reality, the age-0 gag index is composed of multiple data streams 
+combined-sex, composition data. In reality, the age-0 Gag index is composed of multiple data streams 
 whose spatio-temporal footprints have shifted through time, making the index prone to bias and uncertainty
 [@ingram2021juvenile]. Additionally, composition data are highly uncertain and particularly sparse for the private
 recreational fleet [@SEDAR2022], which comprises the majority of the catch. Fully operational simulation studies 
@@ -993,16 +995,16 @@ calculating and including kinship probabilities for grandparents and avuncular p
 and/or setting one's false negative rate to ensure distinction between HSPs and half-avunculars,
 we did not simulate such a process.
 
-Our estimation model was, by necessity, much simpler than the assessment model used for gag in reality. 
+Our estimation model was, by necessity, much simpler than the assessment model used for Gag in reality. 
 Any real-world model would likely require
 hand-tuning that could not be implemented in a simulation framework attempting to fit thousands of
-models. It remains to be seen whether $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ and $\mathrm{RV}_M$ could actually
+models. It remains to be seen whether $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ and $\mathrm{RV}_{a,M}$ could actually
 be estimated in the real world assessment model that includes many more parameters and data sources
 than our simplistic model, but perhaps with the right data, this is an achievable future goal. Unlike
 most real world fisheries stock assessments, we did not fit our assessment model to catch data. This
 was done because we were interested to see how well the CKMR data alone would do in estimating scale
-and because catch data for gag are highly uncertain, mainly due to uncertainty in estimating recreational
-catches which make up the majority of gag removals in the GOM. It is conceivable that the CKMR data
+and because catch data for Gag are highly uncertain, mainly due to uncertainty in estimating recreational
+catches which make up the majority of Gag removals in the GOM. It is conceivable that the CKMR data
 and catch data provide conflicting information about scale and trends, similar to what is often seen
 for composition and index data, that would complicate model fitting; this scenario could be explored
 in future simulations. We note that many species for which management advice is needed in the
@@ -1022,7 +1024,9 @@ such as improvements in assessment performance.
 We sincerely thank Paul Conn for his thoughtful and thorough review, 
 which greatly improved this manuscript. We would like to thank Rob Ahrens whose
 ADMB model code provided as part of his excellent fishery stock assessment class
-served as the basis for the assessment model developed in this paper.
+served as the basis for the assessment model developed in this paper. We also
+thank two anonymous reviewers for their helpful suggestions and constructive
+feedback that strengthened the manuscript.
 A portion of the writing and code development for this paper occurred while
 CF and ECA were scientists-in-residence with Matthew G. DeSaix at the
 mobile High Altitude Venue for Ecological Analysis, Genetics and
@@ -1088,11 +1092,13 @@ kableExtra::kable(table1,
 # Appendix A. Full CKMR Model Specification
 
 \renewcommand{\theequation}{A\arabic{equation}} \setcounter{equation}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\setcounter{table}{0}
 
 To specify the CKMR model, we first derive kinship probabilities representing the 
 likelihood that any two individuals in a genetic sample are HSPs or POPs. Then we combine those into
-two different CKMR pseudolikelihoods that we tested. See Table \@ref(tab:table1) for a 
-summary of notation used in the paper.
+two different CKMR pseudolikelihoods that we tested. See Table A1 for a 
+summary of notation used in the appendices.
 
 
 ### HSP Kinship Probabilities
@@ -1454,6 +1460,7 @@ while composition data weights could increase or decrease. The model was
 refitted up to two times for each iteration. If the model was run more than
 once, the run with the highest likelihood was retained for subsequent analysis.
 
+
 ## References
 
 \begin{hangparas}{.25in}{1}
@@ -1478,3 +1485,18 @@ Waples, R.S., and Feutry, P. 2022. Close-kin methods to estimate census size and
 population size. Fish Fish. 23(2): 273–293.
 \end{hangparas}
 
+
+```{r tableA1, echo=FALSE, warning=FALSE}
+kableExtra::kable(tableA1, 
+                  escape = FALSE, 
+                  booktabs = TRUE, 
+                  caption = "Notation and definitions used in the appendix", 
+                  col.names = NULL,
+                  longtable = TRUE) %>%
+  column_spec(1, width = "6em") %>%
+  column_spec(2, width = "33em") %>%
+  #row_spec(0, bold=TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "repeat_header"), 
+                position = "left", repeat_header_method = "replace") 
+
+```

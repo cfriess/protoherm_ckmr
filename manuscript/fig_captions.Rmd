@@ -90,7 +90,13 @@ header-includes   :
 
 
 
-**Figure 1.** Schematic overview of the simulation routine. The
+**Figure 1.** Overview of annual steps simulated in the individual-based operating model.
+
+\vspace{1em} 
+**Figure 2.** Simulated A) reproductive value (RV) at age and B) probability of female skipped spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RV, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
+shown in blue and green, respectively. Note that age 4 is the youngest age at which a female can turn into a male in our OM.
+
+**Figure 3.** Schematic overview of the simulation routine. The
 operating model (OM) concerns the simulation of individuals in the population, with four
 different scenarios listed. Observed kin pair data are obtained by sampling (sampling model) from the simulated population with different scenarios varying by the number of CKMR sampling years and 
 number of samples collected. Finally, several estimation model (EM) configurations were specified. Estimated abundance and sex ratio 
@@ -99,14 +105,9 @@ RV = reproductive value, P(\male $\rightarrow$ \female) = sex transition probabi
 haplotype diversity, $\Hmte$ = mitochondrial haplotype diversity assumed in the estimation model.
 
 \vspace{1em} 
-**Figure 2.** Overview of annual steps simulated in the individual-based operating model.
 
 \vspace{1em} 
-**Figure 3.** Simulated A) reproductive value (RC) at age and B) probability of female skipped spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RC, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
-shown in blue and green, respectively. Note that age 4 is the youngest age at which a female can turn into a male in our OM.
-
-\vspace{1em} 
-**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RV steeper than female, green = male RC flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
+**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RV steeper than female, green = male RV flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
 
 \vspace{1em} 
 **Figure 5.** Number of CKMR pairwise relationships for three years of CKMR sampling at $10\sqrt{N}$ by OM scenario. 
@@ -139,14 +140,14 @@ $\mathrm{RV}_M^\mathrm{OM}$ differs from $\mathrm{RV}_F^\mathrm{OM}$ (panels E a
 for all OM and EM scenarios and by whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
 ($\mathrm{RV}_{M}$) functions are assumed known (fixed). In the Base case there is no skipped spawning, male and female RV are
-equal, and $\Hmte = \Hmts = 1$. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
+equal, and $\Hmte = \Hmts$ = 1. When $\Hmte \neq \Hmts$, one was set to 1 and the other to 0.9.
 Notice the different y-axis scale for panel B. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
 **Figure 9.** Estimated sex transition and male reproductive value ($RV_M$) functions under different OM and EM configurations.
 The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9. Panel 
-lettering refers to each row of plots: a) Base (no skipped spawning, $RV_M$ = $RV_F$, $H_\mathrm{mt}^{EM} = H_\mathrm{mt}^{OM}$); 
-b) skipped spawning; c) $H_\mathrm{mt}^{EM} < H_\mathrm{mt}^{OM}$; d) $H_\mathrm{mt}^{OM} < H_\mathrm{mt}^{EM}$; 
-e) $RV_M$ flatter than $RV_F$; f) $RV_M$ steeper than $RV_F$.
+lettering refers to each row of plots: a) Base (no skipped spawning, $\mathrm{RV_M}$ = $\mathrm{RV_F}$, $\Hmte = \Hmts$); 
+b) skipped spawning; c) $\Hmte < \Hmts$; d) $\Hmts < \Hmte$; 
+e) $\mathrm{RV_M}$ flatter than $\mathrm{RV_F}$; f) $\mathrm{RV_M}$ steeper than $\mathrm{RV_F}$.
 
 

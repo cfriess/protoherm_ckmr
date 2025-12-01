@@ -156,7 +156,7 @@ om_labels <- c(
 
 
 #--------------------------------
-# Figure 3: simulated reproductive value and sex-ratio-dependent skipped spawning
+# Figure 2: simulated reproductive value and sex-ratio-dependent skipped spawning
 
 plot_age <- seq(1,33,0.1)
 plot_age_Male <- seq(4,33,0.1)
@@ -191,9 +191,11 @@ p_fec <- ggplot(fem_fec_table) +
   theme_bw() +
   theme(legend.position = "none",
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 9),
+        axis.title = element_text(size = 11)) +
   guides(linetype = guide_legend(title = "mERRO OM scenario")) +
-  xlab("Age") + ylab("Relative Reproductive Success")
+  xlab("Age") + ylab("Relative Reproductive \nSuccess")
 
 #### sperm limitation
 
@@ -204,9 +206,11 @@ sl <- data.frame(PropMale = prop_male, Response = resp)
 
 sl_plot <- ggplot(sl) +
   geom_line(aes(x = PropMale, y = 1-Response)) +
-  theme_bw() + ylab("Probability of Female Skipped Spawning") +
+  theme_bw() + ylab("Probability of Female \nSkipped Spawning") +
   theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 9),
+        axis.title = element_text(size = 11)) +
   xlab("Relative Proportion Male")
 
 pspawn_sigmoid <- data.frame(age = ages,
@@ -219,7 +223,7 @@ sig_plot <- ggplot(pspawn_sigmoid) +
 
 mRC_plot <- p_fec + sl_plot + plot_layout(nrow = 1) +
   plot_annotation(tag_levels = 'A')
-ggsave(here("manuscript", "figures", "Figure_3.pdf"), plot = mRC_plot, width = 7, height = 3)
+ggsave(here("manuscript", "figures", "Figure_2.pdf"), plot = mRC_plot, width = 7, height = 3)
 
 
 #--------------------------------

@@ -203,7 +203,7 @@ Squared Error (NRMSE) for every scenario $sc$ as an additional accuracy metric:
 where $n_sc$ is the number of simulations within a scenario. 
 
 The full set of performance metrics for
-sex-specific abundance and sex ratio are shown in Table \@ref(tab:table2). The pattern
+sex-specific abundance and sex ratio are shown in Table S2. The pattern
 of NRMSE was generally similar to median PRE in identifying the scenarios with the lowest
 accuracy. However, due to the absolute rather than signed nature of the accuracy measure, error for the
 base OM and EM scenarios appeared higher for NRMSE than PRE across CKMR sampling scenarios. Additionally,
@@ -272,7 +272,12 @@ tS1_cap <- "Median number of adult males and females sampled and number of obser
 scenario as well as the number of CKMR
 sampling years (Yrs) and CKMR sample size (N; proportion of base sample size, see main text for details). The 
 number in parentheses is the interquartile range. sHmt = simulated mitochondrial haplotype diversity,
-eHmt = mitochondrial haplotype diversity assumed in the EM."
+eHmt = mitochondrial haplotype diversity assumed in the EM. In the Base OM, there was no skipped spawning
+and male reproductive value (mRV) was equal to that of the females. In the Base EM, simulated haplotype diversity (sHmt)
+was equal to estimated (eHmt). POD = parent-offspring pairs with different mitochondrial DNA,
+POS = parent-offspring pairs with matching mitochondrial DNA, HSD = half-sibling
+pairs with different mitochondrial DNA, HSS = half-sibling pairs with matching
+mitochondrial DNA."
 
 tab_tex <- knitr::kable(
   samps_table_data, 
@@ -307,7 +312,10 @@ across years within simulation to obtain a single PRE value per simualated data 
 (interquartile range) values reported in this table represent the median and IQR, respectively, of
 those median PREs, by indicated scenario. NRMSE = Normalized Root Mean Square Error. 
 (normalized by the mean of simulated values). N represents the number of unique data sets analyzed
-for each scenario (400 minus the runs which didn't converge)"
+for each scenario (400 minus the runs which didn't converge). In the Base scenario, male reproductive value (mRV) was
+equal to that of females, there was no sperm limitation, the sampling model collected 
+$10\\sqrt{N}$ (BaseN) samples over three years, and the EM fixed haplotype diversity (Hmt), mRV, and the sex 
+transition function (trans) at the true values."
 tab_tex <- knitr::kable(error_metrics_full, 
                   booktabs = TRUE, 
                   caption = tS2_cap, 
