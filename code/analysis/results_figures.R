@@ -310,7 +310,8 @@ sp1 <- err_ckmr_sampling %>% filter(et == "fixed trans & mRV") %>%
   ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
   facet_wrap( ~ data, scales = "fixed") +
   xlab("CKMR Sample Size") +
   ylab("Percent Relative Error") +
@@ -326,7 +327,8 @@ sp2 <- err_ckmr_sampling %>% filter(et == "est trans & fixed mRV") %>%
   ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
   facet_wrap( ~ data, scales = "fixed") +
   xlab("CKMR Sample Size") +
   ylab("Percent Relative Error") +
@@ -342,7 +344,8 @@ sp3 <- err_ckmr_sampling %>% filter(et == "fixed trans & est mRV") %>%
   ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
   facet_wrap( ~ data, scales = "fixed") +
   xlab("CKMR Sample Size") +
   ylab("Percent Relative Error") +
@@ -356,7 +359,8 @@ sp4 <- err_ckmr_sampling %>% filter(et == "est trans & mRV") %>%
   ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
   facet_wrap( ~ data, scales = "fixed") +
   xlab("CKMR Sample Size") +
   ylab("Percent Relative Error") +
@@ -383,7 +387,7 @@ ckmr_sampling_plot <- ytitle + sp1 + sp2 + sp3 + sp4 + xtitle +
         axis.ticks.x = element_line(color = "grey20"),
         axis.title = element_blank())
 
-ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 9, height = 9)
+ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 8, height = 8)
 
 ### stats for text:
 
@@ -491,7 +495,8 @@ em_p1 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) +
   scale_fill_discrete(
     labels = em_labels
@@ -502,7 +507,7 @@ em_p1 <-
   guides(fill = guide_legend(title = "EM Scenario"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   labs(tag = "A")
 
 om_p3 <-
@@ -511,7 +516,8 @@ om_p3 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) +
   scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
   ylab("Percent Relative Error") +
@@ -520,7 +526,7 @@ om_p3 <-
   ) +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
   guides(fill = guide_legend(title = "EM Scenario")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "flatter than" ~ RV[F]^{"OM"}))) +
@@ -532,7 +538,8 @@ om_p4 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) + 
   scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
   ylab("Percent Relative Error") +
@@ -541,7 +548,7 @@ om_p4 <-
   ) +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
   guides(fill = guide_legend(title = "EM Scenario")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "steeper than" ~ RV[F]^{"OM"}))) +
@@ -553,7 +560,8 @@ om_p2 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) +
   scale_x_discrete(labels = function(x) str_replace_all(x, "&", "&\n")) +
   ylab("Percent Relative Error") +
@@ -562,7 +570,7 @@ om_p2 <-
   ) +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) + # omits 26
   guides(fill = guide_legend(title = "EM Scenario")) +
   ggtitle("Skipped spawning") +
@@ -575,7 +583,8 @@ em_p3 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) +
   scale_fill_discrete(
     labels = em_labels
@@ -586,7 +595,7 @@ em_p3 <-
   guides(fill = guide_legend(title = "EM Scenario"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   labs(tag = "C")
 
 em_p4 <- 
@@ -596,7 +605,8 @@ em_p4 <-
   geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
   geom_boxplot(aes(fill = et),
                outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3) +
+               outlier.shape = 21, outlier.stroke = 0.3,
+               linewidth = 0.3) +
   facet_wrap(~data) +
   scale_fill_discrete(
     labels = em_labels
@@ -607,7 +617,7 @@ em_p4 <-
   guides(fill = guide_legend(title = "EM Scenario"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5, size = 12)) +
   labs(tag = "B")
 
 scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
@@ -628,7 +638,7 @@ scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
                   ) +
   plot_annotation()  # Ensures the patchwork layout processes all theme elements
 
-ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = scen_pre_plot, width = 10, height = 9)
+ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = scen_pre_plot, width = 8, height = 7)
 
 # err_emsc1_2 %>% 
 #   filter(em_sc %in% c("est Hmt < sim Hmt")) %>%
@@ -983,4 +993,4 @@ est_fun_plot <- st_plot + me_plot + plot_layout(axis_titles = "collect_x", axes 
   theme(axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"))
 
-ggsave(here("manuscript", "figures", "Figure_9.pdf"), plot = est_fun_plot, width = 11, height = 12)
+ggsave(here("manuscript", "figures", "Figure_9.pdf"), plot = est_fun_plot, width = 8, height = 9)
