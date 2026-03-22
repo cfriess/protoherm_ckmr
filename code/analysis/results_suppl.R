@@ -673,8 +673,8 @@ samps_table_data <- sample_summary %>%
            F, M, POS, POD, HSS, HSD, Unrelated
   )
 
-names(samps_table_data) <- c("OM", "EM", "Yrs", "N", "Females", "Males", "POD",
-                             "POS", "HSD", "HSS", "Unrelated")
+names(samps_table_data) <- c("OM", "EM", "Yrs", "N", "Females", "Males", "POS",
+                             "POD", "HSS", "HSD", "Unrelated")
 samps_table_data$Yrs <- as.character(samps_table_data$Yrs)
 samps_table_data$OM <- as.character(samps_table_data$OM)
 samps_table_data$EM <- as.character(samps_table_data$EM)
@@ -1029,4 +1029,181 @@ male_samps_suppl_plot2 <- sbys_fem_p + sbys_mal_p +
         axis.ticks.x = element_line(color = "grey20"),
         axis.text = element_text(size = 10)) &
   guides(fill = guide_legend(title = "Male Sampling"))
+
+
+
+### out-takes
+
+
+#--------------------------------
+# Figure 6: PRE by number of CKMR samples and number of sampling yrs
+
+
+err_ckmr_sampling <- abund_res %>%
+  filter(om_sc == "Base", em_sc == "Base") %>%
+  group_by(data, et, ckmr_ssmult, nsampyrs, id) %>%
+  summarize(perror = median(perror)) %>%
+  ungroup()
+
+
+sp1 <- err_ckmr_sampling %>% filter(et == "fixed trans & mRV") %>%
+  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
+  facet_wrap( ~ data, scales = "fixed") +
+  xlab("CKMR Sample Size") +
+  ylab("Percent Relative Error") +
+  ggtitle(expression(bold("fixed" ~ bolditalic(P)^{"F" %->% "M"} ~ " & RV"["M"]))) +
+  #ggtitle("fixed trans & mRV") +
+  coord_cartesian(ylim = c(-55,150)) +
+  labs(tag = "A") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank())
+
+sp2 <- err_ckmr_sampling %>% filter(et == "est trans & fixed mRV") %>%
+  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
+  facet_wrap( ~ data, scales = "fixed") +
+  xlab("CKMR Sample Size") +
+  ylab("Percent Relative Error") +
+  ggtitle(expression(bold("free" ~ bolditalic(P)^{"F" %->% "M"} ~ ", fixed RV"["M"]))) +
+  #ggtitle("est trans & fixed mRV") +
+  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
+  labs(tag = "B") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank())
+
+sp3 <- err_ckmr_sampling %>% filter(et == "fixed trans & est mRV") %>%
+  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
+  facet_wrap( ~ data, scales = "fixed") +
+  xlab("CKMR Sample Size") +
+  ylab("Percent Relative Error") +
+  ggtitle(expression(bold("fixed" ~ bolditalic(P)^{"F" %->% "M"} ~ ", free RV"["M"]))) +
+  #ggtitle("fixed trans & est mRV") +
+  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
+  labs(tag = "C") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+sp4 <- err_ckmr_sampling %>% filter(et == "est trans & mRV") %>%
+  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.4,
+               linewidth = 0.3) +
+  facet_wrap( ~ data, scales = "fixed") +
+  xlab("CKMR Sample Size") +
+  ylab("Percent Relative Error") +
+  ggtitle(expression(bold("free" ~ bolditalic(P)^{"F" %->% "M"} ~ " & RV"["M"]))) +
+  #ggtitle("est trans & mRV") +
+  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
+  labs(tag = "D") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+layout2 <- "
+ABC
+ADE
+FFF
+"
+
+ckmr_sampling_plot <- ytitle + sp1 + sp2 + sp3 + sp4 + xtitle +
+  plot_layout(
+    guides = "collect",
+    design = layout2,
+    widths = c(0.05,0.475,0.475),
+    heights = c(0.475,0.475,0.05)) &
+  theme(legend.position = "none",
+        axis.line.x = element_line(color = "grey20"),
+        axis.ticks.x = element_line(color = "grey20"),
+        axis.title = element_blank())
+
+ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 8, height = 8)
+
+### stats for text:
+
+# tmp <- err_ckmr_sampling %>%
+#   filter(et != "fixed trans & mRV") %>%
+#   group_by(data, et, ckmr_ssmult, nsampyrs) %>%
+#     summarize(med = median(perror),
+#               iqr = IQR(perror),
+#               min = min(perror),
+#               max = max(perror)) %>%
+#     arrange(data, med) %>%
+#     mutate_if(is.numeric, round, digits = 3)
+# summary(tmp$med)
+# summary(tmp$iqr)
+#  
+# err_ckmr_sampling %>%
+#   filter(et != "fixed trans & mRV") %>%
+#   group_by(nsampyrs, et, data, ckmr_ssmult) %>%
+#   summarize(metric = IQR(perror)) %>%
+#   arrange(nsampyrs, et, data, ckmr_ssmult) %>%
+#   mutate_if(is.numeric, round, digits = 3) %>%
+#   spread(nsampyrs, metric) %>%
+#   mutate(diff = `10 Yrs` - `03 Yrs`) %>%
+#   arrange(diff)
+#  
+# err_ckmr_sampling %>%
+#   filter(et != "fixed trans & mRV") %>%
+#   group_by(ckmr_ssmult, et) %>%
+#   summarize(metric = IQR(perror)) %>%
+#   arrange(ckmr_ssmult) %>%
+#   mutate_if(is.numeric, round, digits = 3) %>%
+#   spread(ckmr_ssmult, metric) %>%
+#   mutate(diff50_100 = `50%` - `100%`,
+#          diff100_150 = `100%` - `150%`,
+#          perc50_100 = diff50_100*100/`100%`,
+#          perc100_150 = diff100_150*100/`150%`) %>%
+#   arrange(perc50_100)
+# 
+# err_ckmr_sampling %>%
+#   group_by(et, ckmr_ssmult) %>%
+#   summarize(metric = IQR(perror)) %>%
+#   arrange(ckmr_ssmult) %>%
+#   mutate_if(is.numeric, round, digits = 3) %>%
+#   spread(ckmr_ssmult, metric) %>%
+#   mutate(diff50_100 = `50%` - `100%`,
+#          diff100_150 = `100%` - `150%`,
+#          perc50_100 = diff50_100*100/`100%`,
+#          perc100_150 = diff100_150*100/`150%`) %>%
+#   arrange(perc50_100)
+# 
+# err_ckmr_sampling %>%
+#   group_by(et, ckmr_ssmult, data) %>%
+#   summarize(metric = median(perror)) %>%
+#   arrange(ckmr_ssmult) %>%
+#   mutate_if(is.numeric, round, digits = 3) %>%
+#   spread(ckmr_ssmult, metric) %>%
+#   mutate(diff50_100 = `50%` - `100%`,
+#          diff100_150 = `100%` - `150%`,
+#          perc50_100 = diff50_100*100/`100%`,
+#          perc100_150 = diff100_150*100/`150%`) %>%
+#   arrange(perc50_100)
+# 
+# err_ckmr_sampling %>%
+#   group_by(et, ckmr_ssmult, data, nsampyrs) %>%
+#   summarize(metric = IQR(perror)) %>%
+#   ungroup() %>%
+#   arrange(ckmr_ssmult) %>%
+#   mutate_if(is.numeric, round, digits = 3) %>%
+#   spread(ckmr_ssmult, metric) %>%
+#   mutate(diff50_100 = `50%` - `100%`,
+#          diff100_150 = `100%` - `150%`,
+#          perc50_100 = diff50_100*100/`100%`,
+#          perc100_150 = diff100_150*100/`150%`) %>%
+#   group_by(et) %>%
+#   summarize(diff50_100 = mean(diff50_100),
+#             diff100_150 = mean(diff100_150),
+#             perc50_100 = mean(perc50_100),
+#             perc100_150 = mean(perc100_150))
 

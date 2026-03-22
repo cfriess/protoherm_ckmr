@@ -227,7 +227,7 @@ ggsave(here("manuscript", "figures", "Figure_2.pdf"), plot = mRC_plot, width = 7
 
 
 #--------------------------------
-# Figure 4: simulated pedigrees
+# Figure 3: simulated pedigrees
 
 sim_pop$scenario <- as.factor(sim_pop$scenario)
 
@@ -255,11 +255,11 @@ sim_pop_plot <- ggplot(sim_pop2) +
   ylab("Abundance (Age 3+)") +
   theme(legend.position = "none")
 
-ggsave(here("manuscript", "figures", "Figure_4.pdf"), plot = sim_pop_plot, width = 8, height = 5)
+ggsave(here("manuscript", "figures", "Figure_3.pdf"), plot = sim_pop_plot, width = 8, height = 5)
 
 
 #--------------------------------
-# Figure 5: ckmr pairs
+# Figure 4: ckmr pairs
 
 
 ckmr_pairs_by_scenario <- ckmr_obs_samps_long %>% 
@@ -292,185 +292,12 @@ main_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_scenario_TEX) +
         strip.text.x = element_text(size = 16)) +
   guides(fill = guide_legend(title = "OM Scenario"))
 
-ggsave(here("manuscript", "figures", "Figure_5.pdf"), plot = main_ckmr_pairs_plot, width = 8, height = 6)
-
-
-#--------------------------------
-# Figure 6: PRE by number of CKMR samples and number of sampling yrs
-
-
-err_ckmr_sampling <- abund_res %>%
-  filter(om_sc == "Base", em_sc == "Base") %>%
-  group_by(data, et, ckmr_ssmult, nsampyrs, id) %>%
-  summarize(perror = median(perror)) %>%
-  ungroup()
-
-
-sp1 <- err_ckmr_sampling %>% filter(et == "fixed trans & mRV") %>%
-  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.4,
-               linewidth = 0.3) +
-  facet_wrap( ~ data, scales = "fixed") +
-  xlab("CKMR Sample Size") +
-  ylab("Percent Relative Error") +
-  ggtitle(expression(bold("fixed" ~ bolditalic(P)^{"F" %->% "M"} ~ " & RV"["M"]))) +
-  #ggtitle("fixed trans & mRV") +
-  coord_cartesian(ylim = c(-55,150)) +
-  labs(tag = "A") +
-  theme(plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank())
-
-sp2 <- err_ckmr_sampling %>% filter(et == "est trans & fixed mRV") %>%
-  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.4,
-               linewidth = 0.3) +
-  facet_wrap( ~ data, scales = "fixed") +
-  xlab("CKMR Sample Size") +
-  ylab("Percent Relative Error") +
-  ggtitle(expression(bold("free" ~ bolditalic(P)^{"F" %->% "M"} ~ ", fixed RV"["M"]))) +
-  #ggtitle("est trans & fixed mRV") +
-  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
-  labs(tag = "B") +
-  theme(plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank())
-
-sp3 <- err_ckmr_sampling %>% filter(et == "fixed trans & est mRV") %>%
-  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.4,
-               linewidth = 0.3) +
-  facet_wrap( ~ data, scales = "fixed") +
-  xlab("CKMR Sample Size") +
-  ylab("Percent Relative Error") +
-  ggtitle(expression(bold("fixed" ~ bolditalic(P)^{"F" %->% "M"} ~ ", free RV"["M"]))) +
-  #ggtitle("fixed trans & est mRV") +
-  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
-  labs(tag = "C") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-sp4 <- err_ckmr_sampling %>% filter(et == "est trans & mRV") %>%
-  ggplot(aes(x = ckmr_ssmult, y = perror, fill = nsampyrs)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed") +
-  geom_boxplot(outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.4,
-               linewidth = 0.3) +
-  facet_wrap( ~ data, scales = "fixed") +
-  xlab("CKMR Sample Size") +
-  ylab("Percent Relative Error") +
-  ggtitle(expression(bold("free" ~ bolditalic(P)^{"F" %->% "M"} ~ " & RV"["M"]))) +
-  #ggtitle("est trans & mRV") +
-  coord_cartesian(ylim = c(-55,150)) + # omits 936, highest outliers were for male 10 yrs 50% sampling est both; max 1129.9773
-  labs(tag = "D") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-layout2 <- "
-ABC
-ADE
-FFF
-"
-
-ckmr_sampling_plot <- ytitle + sp1 + sp2 + sp3 + sp4 + xtitle +
-  plot_layout(
-    guides = "collect",
-    design = layout2,
-    widths = c(0.05,0.475,0.475),
-    heights = c(0.475,0.475,0.05)) &
-  theme(legend.position = "none",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.title = element_blank())
-
-ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 8, height = 8)
-
-### stats for text:
-
-# tmp <- err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(data, et, ckmr_ssmult, nsampyrs) %>%
-#     summarize(med = median(perror),
-#               iqr = IQR(perror),
-#               min = min(perror),
-#               max = max(perror)) %>%
-#     arrange(data, med) %>%
-#     mutate_if(is.numeric, round, digits = 3)
-# summary(tmp$med)
-# summary(tmp$iqr)
-#  
-# err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(nsampyrs, et, data, ckmr_ssmult) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(nsampyrs, et, data, ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(nsampyrs, metric) %>%
-#   mutate(diff = `10 Yrs` - `03 Yrs`) %>%
-#   arrange(diff)
-#  
-# err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(ckmr_ssmult, et) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult, data) %>%
-#   summarize(metric = median(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult, data, nsampyrs) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   ungroup() %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   group_by(et) %>%
-#   summarize(diff50_100 = mean(diff50_100),
-#             diff100_150 = mean(diff100_150),
-#             perc50_100 = mean(perc50_100),
-#             perc100_150 = mean(perc100_150))
+ggsave(here("manuscript", "figures", "Figure_4.pdf"), plot = main_ckmr_pairs_plot, width = 8, height = 6)
 
 
 
 #--------------------------------
-# Figure 7: PRE by EM and OM scenario
+# Figure 5: PRE by EM and OM scenario
 
 
 err_emsc1_2 <- abund_res %>%
@@ -638,7 +465,7 @@ scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
                   ) +
   plot_annotation()  # Ensures the patchwork layout processes all theme elements
 
-ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = scen_pre_plot, width = 8, height = 7)
+ggsave(here("manuscript", "figures", "Figure_5.pdf"), plot = scen_pre_plot, width = 8, height = 7)
 
 # err_emsc1_2 %>% 
 #   filter(em_sc %in% c("est Hmt < sim Hmt")) %>%
@@ -663,7 +490,7 @@ ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = scen_pre_plot, widt
 
 
 #--------------------------------
-# Figure 8: Sex ratio PRE plot
+# Figure 6: Sex ratio PRE plot
 
 sr_error <- abund_res %>%
   filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
@@ -758,7 +585,7 @@ sr2 <- ggplot(sr_error_sum %>% filter(om_sc == "skipped spawning"),
         axis.title = element_blank(),
         #axis.text.y = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
-  labs(tag = "E")
+  labs(tag = "D")
 
 sr3 <- ggplot(sr_error_sum %>% filter(em_sc == "est Hmt < sim Hmt"), 
               aes(x = et, y = prerror)) +
@@ -861,11 +688,11 @@ sr_plot_final <- sr_plot +
   )
 
 
-ggsave(here("manuscript", "figures", "Figure_8.pdf"), plot = sr_plot_final, width = 8, height = 8)
+ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = sr_plot_final, width = 8, height = 8)
 
 
 #--------------------------------
-# Figure 9: Estimated function shapes
+# Figure 7: Estimated function shapes
 
 
 est_tf <- sim_pars %>% 
@@ -875,19 +702,23 @@ est_tf <- sim_pars %>%
   dplyr::select(id, om_sc, et, value, sim_value, em_sc) %>%
   rename(est_par = value, sim_par = sim_value) %>%
   mutate(sc3 = case_when(
-    em_sc == "est Hmt < sim Hmt" ~ "eHmt < sHmt",
-    em_sc == "sim Hmt < est Hmt" ~ "sHmt < eHmt",
-    om_sc == "Base" ~ "Base",
+    em_sc == "est Hmt < sim Hmt" ~ 'bold(H[mt]^{"EM"} < H[mt]^{"OM"})',
+    em_sc == "sim Hmt < est Hmt" ~ 'bold(H[mt]^{"OM"} < H[mt]^{"EM"})',
+    om_sc == "Base" ~ 'bold(Base)',
+    om_sc == "skipped spawning" ~ 'bold(skipped~spawning)',
+    om_sc == "mRV flatter" ~ 'bold(mRV~flatter)',
+    om_sc == "mRV steeper" ~ 'bold(mRV~steeper)',
     TRUE ~ om_sc
   ))
+
 est_tf$id2 <- 1:nrow(est_tf)
 est_tf$sc3 <- factor(est_tf$sc3, 
-                     levels = c("Base",
-                                "skipped spawning",
-                                "eHmt < sHmt",
-                                "sHmt < eHmt",
-                                "mRV flatter",
-                                "mRV steeper"))
+                     levels = c('bold(Base)',
+                                'bold(skipped~spawning)',
+                                'bold(H[mt]^{"EM"} < H[mt]^{"OM"})',
+                                'bold(H[mt]^{"OM"} < H[mt]^{"EM"})',
+                                'bold(mRV~flatter)',
+                                'bold(mRV~steeper)'))
 
 
 est_tf <- est_tf %>%
@@ -938,19 +769,22 @@ est_mf <- sim_pars %>%
   dplyr::select(id, om_sc, et, value, sim_value, em_sc) %>%
   rename(est_par = value, sim_par = sim_value) %>%
   mutate(sc3 = case_when(
-    em_sc == "est Hmt < sim Hmt" ~ "eHmt < sHmt",
-    em_sc == "sim Hmt < est Hmt" ~ "sHmt < eHmt",
-    om_sc == "Base" ~ "Base",
+    em_sc == "est Hmt < sim Hmt" ~ 'bold(H[mt]^{"EM"} < H[mt]^{"OM"})',
+    em_sc == "sim Hmt < est Hmt" ~ 'bold(H[mt]^{"OM"} < H[mt]^{"EM"})',
+    om_sc == "Base" ~ 'bold(Base)',
+    om_sc == "skipped spawning" ~ 'bold(skipped~spawning)',
+    om_sc == "mRV flatter" ~ 'bold(mRV~flatter)',
+    om_sc == "mRV steeper" ~ 'bold(mRV~steeper)',
     TRUE ~ om_sc
-  )) 
+  ))
 est_mf$id2 <- 1:nrow(est_mf)
 est_mf$sc3 <- factor(est_mf$sc3, 
-                     levels = c("Base",
-                                "skipped spawning",
-                                "eHmt < sHmt",
-                                "sHmt < eHmt",
-                                "mRV flatter",
-                                "mRV steeper"))
+                     c('bold(Base)',
+                       'bold(skipped~spawning)',
+                       'bold(H[mt]^{"EM"} < H[mt]^{"OM"})',
+                       'bold(H[mt]^{"OM"} < H[mt]^{"EM"})',
+                       'bold(mRV~flatter)',
+                       'bold(mRV~steeper)'))
 
 est_mf1 <- est_mf %>%
   filter(et %in% c("fixed trans & est mRV", "est trans & mRV")) %>%
@@ -982,10 +816,11 @@ me_plot <- ggplot(est_mf) +
   geom_line(data = est_mf %>%
               group_by(Age, sc3, et) %>% summarize(median_val = median(est_value)),
             aes(x = Age, y = median_val), linewidth = 0.8) +
-  facet_grid(sc3 ~ et) +
+  facet_grid(sc3 ~ et, labeller = labeller(sc3 = label_parsed)) +
   scale_y_continuous(breaks = c(0,0.5,1)) +
   theme(legend.position = "none",
-        plot.title = element_text(hjust = 0.5)) +
+        plot.title = element_text(hjust = 0.5),
+        strip.text = element_text(size = 10)) +
   ylab("Reproductive Value") + ggtitle("Estimated Male RV Fct")
 
 
@@ -993,4 +828,4 @@ est_fun_plot <- st_plot + me_plot + plot_layout(axis_titles = "collect_x", axes 
   theme(axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"))
 
-ggsave(here("manuscript", "figures", "Figure_9.pdf"), plot = est_fun_plot, width = 8, height = 9)
+ggsave(here("manuscript", "figures", "Figure_7.pdf"), plot = est_fun_plot, width = 8, height = 9)

@@ -96,35 +96,18 @@ header-includes   :
 **Figure 2.** Simulated A) reproductive value (RV) at age and B) probability of female skipped spawning as a function of sex ratio. In A), the dashed line corresponds to relative female fecundity at age. The solid lines are male RV, where red is the OM scenario where $\mathrm{RV}_M = \mathrm{RV}_F$. Flatter and steeper $\mathrm{RV}_M$ are
 shown in blue and green, respectively. Note that age 4 is the youngest age at which a female can turn into a male in our OM.
 
-**Figure 3.** Schematic overview of the simulation routine. The
-operating model (OM) concerns the simulation of individuals in the population, with four
-different scenarios listed. Observed kin pair data are obtained by sampling (sampling model) from the simulated population with different scenarios varying by the number of CKMR sampling years and 
-number of samples collected. Finally, several estimation model (EM) configurations were specified. Estimated abundance and sex ratio 
-were compared to simulated values by calculating percent relative error. The scenarios in each submodel highlighted by bold font are the base case.
-RV = reproductive value, P(\male $\rightarrow$ \female) = sex transition probability. $\Hmts$ = simulated mitochondrial 
-haplotype diversity, $\Hmte$ = mitochondrial haplotype diversity assumed in the estimation model.
+\vspace{1em} 
+**Figure 3.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RV steeper than female, green = male RV flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
 
 \vspace{1em} 
-
-\vspace{1em} 
-**Figure 4.** Simulated female (left) and male (right) abundance for years 75 to 119 by OM scenario (grey = base, red = skipped spawning, blue = male RV steeper than female, green = male RV flatter than females). Each of the 40 abundance time series per scenario is plotted individually, and the median is presented by bold lines.
-
-\vspace{1em} 
-**Figure 5.** Number of CKMR pairwise relationships for three years of CKMR sampling at $10\sqrt{N}$ by OM scenario. 
+**Figure 4.** Number of CKMR pairwise relationships for three years of CKMR sampling at $10\sqrt{N}$ by OM scenario. 
 $\mathrm{POP}^{\neq}$ = parent-offspring pairs with different mitochondrial DNA, $\mathrm{POP}^=$ = parent-offspring pairs with matching mitochondrial DNA, 
 $\mathrm{HSP}^{\neq}$ = half-sibling pairs with different mitochondrial DNA, $\mathrm{HSP}^=$ = half-sibling pairs with matching mitochondrial 
 DNA. In the base OM scenario, there is no skipped spawning, male and female reproductive value (RV) are equal. In this figure and all other boxplot figures in this manuscript, the box represents the interquartile range (IQR), the line is the median, 
 the whiskers extend to 1.5 IQR and outliers fall beyond that.
 
 \vspace{1em} 
-**Figure 6.** Percent relative error in estimated male and female abundance time series 
-summarized across years, by number of CKMR sampling years (red = 3, blue = 10), CKMR sample size, and whether or not sex transition 
-($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
-($\mathrm{RV}_{M}$) functions are were assumed known (fixed). Results are shown for the base OM scenario and without
-any model misspecification. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
-
-\vspace{1em} 
-**Figure 7.** Percent relative error in estimated male and female abundance time series
+**Figure 5.** Percent relative error in estimated male and female abundance time series
 summarized across years, for the base sampling case ($10\sqrt{N}$ samples collected over 3 years)
 for all OM and EM scenarios and by whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
@@ -135,7 +118,7 @@ value as that of females. Consequently when $\mathrm{RV}_M$ is fixed (red and bl
 $\mathrm{RV}_M^\mathrm{OM}$ differs from $\mathrm{RV}_F^\mathrm{OM}$ (panels E and F). In the base OM, . Y-axis truncated to improve readability. Notice the different y-axis scale for panel C. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
-**Figure 8.** Percent relative error in estimated sex ratio 
+**Figure 6.** Percent relative error in estimated sex ratio 
 (number of estimated males divided by total number of age 3+ year-olds) summarized across years 
 for all OM and EM scenarios and by whether or not sex transition 
 ($P^{\mathrm{F}\rightarrow \mathrm{M}}$) and male reproductive value 
@@ -144,8 +127,8 @@ equal, and $\Hmte = \Hmts$ = 1. When $\Hmte \neq \Hmts$, one was set to 1 and th
 Notice the different y-axis scale for panel B. Y-axis truncated to improve readability. Boxplot elements are as described for Figure 5.
 
 \vspace{1em} 
-**Figure 9.** Estimated sex transition and male reproductive value ($RV_M$) functions under different OM and EM configurations.
-The dashed black lines are the simulated values and solid black lines are the median estimated values. sHmt = simulated mitochondrial haplotype diversity, eHmt = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9. Panel 
+**Figure 7.** Estimated sex transition and male reproductive value ($RV_M$) functions under the evaluated scenarios.
+The dashed black lines are the simulated values and solid black lines are the median estimated values. $\Hmts$ = simulated mitochondrial haplotype diversity, $\Hmte$ = mitochondrial haplotype diversity assumed in the estimation model. In the Base case there is no skipped spawning, male and female RV are equal, and eHmt = sHmt = 1. When eHmt $\neq$ sHmt, one was set to 1 and the other to 0.9. Panel 
 lettering refers to each row of plots: a) Base (no skipped spawning, $\mathrm{RV_M}$ = $\mathrm{RV_F}$, $\Hmte = \Hmts$); 
 b) skipped spawning; c) $\Hmte < \Hmts$; d) $\Hmts < \Hmte$; 
 e) $\mathrm{RV_M}$ flatter than $\mathrm{RV_F}$; f) $\mathrm{RV_M}$ steeper than $\mathrm{RV_F}$.

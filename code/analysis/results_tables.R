@@ -62,6 +62,37 @@ table1 <- data.frame(Notation = col1,
                      Definition = col2 
 ) 
 
+#### table 2 in paper
+
+table2_df <- data.frame(
+  Issue = c("",
+            "\\multirow{2}{*}{\\shortstack[l]{Sex Assignment\\\\[4pt]Accuracy}}",
+            "",
+            "\\multirow{3}{*}{\\shortstack[l]{Male Contribution\\\\[4pt]to Repro Success}}",
+            "",
+            ""),
+  Scenario = c("Base", 
+               "$H_{mt}^{\\mathrm{OM}} < H_{mt}^{\\mathrm{EM}}$", 
+               "$H_{mt}^{\\mathrm{EM}} < H_{mt}^{\\mathrm{OM}}$",
+               "Skipped Spawning",
+               "$\\mathrm{RV}_M$ flatter than $\\mathrm{RV}_F$",
+               "$\\mathrm{RV}_M$ steeper than $\\mathrm{RV}_F$"),
+  skipped = c("no", ".", ".", "yes", ".", "."),
+  RVM = c("$= \\mathrm{RV}_F$", ".", ".", ".", "$\\neq \\mathrm{RV}_F$", "$\\neq \\mathrm{RV}_F$"),
+  H_EM = c("$= H_{mt}^{\\mathrm{OM}}$", "$\\neq H_{mt}^{\\mathrm{OM}}$", "$\\neq H_{mt}^{\\mathrm{OM}}$", ".", ".", ".")
+)
+
+table2_caption <- "Scenarios simulated in this study. A dot in a table cell indicates the same 
+configuration as the Base scenario. Operating Model (OM) scenarios differred in
+whether skipped spawning was simulated and whether male reproductive value ($\\mathrm{RV}_M$)
+was simulated to be the same as that for the females ($\\mathrm{RV}_F$). EM scenarios focused
+on whether mitochondrial haplotype diversity ($H_{mt}$) assumed in the estimation model (EM)
+differed from what was simulated in the OM. For each scenario, 400 data sets were simulated (40 pedigrees 
+subsampled ten times each) and estimated under four different parameter estimation combinations that 
+treated $P_a^{\\mathrm{F}\\rightarrow \\mathrm{M}}$ and $\\mathrm{RV}_{M}$ as fixed or estimated."
+
+
+#### appendix table 1A
 
 colA1 <- c(
   '$A$',
