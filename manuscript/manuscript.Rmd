@@ -602,14 +602,15 @@ adult abundance and sex ratio as:
 where $\mathrm{EV}$ = estimated value and $\mathrm{SV}$ = simulated value. Sex ratio was
 defined as the number of males divided by the total number of 3+ year-olds. 
 We calculated the median of $\mathrm{PRE}_{t,k,c}$ to obtain one $\mathrm{PRE_{k,c}}$ value per iteration. 
-We chose the median over the mean here after inspecting the PRE values within case (Figure Sx). 
+We chose the median over the mean here after inspecting the PRE values within case (Figures S3 and S4). 
 For most cases, PREs were flat over years for all iterations, so median and mean perform similarly. 
-There were, however, a number of iterations (primarily within two cases) where extreme PRE values early in
-the time series distort the mean while the median captures the dominant signal (see Supplemental Material).
+There were, however, a number of iterations (only for the males and primarily within two cases; Figure S3) 
+where extreme PRE values early in
+the time series distort the mean while the median captures the dominant signal.
 
 To characterize accuracy and precision by case, we calculated the median and interquartile range (IQR), respectively, of
 $\mathrm{PRE_{k,c}}$. The distributions of $\mathrm{PRE_{k,c}}$ were well-behaved for most of the
-cases, but some exhibited right-skew and extreme tails (Figure Sx) and the median better describes
+cases, but some exhibited right-skew and extreme tails (Figure S5) and the median better describes
 the bulk of the distribution for those cases than the mean.
 
 Additional model evaluation metrics, including PRE for main model parameters and normalized 
@@ -631,11 +632,11 @@ sperm limitation in the final 35-40 years of the simulation (Figure 3).
 ## 3.2. Simulated CKMR Samples
 
 The number of females sampled in the base case was about two orders of magnitude higher 
-than the number of males sampled (median of 3,110 females vs 28 males; Table S1, Figure S3).
+than the number of males sampled (median of 3,110 females vs 28 males; Table S1, Figure S6).
 The number
 of HSPs found with different mtDNA ($\HSPD$) was about sixteen times higher (758 vs 47) than
 the number of HSPs sharing mtDNA ($\HSPS$). Additionally, POPs with matching mtDNA were 
-seven times more common than those with different mtDNA (36 vs 5; Table S1, Figure S4). 
+seven times more common than those with different mtDNA (36 vs 5; Table S1, Figure S7). 
 
 Some differences in the number of pairs found were apparent across scenarios
 (Figure 4). First, the number of unrelated pairs was much
@@ -649,8 +650,8 @@ females contributed offspring and the likelihood of finding
 HSPs sharing a mother increased.
 The next major effect was that of $\mathrm{RV}_{a,M}^\mathrm{OM}$ on $\HSPD$.
 When $\mathrm{RV}_{a,M}^\mathrm{OM}$ increased more steeply with age, as would be
-expected based on the size advantage model, the number of $\HSPD$ more than doubled
-compared to the base case (Figure 4).
+expected based on the size advantage model, the number of $\HSPD$ increased about
+three-fold compared to the base case (Figure 4, Table S1).
 The explanation is analogous to finding more $\HSPS$ when there is skipped spawning. 
 If $\mathrm{RV}_{a,M}^\mathrm{OM}$ is steeper,
 older males (of which there are fewer than younger males) are much more successful at fathering offspring and
@@ -722,16 +723,16 @@ When both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were 
 male abundance estimates were fairly accurate ($|\mathrm{PRE_{c}}| \pm 9\%$), in stark contrast to 
 female abundance estimates. When only $\mathrm{RV}_{a,M}$ was estimated but
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ remained fixed, male abundance was systematically
-inaccurate in the opposite direction compared to females (Figures 5B&C).
+inaccurate in the opposite direction compared to females (Figure 5B&C).
 Consequently, allowing
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ to be estimated when $\Hmt$ was misspecified in the EM resulted in highly
 inaccurate sex ratio estimates (Figure 6B&C).
 
 When $\Hmts < \Hmte$, the observed number of $\HSPS$ was higher than when $\Hmts = \Hmte$
-(Figure S5). Thus when the EM sees more $\HSPS$ than it expects
+(Figure S8). Thus when the EM sees more $\HSPS$ than it expects
 in the case of $\Hmts$ < $\Hmte$,
 it attempts to reduce the number of expected females to match what it sees in the genetic
-data (Figure 5B). It does this by underestimating mean recruitment (Figure S6)
+data (Figure 5B). It does this by underestimating mean recruitment (Figure S9)
 along with changing the shape of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}^\mathrm{EM}$,
 if allowed (Figure 7D).
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ is fixed, thereby locking in the sex ratio, the EM can only reduce the expected
@@ -743,7 +744,7 @@ results in females turning into males at a younger age, reducing the shift in $\
 required to reconcile observed and expected numbers
 (Figure 7D). The opposite is true when the EM sees fewer
 $\HSPS$ than it expects in the data for the $\Hmte$ < $\Hmts$ scenario: recruitment is now
-overestimated (Figure S6) and the estimated
+overestimated (Figure S9) and the estimated
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ functions are steeper to create
 more expected females (Figure 7C).
 
@@ -795,7 +796,7 @@ and estimating both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a
 The sex transition function shape was overall well estimated with little variability,
 except when $\mathrm{RV}_{a,M}^\mathrm{OM}$ was steeper than 
 $\mathrm{RV}_{a,F}^\mathrm{OM}$ and $\mathrm{RV}_{a,M}$ was also estimated (Figure 7F). 
-The $\mathrm{RV}_{a,M}$ function was much more variable (Figures 7 and S7).
+The $\mathrm{RV}_{a,M}$ function was much more variable (Figures 7 and S10).
 Generally, the median estimated $\mathrm{RV}_{a,M}$ shapes matched the simulated curvatures,
 with the notable exception of when $\Hmts < \Hmte$ (Figure 7D).
 However, in almost all scenarios, some runs estimated incorrect curvatures (i.e., estimated
@@ -804,9 +805,9 @@ to increase at a decreasing rate with age, and *vice versa*).
 
 The standard deviation of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$
 ($\mathrm{STF}_{SD}$) and the exponent of $\mathrm{RV}_{a,M}^\mathrm{EM}$ were
-strongly positively correlated, meaning as the estimated $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ function
-became flatter, $\mathrm{RV}_{a,M}^\mathrm{EM}$ became steeper (Figure S8). 
-$\mathrm{STF}_{SD}$ was moderately negatively correlated with mean recruitment (Figure S8).
+strongly positively correlated (Figure S11), meaning as the estimated $P_a^{\mathrm{F}\rightarrow\mathrm{M}}$ function
+became flatter, $\mathrm{RV}_{a,M}^\mathrm{EM}$ became steeper. 
+$\mathrm{STF}_{SD}$ was moderately negatively correlated with mean recruitment (Figure S11).
 
 # 4. Discussion
 
