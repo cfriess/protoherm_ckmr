@@ -15,58 +15,35 @@ res_raw$sample_by_sex <- as.numeric(ifelse(res_raw$sample_by_sex == "TRUE", "1",
 
 res <- res_raw %>%
   mutate(scenario = case_when(
-    sample_by_sex %in% 2:3 ~ "EM_S19",
+    sample_by_sex %in% 2:3 ~ "Suppl Scen Male & Female Sampling",
     mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "S0",
-    mating == "monogamy" & eofsr == 0 & ssf == 0.8 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "OM_S1",
+      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3 ~ "Base", 
+    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
+      hzt == 0.9 & hze == 1 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3 ~ "sHmt < eHmt",
+    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
+      hzt == 1 & hze == 0.9 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3 ~ "eHmt < sHmt",
     mating == "polyandry" & eofsr == 3 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "OM_S2",
+      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3 ~ "skipped spawning",
     mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 2 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "OM_S3",
+      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3  ~ "mRV steeper",
     mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 3 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "OM_S4",
+      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:3 &
+      ckmr_ssmult == 1.0 & nsampyrs == 3  ~ "mRV flatter",
     mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 0.9 & hze == 1 & nll_type == 1 & et %in% 0:1 ~ "EM_S1",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 0.9 & nll_type == 1 & et %in% 0:1 ~ "EM_S2",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 0 & et %in% 0:1 ~ "EM_S3",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 2 ~ "EM_S4",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 3 ~ "EM_S5",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 2 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 2 ~ "EM_S6",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 2 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 3 ~ "EM_S7",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 3 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 2 ~ "EM_S8",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 3 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 3 ~ "EM_S9",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 0.9 & hze == 1 & nll_type == 1 & et == 2 ~ "EM_S10",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 0.9 & nll_type == 1 & et == 2 ~ "EM_S11",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 0.9 & hze == 1 & nll_type == 1 & et == 3 ~ "EM_S12",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 0.9 & nll_type == 1 & et == 3 ~ "EM_S13",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 0 & et == 2 ~ "EM_S14",
-    mating == "polyandry" & eofsr == 0 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 0 & et == 3 ~ "EM_S15",
-    mating == "polyandry" & eofsr == 3 & ssf == 0.01 & fec_known ==  1& 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 2 ~ "EM_S16",
-    mating == "polyandry" & eofsr == 3 & ssf == 0.01 & fec_known == 1 & 
-      hzt == 1 & hze == 1 & nll_type == 1 & et == 3 ~ "EM_S17",
-    mating == "polyandry" & eofsr == 3 & ssf == 0.01 & fec_known ==  1 & 
-      hzt == 1 & hze == 1 & nll_type == 0 ~ "EM_S18",
-    TRUE ~ "check me"
+      hzt == 1 & hze == 1 & nll_type == 1 & et %in% 0:3 ~ "Suppl Sampling Intensity",
+    TRUE ~ "not used"
   )) %>%
-  filter(!scenario %in% c("OM_S1","EM_S3","EM_S14","EM_S15","EM_S18")) 
-sort(unique(res$scenario))
-(N <- nrow(res)) # 57600; 64000 with the extra figure for sample_by_sex 2|3
+  filter(scenario != "not used") %>%
+  mutate(scen_type = ifelse(scenario %in% c("Suppl Sampling Intensity",
+                                            "Suppl Scen Male & Female Sampling"), "Supplement", "Main"))
+table(res$scenario[res$scen_type == "Main"]) # 1600 per scenario
+
+# N for sample size and # of sampling year runs
 
 res <- res %>%
   mutate(
@@ -116,17 +93,15 @@ res <- res %>%
     nll_type == "HSP" ~ "HSPs only",
     TRUE ~ "Base"
   ))
-# should each have 1600 - 40 ped reps x 10 ckmr seeds x 4 ets
-table(res$om_sc[res$ckmr_ssmult == "100%" & res$nsampyrs == "03 Yrs"], 
-      res$em_sc[res$ckmr_ssmult == "100%" & res$nsampyrs == "03 Yrs"])
-# just checking:
-table(res$om_sc[!(res$ckmr_ssmult == "100%" & res$nsampyrs == "03 Yrs")], 
-      res$em_sc[!(res$ckmr_ssmult == "100%" & res$nsampyrs == "03 Yrs")])
+
+# N for the main paper runs:
+(N <- nrow(res %>% filter(scen_type == "Main"))) # 9600
+nrow(res %>% filter(scen_type == "Supplement")) # 54,400
 
 res_compn <- res %>% 
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
-                ckmr_seed, data, id, scenario, om_sc, em_sc) %>%
+                ckmr_seed, data, id, scenario, om_sc, em_sc, scen_type) %>%
   mutate(abund_res = map(data, "abund_res"),
          admb_cormat = map(data, "admb_cor"),
          para_res = map(data, "para_res"),
@@ -138,13 +113,10 @@ res_compn <- res %>%
          admb_run_res = map(data, "admb_run_res")
          ) 
 
-table(res_compn$admb_exit) # 2276 failures, so ~3.5%
+### admb failures
+admb_fail_ids <- unique(res_compn$id[res_compn$admb_exit == 1])
 
-sort(round(((table(res_compn$admb_exit, res_compn$scenario)[2,] / table(res_compn$scenario)) * 100), digits = 1))
-table(res_compn$admb_exit, res_compn$ckmr_ssmult)
-
-#table(res_compn$admb_exit, res_compn$nll_type) # no drastic difference
-summary(res_compn$max_grad[res_compn$admb_exit != 1])
+### boundary estimation
 
 rbar_bounds <- exp(c(6,17))
 f_bounds <- exp(c(-4.6,0.5))
@@ -155,7 +127,7 @@ paras <- res_compn %>%
   filter(admb_exit == 0) %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
-                ckmr_seed, id, scenario, para_res, om_sc, em_sc) %>%
+                ckmr_seed, id, scenario, para_res, om_sc, em_sc, scen_type) %>%
   unnest(para_res) %>%
   mutate(lb = case_when(
     par_name == "log_rbar" ~ rbar_bounds[1],
@@ -176,22 +148,30 @@ length(unique(paras$id))
 table(paras$par_name)
 
 bounds_exclude_ids <- unique(paras$id[paras$bounds_flag == 1])
-length(bounds_exclude_ids)/N # 7.1% excluded due to bounds
-summary(res_compn$max_grad[res_compn$admb_exit != 1 & !res_compn$id %in% bounds_exclude_ids])
-# which of the remaining runs have high max gradients
+
+### high max gradients
+
 max_grad_thresh <- 0.1 # set to 1e8 for no gradient filtering or 0.1 for more restrictive gradient filtering
-sum(res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad) & !res_compn$id %in% bounds_exclude_ids) # 241
 
-high_grad_runs <- res_compn$id[res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad) & !(res_compn$id %in% bounds_exclude_ids)] 
-length(high_grad_runs)/N # 0.4%
-summary(res_compn$max_grad[res_compn$id %in% high_grad_runs])
+high_grad_ids <- unique(res_compn$id[res_compn$max_grad > max_grad_thresh & !is.na(res_compn$max_grad)])
+high_grad_ids <- high_grad_ids[!high_grad_ids %in% bounds_exclude_ids]
 
-exclude_ids <- unique(c(high_grad_runs, bounds_exclude_ids, res_compn$id[res_compn$admb_exit == 1]))
-(length(exclude_ids) / N) * 100 # 9.4%
-table(res_compn$admb_exit[!res_compn$id %in% exclude_ids]) # excluding all nonconverged
+exclude_ids <- unique(c(admb_fail_ids, bounds_exclude_ids, high_grad_ids))
+
+res_compn$bounds_fail <- 0
+res_compn$bounds_fail[res_compn$id %in% bounds_exclude_ids] <- 1
+
+res_compn$gradient_fail <- 0
+res_compn$gradient_fail[res_compn$id %in% high_grad_ids] <- 1
+
+table(res_compn$admb_exit, res_compn$scen_type) # 227 out of 9600 failed
+table(res_compn$bounds_fail, res_compn$scen_type) # 779 out of 9373 failed
+table(res_compn$gradient_fail, res_compn$scen_type) # 38 out of 8821 failed
 
 res_compn$exclude <- 0
 res_compn$exclude[res_compn$id %in% exclude_ids] <- 1
+
+table(res_compn$exclude, res_compn$scen_type) # 8556 out of 9600 used
 
 sim_pars <- paras %>%
   filter(!id %in% exclude_ids) %>%
@@ -234,21 +214,21 @@ admb_res <- res_compn %>%
   filter(!id %in% exclude_ids) %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
-                ckmr_seed, id, scenario, admb_run_res, om_sc, em_sc) %>%
+                ckmr_seed, id, scenario, admb_run_res, om_sc, em_sc, scen_type) %>%
   unnest(admb_run_res)
 run_cnt <- admb_res %>% 
   filter(!is.na(admb_run_cnt)) %>%
-  group_by(id) %>%
+  group_by(id, scen_type) %>%
   summarize(max_runs = max(admb_run_cnt),
             best_nll = which.min(nll)) 
-table(run_cnt$max_runs, run_cnt$best_nll)
+table(run_cnt$max_runs, run_cnt$best_nll, run_cnt$scen_type)
 
 
 abund_res <- res_compn %>%
   filter(!id %in% exclude_ids) %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
-                ckmr_seed, id, scenario, abund_res, om_sc, em_sc) %>%
+                ckmr_seed, id, scenario, abund_res, om_sc, em_sc, scen_type) %>%
   unnest(abund_res) %>%
   mutate(perror = (est_value - sim_value)/sim_value * 100,
          aperror = abs(est_value - sim_value)/sim_value * 100) %>%
@@ -272,7 +252,7 @@ ckmr_samps <- res_compn %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
                 ckmr_seed, id, scenario, ckmr_true, exclude,
-                om_sc, em_sc) %>%
+                om_sc, em_sc, scen_type) %>%
   nest_summarize(ckmr_true, 
                  POD = sum(PO),
                  POS = sum(MO),
@@ -287,7 +267,7 @@ ckmr_obs_samps <- res_compn %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
                 ckmr_seed, id, scenario, ckmr_obs, exclude,
-                om_sc, em_sc) %>%
+                om_sc, em_sc, scen_type) %>%
   nest_summarize(ckmr_obs, 
                  POD = sum(PO),
                  POS = sum(MO),
@@ -304,7 +284,7 @@ samp_summary <- res_compn %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
                 ckmr_seed, id, scenario, samp_summary, exclude,
-                om_sc, em_sc) %>%
+                om_sc, em_sc, scen_type) %>%
   nest_mutate(samp_summary, LifeStage = ifelse(AgeLast == 1, "Juv", "Adult")) %>%
   nest_group_by(samp_summary, Sex, LifeStage) %>%
   nest_summarize(samp_summary, N = sum(N)) %>%
@@ -322,7 +302,8 @@ cor_res_et <- res_compn %>%
   filter(!id %in% exclude_ids, et == "est trans & mRV") %>%
   dplyr::select(ped_rep, eofsr, mating, ssf, fec_known, sample_by_sex,
                 nsampyrs, ckmr_ssmult, et, nll_type, hzt, hze,
-                ckmr_seed, id, scenario, admb_cormat, om_sc, em_sc) 
+                ckmr_seed, id, scenario, admb_cormat, om_sc, em_sc,
+                scen_type) 
 
 cor_res_et$rbar_tsd_cor <- sapply(cor_res_et$admb_cormat, function(mat) {
   mat[1, 4]

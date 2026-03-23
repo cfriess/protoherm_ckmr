@@ -75,7 +75,7 @@ sim_pars$et <- factor(sim_pars$et, levels = et_levels)
 sim_pars$om_sc <- factor(sim_pars$om_sc, levels = om_sc_levels)
 sim_pars$em_sc <- factor(sim_pars$em_sc, levels = em_sc_levels)
 sim_pars$scenario <- as.factor(sim_pars$scenario)
-sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(22,18:21,1,10:17,2:9)])
+sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(1,5,2,6,3,4,7,8)])
 
 sim_pars <- sim_pars %>%
   mutate(par_name_long = case_when(
@@ -131,12 +131,12 @@ samp_sex_base <- "age 1+ sex ratio"
 get_perror = function(sim, est) (est - sim)/sim * 100
 
 ytitle <- ggdraw() + draw_label("Percent Relative Error", 
-                                size = 16, 
+                                size = 12, 
                                 fontface = "plain", 
                                 angle = 90)
 
 xtitle <- ggdraw() + draw_label("CKMR Sample Size", 
-                                size = 16, 
+                                size = 12, 
                                 fontface = "plain")
 
 fyrplot <- 75
@@ -238,9 +238,124 @@ fplot <- ggplot(fplot_dat) +
 F_vul_plot <- vul_plot + fplot +
   plot_layout(nrow = 2) + plot_annotation(tag_levels = 'A')
 
+#--------------------------------
+# Figure S3: PRE by iteration for males
+
+# note filtering for only those where all years are < 500 PRE
+# results in omitting 20 iterations (6 for eHmt < sHmt fixed trans & est mRV
+# and 16 for mRV steeper est trans & mRV). no interesting patterns, just
+# really high errors:
+
+# abund_res %>% 
+#   filter(scen_type == "Main", data == "Males") %>%
+#   group_by(scenario, et, id) %>%
+#   mutate(tmp_id = cur_group_id()) %>% 
+#   group_by(scenario) %>%
+#   mutate(tmp_id = dense_rank(tmp_id)) %>% 
+#   ungroup() %>%
+#   group_by(scenario, et, id) %>%
+#   filter(any(perror > 500)) %>%
+#   ungroup() %>%
+#   distinct(scenario, et, id)
+
+pre_by_year_males <- abund_res %>% 
+  filter(scen_type == "Main", data == "Males") %>%
+  group_by(scenario, et, id) %>%
+  mutate(tmp_id = cur_group_id()) %>%  # first get a unique group number per scenario+id combo
+  group_by(scenario) %>%
+  mutate(tmp_id = dense_rank(tmp_id)) %>% # then re-rank within scenario so it starts at 1
+  ungroup() %>%
+  group_by(scenario, et, id) %>%
+  filter(all(perror < 500)) %>%
+  ungroup() %>%
+  ggplot(aes(x = year, y = perror, color = as.factor(tmp_id))) +
+  geom_line() +
+  facet_grid(et~scenario) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(y = "PRE", x = "Year") +
+  theme(legend.position =  "none",
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12),
+        strip.text = element_text(size = 9))
 
 #--------------------------------
-# Figure S3: Number of individuals sampled for CKMR
+# Figure S4: PRE by iteration for males
+
+# note filtering for only those where all years are < 1000 PRE
+# results in omitting 10 iterations (all for eHmt < sHmt). 
+# no interesting patterns, just really high errors:
+
+# abund_res %>% 
+#   filter(scen_type == "Main", data == "Females") %>%
+#   group_by(scenario, et, id) %>%
+#   mutate(tmp_id = cur_group_id()) %>%  # first get a unique group number per scenario+id combo
+#   group_by(scenario) %>%
+#   mutate(tmp_id = dense_rank(tmp_id)) %>% # then re-rank within scenario so it starts at 1
+#   ungroup() %>%
+#   group_by(scenario, et, id) %>%
+#   filter(any(perror > 1000)) %>%
+#   ungroup() %>%
+#   distinct(scenario, et, id)
+
+pre_by_year_females <- abund_res %>% 
+  filter(scen_type == "Main", data == "Females") %>%
+  group_by(scenario, et, id) %>%
+  mutate(tmp_id = cur_group_id()) %>%  # first get a unique group number per scenario+id combo
+  group_by(scenario) %>%
+  mutate(tmp_id = dense_rank(tmp_id)) %>% # then re-rank within scenario so it starts at 1
+  ungroup() %>%
+  group_by(scenario, et, id) %>%
+  filter(all(perror < 1000)) %>%
+  ungroup() %>%
+  ggplot(aes(x = year, y = perror, color = as.factor(tmp_id))) +
+  geom_line() +
+  facet_grid(et~scenario) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(y = "PRE", x = "Year") +
+  theme(legend.position =  "none",
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12),
+        strip.text = element_text(size = 9))
+
+
+#--------------------------------
+# Figure S5: distribution of PREs
+
+dat <- abund_res %>% filter(scen_type == "Main") %>%
+  group_by(id, ped_rep, scenario, et, data) %>%
+  summarize(perror = median(perror), .groups = "drop")
+
+plot_settings <- list(
+  geom_histogram(),
+  geom_vline(xintercept = 0, linetype = "dashed"),
+  facet_wrap(~et, scales = "free"),
+  theme(plot.title = element_text(size = 9),
+        strip.text = element_text(size = 8),
+        axis.text = element_text(size = 8),
+        axis.title = element_blank())  # remove individual axis labels
+)
+
+p1 <- dat %>% filter(data == "Males", scenario == "Base") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("Base")
+
+p2 <- dat %>% filter(data == "Males", scenario == "sHmt < eHmt") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("est Hmt < sim Hmt")
+
+p3 <- dat %>% filter(data == "Males", scenario == "eHmt < sHmt") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("sim Hmt < est Hmt")
+
+p4 <- dat %>% filter(data == "Males", scenario == "skipped spawning") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("skipped spawning")
+
+p5 <- dat %>% filter(data == "Males", scenario == "mRV flatter") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("mRV flatter")
+
+p6 <- dat %>% filter(data == "Males", scenario == "mRV steeper") %>%
+  ggplot(aes(x = perror)) + plot_settings + ggtitle("mRV steeper")
+
+
+#--------------------------------
+# Figure S6: Number of individuals sampled for CKMR
 
 nsamps_plot <- ggplot(samp_summary %>%
                         filter(LifeStage != "Juv") %>%
@@ -257,9 +372,10 @@ nsamps_plot <- ggplot(samp_summary %>%
 
 
 #--------------------------------
-# Figure S4: Number of observed kin pairs by CKMR sampling
+# Figure S7: Number of observed kin pairs by CKMR sampling
 
-ckmr_pairs_by_sampling <- ckmr_samps_long %>% filter(scenario == "S0")
+ckmr_pairs_by_sampling <- ckmr_samps_long %>% 
+  filter(scenario %in% c("Base", "Suppl Sampling Intensity"))
 
 ckmr_pairs_by_sampling_TEX <- ckmr_pairs_by_sampling
 levels(ckmr_pairs_by_sampling_TEX$pair_type) <- c(
@@ -283,19 +399,13 @@ suppl_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_sampling_TEX) +
   ) +
   xlab("CKMR Sample Size")
 
-# ckmr_pairs_by_sampling %>% 
-#   group_by(pair_type, ckmr_ssmult) %>%
-#   summarize(medN = median(count)) %>%
-#   spread(pair_type, medN)
-
 
 #--------------------------------
-# Figure S5: ckmr pairs by EM scenario
+# Figure S8: ckmr pairs by EM scenario
 
 
 ckmr_pairs_by_scenario2 <- ckmr_obs_samps_long %>% 
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, ckmr_ssmult == base_ckmr_ssmult,
-         om_sc == "Base") 
+  filter(scenario %in% c("Base", "sHmt < eHmt", "eHmt < sHmt"))
 
 ckmr_pairs_by_scenario2_TEX <- ckmr_pairs_by_scenario2
 levels(ckmr_pairs_by_scenario2_TEX$pair_type) <- c(
@@ -324,12 +434,12 @@ suppl_ckmr_pairs_plot2 <- ggplot(ckmr_pairs_by_scenario2_TEX) +
         axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"),
         strip.text.x = element_text(size = 16)) +
-  guides(fill = guide_legend(title = "EM Scenario"))
+  guides(fill = guide_legend(title = "Scenario"))
 
 
 
 #--------------------------------
-# Figure S6: estimated parameters by EM scenario
+# Figure S9: estimated parameters by EM scenario
 
 layout3 <- "
 BCF
@@ -337,8 +447,7 @@ DEA
 " 
 
 pars_nll <- sim_pars %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, om_sc == "Base") 
+  filter(scenario %in% c("Base", "sHmt < eHmt", "eHmt < sHmt")) 
 
 levels(pars_nll$et)[levels(pars_nll$et) == "fixed trans & est mRV"] <- "fixed trans, free mRV"
 levels(pars_nll$et)[levels(pars_nll$et) == "est trans & fixed mRV"] <- "free trans, fixed mRV"
@@ -363,7 +472,7 @@ par_est_nll <- pars_nll %>%
       facet_nested(. ~ par_name_long) +
       scale_x_discrete(labels = scales::wrap_format(15)) +
       ylab("Percent Relative Error") +
-      guides(fill = guide_legend(title = "EM Scenario")) 
+      guides(fill = guide_legend(title = "Scenario")) 
     
     if (unique(x$par_name) == "mRV_exp") {
       p <- p + coord_cartesian(ylim = c(-100, 200)) # 1 outliers removed incorp. 5% expand
@@ -387,11 +496,10 @@ para_res_plot_nll <- wrap_plots(par_est_nll, design = layout3) + guide_area() +
 
 
 #--------------------------------
-# Figure S7: estimated parameters by OM scenario
+# Figure S10: estimated parameters by OM scenario
 
 pars_mRV <- sim_pars %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, em_sc == "Base"
+  filter(scenario %in% c("Base", "sipped spawning", "mRV flatter", "mRV steeper")
   ) 
 
 levels(pars_mRV$et)[levels(pars_mRV$et) == "fixed trans & est mRV"] <- "fixed trans, free mRV"
@@ -413,7 +521,7 @@ par_est <- pars_mRV %>%
       facet_nested(. ~ par_name_long) +
       scale_x_discrete(labels = scales::wrap_format(15)) +
       ylab("Percent Relative Error") +
-      guides(fill = guide_legend(title = "OM Scenario")) 
+      guides(fill = guide_legend(title = "Scenario")) 
     
     if (unique(x$par_name) == "mRV_exp") {
       p <- p + coord_cartesian(ylim = c(-90, 1400)) # 1 outliers removed incorp. 5% expand
@@ -436,21 +544,21 @@ para_res_plot <- wrap_plots(par_est, design = layout3) + guide_area() +
 
 
 #--------------------------------
-# Figure S8: parameter correlations
+# Figure S11: parameter correlations
 
 cor_dat <- cor_res_et %>%
-  filter(scenario %in% c(paste0("EM_S", c(5,7,9,17))), nsampyrs == base_ckmr_nsampyrs) %>%
+  filter(scenario %in% c("Base", "Suppl Sampling Intensity")) %>%
   dplyr::select(nsampyrs, ckmr_ssmult, rbar_tsd_cor:tsd_exp_cor,fec_known, om_sc) %>%
   gather(comp, cor, rbar_tsd_cor:tsd_exp_cor) %>%
   mutate(comp = case_when(
-    comp == "rbar_tsd_cor" ~ "Recruitment & Transition Fct",
-    comp == "rbar_exp_cor" ~ "Recruitment & Male RV",
-    comp == "tsd_exp_cor" ~ "Transition Fct & Male RV"
+    comp == "rbar_tsd_cor" ~ "Recruitment & \nTransition Fct",
+    comp == "rbar_exp_cor" ~ "Recruitment & \nMale RV",
+    comp == "tsd_exp_cor" ~ "Transition Fct & \nMale RV"
   ))
 
 
 cor_plot <- ggplot(cor_dat) +
-  geom_boxplot(aes(x = ckmr_ssmult, y = cor, fill = om_sc)) +
+  geom_boxplot(aes(x = ckmr_ssmult, y = cor), fill = "grey") +
   facet_wrap(~comp) +
   scale_fill_discrete(
     labels = om_labels
@@ -459,39 +567,31 @@ cor_plot <- ggplot(cor_dat) +
         axis.text.x = element_text(angle = 45, hjust = 1),
         axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
         axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)),
-        strip.text.x = element_text(size = 10)) +
+        strip.text.x = element_text(size = 11)) +
   xlab("CKMR Sample Size") +
-  guides(fill = guide_legend(title = "OM Scenario", nrow = 2, byrow = T)) +
   ylab("Correlation")
 
 
 
 #--------------------------------
-# Figures A9-A10: PRE and NRMSE comparison
+# Figures A12-A13: PRE and NRMSE comparison
 
 error_metrics_scens <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult) %>%
-  mutate(sc3 = case_when(
-    em_sc != "Base" ~ em_sc,
-    om_sc == "Base" ~ "Base",
-    TRUE ~ om_sc
-  )) %>%
-  bind_rows(err_ckmr_sampling <- abund_res %>%
-              filter(scenario %in% c("S0","EM_S4", "EM_S5"),
-                     !(ckmr_ssmult == base_ckmr_ssmult &
-                         nsampyrs== base_ckmr_nsampyrs)) %>%
-              mutate(sc3 = case_when(
+              filter(scen_type == "Main" | scenario == "Suppl Sampling Intensity"#,
+                     # !(ckmr_ssmult == base_ckmr_ssmult &
+                     #     nsampyrs== base_ckmr_nsampyrs)
+                     ) %>%
+              mutate(scenario = case_when(
                 nsampyrs == "03 Yrs" & ckmr_ssmult == "50%" ~ "3 Yrs, 50% BaseN",
                 nsampyrs == "03 Yrs" & ckmr_ssmult == "150%" ~ "3 Yrs, 150% BaseN",
                 nsampyrs == "10 Yrs" & ckmr_ssmult == "50%" ~ "10 Yrs, 50% BaseN",
                 nsampyrs == "10 Yrs" & ckmr_ssmult == "100%" ~ "10 Yrs, 100% BaseN",
                 nsampyrs == "10 Yrs" & ckmr_ssmult == "150%" ~ "10 Yrs, 150% BaseN",
-                TRUE ~ "check me"
-              )))
+                TRUE ~ scenario
+              ))
 
 error_metrics <- error_metrics_scens %>%
-  group_by(sc3, et, data, id, ped_rep, ckmr_seed) %>% # summarize by id
+  group_by(scenario, et, data, id, ped_rep, ckmr_seed) %>% # summarize by id
   summarize(pre = median(perror),
             ape = median(aperror),
             sd_ape = sd(aperror),
@@ -499,7 +599,7 @@ error_metrics <- error_metrics_scens %>%
             med_est = median(est_value),
             squared_diff = (med_est-med_sim)^2) %>%
   ungroup() %>%
-  group_by(sc3, et, data) %>% # summarize by scenario
+  group_by(scenario, et, data) %>% # summarize by scenario
   summarize(med_PRE = median(pre),
             med_APE = median(ape),
             iqr_PRE = IQR(pre),
@@ -513,20 +613,22 @@ error_metrics <- error_metrics_scens %>%
   mutate_if(is.numeric, round, digits = 3) %>%
   ungroup()
 
-error_metrics$sc3 <- as.factor(error_metrics$sc3)
-error_metrics$sc3 <- factor(error_metrics$sc3, levels(error_metrics$sc3)[c(6, 5,4,1,3,2,7,10,11,8,9)])
+error_metrics$scenario <- as.factor(error_metrics$scenario)
+error_metrics$scenario <- factor(error_metrics$scenario, levels(error_metrics$scenario)[c(6,10,7,11,8,9,5,4,3,1,2)])
 
 summary(error_metrics$N)
 summary(error_metrics$nrmse)
 
-# Figure S9: accuracy metrics plots for the females
+
+
+# Figure S12: accuracy metrics plots for the females
 f_ac_plot <- ggplot(error_metrics %>%
                       filter(data == "Females") %>%
-                      dplyr::select(sc3, et, med_PRE, nrmse) %>%
+                      dplyr::select(scenario, et, med_PRE, nrmse) %>%
                       rename(`Median PRE` = med_PRE,
                              NRMSE = nrmse) %>%
-                      gather(metric, value, -et, -sc3)) +
-  geom_col(aes(x = sc3, y = value, fill = et), color = "black",
+                      gather(metric, value, -et, -scenario)) +
+  geom_col(aes(x = scenario, y = value, fill = et), color = "black",
            position = position_dodge2()) +
   facet_wrap(~metric, ncol = 1, scales = "free_y") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -536,14 +638,14 @@ f_ac_plot <- ggplot(error_metrics %>%
   guides(fill = guide_legend(title = "Parameter Estimation", nrow = 2, byrow = T)) + 
   xlab("Scenario") + ylab("Metric Value")
 
-# Figure S10: accuracy metrics plots for the males
+# Figure S13: accuracy metrics plots for the males
 m_ac_plot <- ggplot(error_metrics %>%
                       filter(data == "Males") %>%
-                      dplyr::select(sc3, et, med_PRE, nrmse) %>%
+                      dplyr::select(scenario, et, med_PRE, nrmse) %>%
                       rename(`Median PRE` = med_PRE,
                              NRMSE = nrmse) %>%
-                      gather(metric, value, -et, -sc3)) +
-  geom_col(aes(x = sc3, y = value, fill = et), color = "black",
+                      gather(metric, value, -et, -scenario)) +
+  geom_col(aes(x = scenario, y = value, fill = et), color = "black",
            position = position_dodge2()) +
   facet_wrap(~metric, ncol = 1, scales = "free_y") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -554,152 +656,51 @@ m_ac_plot <- ggplot(error_metrics %>%
   xlab("Scenario") + ylab("Metric Value")
 
 
-# ------------------------------------
-# error metrics table
-
-sr_error_metrics <- error_metrics_scens %>%
-  dplyr::select(eofsr, ped_rep, mating, nsampyrs, ssf, ckmr_ssmult,
-                et, year, hze, hzt, nll_type, fec_known, ckmr_seed, 
-                data, sim_value, est_value, id, scenario, sc3) %>%
-  mutate(data2 = data) %>%
-  spread(data, est_value) %>%
-  rename(fem_est = Females, male_est = Males) %>%
-  spread(data2, sim_value) %>%
-  rename(fem_sim = Females, male_sim = Males) %>%
-  group_by(et, year, id, sc3) %>%
-  summarize(fem_est = sum(fem_est, na.rm = TRUE),
-            male_est = sum(male_est, na.rm = TRUE),
-            fem_sim = sum(fem_sim, na.rm = TRUE),
-            male_sim = sum(male_sim, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(sim_sr = male_sim/(male_sim+fem_sim)*100,
-         est_sr = male_est/(male_est+fem_est)*100,
-         pre = get_perror(sim = sim_sr, est = est_sr),
-         ape = abs(est_sr - sim_sr)/sim_sr * 100) %>%
-  group_by(sc3, et, id) %>%
-  summarize(pre = median(pre),
-            ape = median(ape),
-            sd_ape = sd(ape),
-            med_sim = median(sim_sr),
-            med_est = median(est_sr),
-            squared_diff = (med_est-med_sim)^2) %>%
-  ungroup() %>%
-  group_by(sc3, et) %>%
-  summarize(med_PRE = median(pre),
-            med_APE = median(ape),
-            iqr_PRE = IQR(pre),
-            N = length(unique(id)),
-            meanobs = mean(med_sim),
-            rmse = sqrt((1/N) * sum(squared_diff)),
-            nrmse = rmse/meanobs,
-            min_PRE = min(pre),
-            max_PRE = max(pre),
-            med_sd_APE_within = median(sd_ape)) %>%
-  mutate_if(is.numeric, round, digits = 3) %>%
-  ungroup() %>%
-  mutate(data = "SexRatio",
-         .after = et)
-
-sr_error_metrics$sc3 <- as.factor(sr_error_metrics$sc3)
-sr_error_metrics$sc3 <- factor(sr_error_metrics$sc3, levels(sr_error_metrics$sc3)[c(6, 5,4,1,3,2,8,7,11,12,9,10)])
-
-names(sr_error_metrics) == names(error_metrics)
-
-error_metrics_full <- error_metrics %>%
-  bind_rows(sr_error_metrics) %>%
-  pivot_wider(id_cols = c(sc3, et), 
-              names_from = data, 
-              values_from = c("N", "med_PRE", "iqr_PRE", "nrmse")) %>%
-  dplyr::select(-N_Males, -N_SexRatio) %>%
-  mutate(med_PRE_Males = round(med_PRE_Males,2),
-         med_PRE_Females = round(med_PRE_Females,2),
-         med_PRE_SexRatio = round(med_PRE_SexRatio,2),
-         iqr_PRE_Females = round(iqr_PRE_Females,1),
-         iqr_PRE_Males = round(iqr_PRE_Males,1),
-         iqr_PRE_SexRatio = round(iqr_PRE_SexRatio,1),) %>%
-  rename(N = N_Females,
-         Scenario = sc3,
-         `Parameter Estimation` = et) %>%
-  relocate(Scenario, `Parameter Estimation`, N, med_PRE_Females, iqr_PRE_Females, 
-           nrmse_Females, med_PRE_Males, iqr_PRE_Males, nrmse_Males,
-           med_PRE_SexRatio, iqr_PRE_SexRatio, nrmse_SexRatio) %>%
-  arrange(Scenario, `Parameter Estimation`)
-
-names(error_metrics_full)[4:12] <- rep(c("PRE", "IQR", "NRMSE"), 3)
-
-#--------------------------------
-# CKMR sampling table
-
-# n for each of these is 400
-obs_summary <- ckmr_obs_samps_long %>% 
-  filter(sample_by_sex == samp_sex_base, et == base_et) %>%
-  group_by(om_sc, em_sc, nsampyrs, ckmr_ssmult, pair_type) %>%
-  summarize(median_count = round(median(count),0),
-            #min_count = min(count),
-            #max_count = max(count),
-            iqr_count = round(IQR(count),0)#,
-            #n = n()
-  ) %>%
-  mutate(count = paste0(format(median_count, big.mark = ",", scientific = FALSE), " (", 
-                        format(iqr_count, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
-  dplyr::select(-median_count, -iqr_count) %>%
-  pivot_wider(id_cols = c(em_sc, om_sc, nsampyrs, ckmr_ssmult), 
-              names_from = pair_type, 
-              values_from = c("count"))
-
-# n for each of these is 400
-sample_summary <- samp_summary %>%
-  filter(sample_by_sex == samp_sex_base, et == base_et, LifeStage == "Adult") %>%
-  group_by(om_sc, em_sc, nsampyrs, ckmr_ssmult, Sex) %>%
-  summarize(median_N = round(median(N),0),
-            #min_N = min(N),
-            #max_N = max(N),
-            iqr_N = round(IQR(N),0)#,
-            #n = n()
-  ) %>%
-  mutate(count = paste0(format(median_N, big.mark = ",", scientific = FALSE), " (", 
-                        format(iqr_N, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
-  dplyr::select(-median_N, -iqr_N) %>%
-  pivot_wider(id_cols = c(em_sc, om_sc, nsampyrs, ckmr_ssmult), 
-              names_from = Sex, 
-              values_from = c("count"))
-
-
-samps_table_data <- sample_summary %>%
-  left_join(obs_summary, 
-            by = c("em_sc", "om_sc", "nsampyrs", "ckmr_ssmult")
-  ) %>%
-  relocate(om_sc, em_sc, nsampyrs, ckmr_ssmult, 
-           F, M, POS, POD, HSS, HSD, Unrelated
-  )
-
-names(samps_table_data) <- c("OM", "EM", "Yrs", "N", "Females", "Males", "POS",
-                             "POD", "HSS", "HSD", "Unrelated")
-samps_table_data$Yrs <- as.character(samps_table_data$Yrs)
-samps_table_data$OM <- as.character(samps_table_data$OM)
-samps_table_data$EM <- as.character(samps_table_data$EM)
-samps_table_data$Yrs <- ifelse(samps_table_data$Yrs == "03 Yrs", 3, 10)
-samps_table_data$EM[samps_table_data$EM == "est Hmt < sim Hmt"] <- "eHmt < sHmt"
-samps_table_data$EM[samps_table_data$EM == "sim Hmt < est Hmt"] <- "sHmt < eHmt"
-samps_table_data$OM[samps_table_data$OM == "skipped spawning"] <- "skip spawn"
 
 
 #--------------------------------
-# Figures S11-S12: PRE by simulated pedigree
+### Figure S14: ICC plot
+
+library(lme4)
+
+dat <- abund_res %>% filter(scen_type == "Main") %>%
+  group_by(id, ped_rep, scenario, et, data) %>%
+  summarize(perror = median(perror), .groups = "drop")
+
+icc_results <- dat %>%
+  group_by(scenario, et, data) %>%
+  group_modify(~ {
+    m <- lmer(perror ~ 1 + (1|ped_rep), data = .x)
+    vc <- as.data.frame(VarCorr(m))
+    icc <- vc$vcov[1] / sum(vc$vcov)
+    tibble(icc = icc, singular = isSingular(m))
+  })
+
+icc_results$scenario <- as.factor(icc_results$scenario)
+icc_results$scenario <- factor(icc_results$scenario, levels = 
+                                 levels(icc_results$scenario)[c(1,5,2,6,3,4)])
+
+icc_plot <- ggplot(icc_results) +
+  geom_col(aes(x = scenario, y = icc, fill = et),
+           position = position_dodge2()) +
+  facet_wrap(~data) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "bottom") +
+  guides(fill = guide_legend(title = "EM Configuration",
+                             nrow = 2, byrow = T)) +
+  xlab("Scenario") + ylab("Intraclass Correlation Coefficient")
+
+
+#--------------------------------
+# Figures S15-S16: PRE by simulated pedigree
 
 # female data
 
 fdat <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult,
+  filter(scen_type == "Main",
          data == "Females",
   ) %>%
-  mutate(sc3 = case_when(
-    em_sc != "Base" ~ em_sc,
-    om_sc == "Base" ~ "Base",
-    TRUE ~ om_sc
-  )) %>%
-  group_by(data, ped_rep, ckmr_seed, et, sc3, id) %>%
+  group_by(data, ped_rep, ckmr_seed, et, scenario, id) %>%
   summarize(perror = median(perror),
             Nyears = n(),
             rmse = sqrt((1/Nyears) * sum(squared_diff))) %>%
@@ -711,17 +712,17 @@ fdat <- abund_res %>%
 dim(fdat)
 summary(fdat$Nyears)
 
-fdat$sc3 <- factor(fdat$sc3,
-                   levels = c("Base",
-                              "skipped spawning",
-                              "mRV flatter",
-                              "mRV steeper",
-                              "est Hmt < sim Hmt",
-                              "sim Hmt < est Hmt"))
+fdat$scenario <- factor(fdat$scenario,
+                        levels = c("Base",
+                                   "sHmt < eHmt",
+                                   "eHmt < sHmt",
+                                   "skipped spawning",
+                                   "mRV flatter",
+                                   "mRV steeper"
+                        ))
 
-#table(fdat$ped_rep, fdat$et, fdat$sc3)
 
-fdat <- fdat %>% group_by(ped_rep, et, sc3) %>% 
+fdat <- fdat %>% group_by(ped_rep, et, scenario) %>% 
   mutate(N = n())
 
 fdat <- fdat %>% filter(N > 3)
@@ -731,16 +732,10 @@ fdat <- fdat %>% droplevels()
 # male data
 
 mdat <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult,
+  filter(scen_type == "Main",
          data == "Males",
   ) %>%
-  mutate(sc3 = case_when(
-    em_sc != "Base" ~ em_sc,
-    om_sc == "Base" ~ "Base",
-    TRUE ~ om_sc
-  )) %>%
-  group_by(data, ped_rep, ckmr_seed, et, sc3, id) %>%
+  group_by(data, ped_rep, ckmr_seed, et, scenario, id) %>%
   summarize(perror = median(perror),
             Nyears = n(),
             rmse = sqrt((1/Nyears) * sum(squared_diff))) %>%
@@ -748,23 +743,24 @@ mdat <- abund_res %>%
   mutate(ped_rep = as.factor(ped_rep),
          #perror = scale(perror),
          #rmse = scale(rmse)
-  ) 
+  )
 
-mdat$sc3 <- factor(mdat$sc3,
-                   levels = c("Base",
-                              "skipped spawning",
-                              "mRV flatter",
-                              "mRV steeper",
-                              "est Hmt < sim Hmt",
-                              "sim Hmt < est Hmt"))
+mdat$scenario <- factor(mdat$scenario,
+                        levels = c("Base",
+                                   "sHmt < eHmt",
+                                   "eHmt < sHmt",
+                                   "skipped spawning",
+                                   "mRV flatter",
+                                   "mRV steeper"
+                        ))
 
-mdat <- mdat %>% group_by(ped_rep, et, sc3) %>% 
+mdat <- mdat %>% group_by(ped_rep, et, scenario) %>% 
   mutate(N = n())
 
 mdat <- mdat %>% filter(N > 3)
 mdat <- mdat %>% droplevels()
 
-### Figure S11: female plot
+### Figure S15: female plot
 
 fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
                    aes(x = ped_rep, y = perror, fill = et)) +
@@ -777,7 +773,7 @@ fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hm
   labs(#title = "Female Abundance",
     x = "Simulated Population", y = "Percent Relative Error") +
   theme_minimal() +
-  facet_wrap(~sc3, scales = "free_x", ncol = 6,
+  facet_wrap(~scenario, scales = "free_x", ncol = 6,
              axis.labels = "margins") +
   theme(legend.position = "bottom",
         panel.spacing.x = unit(4, "mm"),
@@ -785,7 +781,7 @@ fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hm
   guides(fill = guide_legend(title = "EM Scenario"))
 
 
-### Figure S12: male plot
+### Figure S16: male plot
 
 mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
                    aes(x = ped_rep, y = perror, fill = et)) +
@@ -798,7 +794,7 @@ mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hm
   labs(#title = "Male Abundance",
     x = "Simulated Population", y = "Percent Relative Error") +
   theme_minimal() +
-  facet_wrap(~sc3, scales = "free_x", ncol = 6,
+  facet_wrap(~scenario, scales = "free_x", ncol = 6,
              axis.labels = "margins") +
   theme(legend.position = "bottom",
         panel.spacing.x = unit(4, "mm"),
@@ -806,241 +802,12 @@ mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hm
   guides(fill = guide_legend(title = "EM Scenario"))
 
 
-### Figure S13: Marginal means plot for scenario effect
-
-library(glmmTMB)
-library(MuMIn)
-library(emmeans)
-
-### Females
-
-
-# fit1 <- glmmTMB(perror ~ et,
-#                 data = fdat, family = gaussian())
-# fit2 <- glmmTMB(perror ~ et + sc3,
-#                 data = fdat, family = gaussian())
-# fit3 <- glmmTMB(perror ~ et + sc3 + (1|ped_rep),
-#                 data = fdat, family = gaussian())
-# fit4 <- glmmTMB(perror ~ et * sc3,
-#                 data = fdat, family = gaussian())
-fit5 <- glmmTMB(perror ~ et * sc3 + (1|ped_rep),
-                data = fdat, family = gaussian())
-
-# model.sel(fit1, fit2, fit3, fit4, fit5) # fit5 is best
-
-# VarCorr(fit5)
-# summary(fit5)
-# residuals <- residuals(fit5)
-# plot(residuals)
-# confint(fit5)
-
-
-### visualize fixed effects
-fixef_df <- as.data.frame(summary(fit5)$coefficients$cond) %>%
-  mutate(CI_lower = Estimate - 1.96 * `Std. Error`,
-         CI_upper = Estimate + 1.96 * `Std. Error`,
-         term = rownames(.))
-
-# ggplot(fixef_df, aes(x = reorder(term, Estimate), y = Estimate)) +
-#   geom_point() +
-#   geom_errorbar(aes(ymin = CI_lower, ymax = CI_upper)) +
-#   coord_flip() + 
-#   labs(title = "Fixed Effects Coefficients for perror",
-#        x = "Effect", y = "Estimate") +
-#   theme_minimal()
-
-
-### visualize random effects
-ranef_vals <- ranef(fit5)[[1]]$ped_rep
-
-# Convert to data frame for plotting
-ranef_df <- data.frame(
-  ped_rep = sort(unique(fdat$ped_rep)),
-  random_intercept = ranef_vals[, 1]
-)
-
-# Reorder ped_rep based on the values of random_intercept
-ranef_df$ped_rep <- factor(ranef_df$ped_rep, levels = ranef_df$ped_rep[order(ranef_df$random_intercept)])
-
-# Plot random effects
-# ggplot(ranef_df, aes(x = ped_rep, y = random_intercept)) +
-#   geom_point() +
-#   coord_flip() +
-#   labs(title = "Random Effects: Intercepts with Confidence Intervals for Each ped_rep",
-#        x = "ped_rep (Population)", y = "Random Intercept") +
-#   theme_minimal()
-
-# marginal means for females
-femm <- plot(emmeans(fit5, ~ sc3 * et), comparisons = TRUE, plotit = F)
-
-
-### Males
-
-# fit6 <- glmmTMB(perror ~ et,
-#                 data = mdat, family = gaussian())
-# fit7 <- glmmTMB(perror ~ et + sc3,
-#                 data = mdat, family = gaussian())
-# fit8 <- glmmTMB(perror ~ et + sc3 + (1|ped_rep),
-#                 data = mdat, family = gaussian())
-fit9 <- glmmTMB(perror ~ et * sc3,
-                data = mdat, family = gaussian())
-# fit10 <- glmmTMB(perror ~ et * sc3 + (1|ped_rep),
-#                 data = mdat, family = gaussian())
-# 
-# model.sel(fit6, fit7, fit8, fit9, fit10) # fit9 is best, no random effects!
-
-# marginal means for males
-memm <- plot(emmeans(fit9, ~ sc3 * et), comparisons = TRUE, plotit = F)
-
-full_emm <- femm %>% mutate(sex = "Female") %>%
-  bind_rows(memm %>% mutate(sex = "Male"))
-
-emmeans_plot <- ggplot(full_emm, aes(x = et, y = the.emmean, color = sc3, group = sc3)) +
-  geom_point() +
-  geom_line() +
-  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.1) +
-  theme_minimal() +  # Use a minimal theme
-  facet_wrap(~sex) +
-  labs(
-    x = "Parameter Estimation",
-    y = "Estimated Marginal Mean PRE",
-    color = "Scenario") +
-  theme(legend.position = "top",
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
-        axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)))
-
-
-
-
 #--------------------------------
-# Figure S14: number sampled and kin pairs found when
-# varying the proportion of males in the CKMR sample
-
-samp_sum_suppl_plot <- ggplot(samp_summary %>%
-                                filter(LifeStage != "Juv") %>%
-                                mutate(Sex = ifelse(Sex == "F", "Female", "Male")) %>%
-                                filter(om_sc %in% c("Base","skipped spawning"), em_sc == "Base", et == base_et,
-                                       nsampyrs == base_ckmr_nsampyrs, ckmr_ssmult == base_ckmr_ssmult)) +
-  geom_boxplot(aes(x = om_sc, y = N, fill = sample_by_sex),
-               position = position_dodge(preserve = "single"),
-               outlier.size = 1.4, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.2,
-               size = 0.4) +
-  facet_wrap(~Sex, scales = "free_y") +
-  xlab("") + ylab("Number Sampled") +
-  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
-                    labels = c("Base", "More males", "No males")) +
-  theme(legend.position = "none",
-        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
-        axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0))) +
-  labs(tag = "A")
-
-ckmr_pairs_suppl <- ckmr_obs_samps_long %>% 
-  filter(em_sc == "Base", nsampyrs == base_ckmr_nsampyrs, om_sc %in% c("Base","skipped spawning"), 
-         ckmr_ssmult == base_ckmr_ssmult, et == base_et)
-
-ckmr_pairs_suppl_TEX <- ckmr_pairs_suppl
-levels(ckmr_pairs_suppl_TEX$pair_type) <- c(
-  POD = TeX("POP$^\\neq$"),
-  POS = TeX("POP$^=$"),
-  HSD = TeX("HSP$^\\neq$"),
-  HSS = TeX("HSP$^=$"),
-  Unrelated = TeX("Unrelated")
-)
-
-pairs_plot_suppl_plot <- ggplot(ckmr_pairs_suppl_TEX) +
-  geom_boxplot(aes(x = om_sc, y = count, fill = sample_by_sex),
-               position = position_dodge(preserve = "single"),
-               outlier.size = 1.4, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.2,
-               size = 0.4) +
-  facet_wrap(~pair_type, labeller = label_parsed,
-             scales = "free_y", ncol = 3) +
-  ylab("Number of Pairs") + xlab("") +
-  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
-                    labels = c("Base", "More males", "No males")) +
-  theme(legend.position = "inside",
-        legend.position.inside = c(0.75, 0.1),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        strip.text.x = element_text(size = 12)) +
-  guides(fill = guide_legend(title = "Male Sampling")) +
-  labs(tag = "B")
-
-
-male_samps_suppl_plot1 <- samp_sum_suppl_plot + pairs_plot_suppl_plot + 
-  plot_layout(
-    nrow = 2,
-    heights = c(0.5,1)) &
-  theme(axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.text = element_text(size = 10))
-
-
-
-#--------------------------------
-# Figure S15: PRE for varying the proportion of males in the CKMR sample
-
-samps_bysex <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, ckmr_ssmult == base_ckmr_ssmult,
-         om_sc %in% c("Base","skipped spawning"),
-         em_sc == "Base") %>%
-  group_by(om_sc, sample_by_sex, et, data, id) %>%
-  summarize(perror = median(perror))
-
-
-sbys_fem_p <- ggplot(samps_bysex %>% filter(data == "Females"), aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
-  geom_boxplot(aes(fill = sample_by_sex),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3,
-               size = 0.4) +
-  facet_wrap(~om_sc) + 
-  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
-                    labels = c("Base", "More males", "No males")) +
-  xlab("") + ylab("Percent Relative Error") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
-  ggtitle("Females") +
-  labs(tag = "A")
-
-
-sbys_mal_p <- ggplot(samps_bysex %>% filter(data == "Males"), aes(x = et, y = perror)) +
-  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
-  geom_boxplot(aes(fill = sample_by_sex),
-               outlier.size = 0.8, outlier.fill = NULL, 
-               outlier.shape = 21, outlier.stroke = 0.3,
-               size = 0.4) +
-  facet_wrap(~om_sc) + 
-  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
-                    labels = c("Base", "More males", "No males")) +
-  xlab("") + ylab("Percent Relative Error") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
-  ggtitle("Males") +
-  labs(tag = "B")
-
-male_samps_suppl_plot2 <- sbys_fem_p + sbys_mal_p + 
-  plot_layout(axis_titles = "collect",
-              guides = "collect",
-              nrow = 1) &
-  theme(legend.position = "bottom",
-        axis.line.x = element_line(color = "grey20"),
-        axis.ticks.x = element_line(color = "grey20"),
-        axis.text = element_text(size = 10)) &
-  guides(fill = guide_legend(title = "Male Sampling"))
-
-
-
-### out-takes
-
-
-#--------------------------------
-# Figure 6: PRE by number of CKMR samples and number of sampling yrs
+# Figure S17: PRE by number of CKMR samples and number of sampling yrs
 
 
 err_ckmr_sampling <- abund_res %>%
-  filter(om_sc == "Base", em_sc == "Base") %>%
+  filter(scenario %in% c("Base","Suppl Sampling Intensity")) %>%
   group_by(data, et, ckmr_ssmult, nsampyrs, id) %>%
   summarize(perror = median(perror)) %>%
   ungroup()
@@ -1125,85 +892,262 @@ ckmr_sampling_plot <- ytitle + sp1 + sp2 + sp3 + sp4 + xtitle +
   theme(legend.position = "none",
         axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"),
-        axis.title = element_blank())
+        axis.title = element_blank(),
+        axis.text = element_text(size = 10))
 
-ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = ckmr_sampling_plot, width = 8, height = 8)
 
-### stats for text:
 
-# tmp <- err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(data, et, ckmr_ssmult, nsampyrs) %>%
-#     summarize(med = median(perror),
-#               iqr = IQR(perror),
-#               min = min(perror),
-#               max = max(perror)) %>%
-#     arrange(data, med) %>%
-#     mutate_if(is.numeric, round, digits = 3)
-# summary(tmp$med)
-# summary(tmp$iqr)
-#  
-# err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(nsampyrs, et, data, ckmr_ssmult) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(nsampyrs, et, data, ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(nsampyrs, metric) %>%
-#   mutate(diff = `10 Yrs` - `03 Yrs`) %>%
-#   arrange(diff)
-#  
-# err_ckmr_sampling %>%
-#   filter(et != "fixed trans & mRV") %>%
-#   group_by(ckmr_ssmult, et) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult, data) %>%
-#   summarize(metric = median(perror)) %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   arrange(perc50_100)
-# 
-# err_ckmr_sampling %>%
-#   group_by(et, ckmr_ssmult, data, nsampyrs) %>%
-#   summarize(metric = IQR(perror)) %>%
-#   ungroup() %>%
-#   arrange(ckmr_ssmult) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   spread(ckmr_ssmult, metric) %>%
-#   mutate(diff50_100 = `50%` - `100%`,
-#          diff100_150 = `100%` - `150%`,
-#          perc50_100 = diff50_100*100/`100%`,
-#          perc100_150 = diff100_150*100/`150%`) %>%
-#   group_by(et) %>%
-#   summarize(diff50_100 = mean(diff50_100),
-#             diff100_150 = mean(diff100_150),
-#             perc50_100 = mean(perc50_100),
-#             perc100_150 = mean(perc100_150))
+#--------------------------------
+# Figure S18: number sampled and kin pairs found when
+# varying the proportion of males in the CKMR sample
+
+samp_sum_suppl_plot <- ggplot(samp_summary %>%
+                                filter(LifeStage != "Juv") %>%
+                                mutate(Sex = ifelse(Sex == "F", "Female", "Male")) %>%
+                                filter(scenario %in% c("Base","skipped spawning","Suppl Scen Male & Female Sampling"))) +
+  geom_boxplot(aes(x = om_sc, y = N, fill = sample_by_sex),
+               position = position_dodge(preserve = "single"),
+               outlier.size = 1.4, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.2,
+               size = 0.4) +
+  facet_wrap(~Sex, scales = "free_y") +
+  xlab("") + ylab("Number Sampled") +
+  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
+                    labels = c("Base", "More males", "No males")) +
+  theme(legend.position = "none",
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
+        axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0))) +
+  labs(tag = "A")
+
+ckmr_pairs_suppl <- ckmr_obs_samps_long %>% 
+  filter(scenario %in% c("Base","skipped spawning","Suppl Scen Male & Female Sampling"))
+
+ckmr_pairs_suppl_TEX <- ckmr_pairs_suppl
+levels(ckmr_pairs_suppl_TEX$pair_type) <- c(
+  POD = TeX("POP$^\\neq$"),
+  POS = TeX("POP$^=$"),
+  HSD = TeX("HSP$^\\neq$"),
+  HSS = TeX("HSP$^=$"),
+  Unrelated = TeX("Unrelated")
+)
+
+pairs_plot_suppl_plot <- ggplot(ckmr_pairs_suppl_TEX) +
+  geom_boxplot(aes(x = om_sc, y = count, fill = sample_by_sex),
+               position = position_dodge(preserve = "single"),
+               outlier.size = 1.4, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.2,
+               size = 0.4) +
+  facet_wrap(~pair_type, labeller = label_parsed,
+             scales = "free_y", ncol = 3) +
+  ylab("Number of Pairs") + xlab("") +
+  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
+                    labels = c("Base", "More males", "No males")) +
+  theme(legend.position = "inside",
+        legend.position.inside = c(0.75, 0.1),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.line.x = element_line(color = "grey20"),
+        axis.ticks.x = element_line(color = "grey20"),
+        strip.text.x = element_text(size = 12)) +
+  guides(fill = guide_legend(title = "Male Sampling")) +
+  labs(tag = "B")
+
+
+male_samps_suppl_plot1 <- samp_sum_suppl_plot + pairs_plot_suppl_plot + 
+  plot_layout(
+    nrow = 2,
+    heights = c(0.5,1)) &
+  theme(axis.line.x = element_line(color = "grey20"),
+        axis.ticks.x = element_line(color = "grey20"),
+        axis.text = element_text(size = 10))
+
+
+
+#--------------------------------
+# Figure S19: PRE for varying the proportion of males in the CKMR sample
+
+samps_bysex <- abund_res %>%
+  filter(scenario %in% c("Base","skipped spawning","Suppl Scen Male & Female Sampling")) %>%
+  group_by(om_sc, sample_by_sex, et, data, id) %>%
+  summarize(perror = median(perror))
+
+
+sbys_fem_p <- ggplot(samps_bysex %>% filter(data == "Females"), aes(x = et, y = perror)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
+  geom_boxplot(aes(fill = sample_by_sex),
+               outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.3,
+               size = 0.4) +
+  facet_wrap(~om_sc) + 
+  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
+                    labels = c("Base", "More males", "No males")) +
+  xlab("") + ylab("Percent Relative Error") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+  ggtitle("Females") +
+  labs(tag = "A")
+
+
+sbys_mal_p <- ggplot(samps_bysex %>% filter(data == "Males"), aes(x = et, y = perror)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed", color = "red") +
+  geom_boxplot(aes(fill = sample_by_sex),
+               outlier.size = 0.8, outlier.fill = NULL, 
+               outlier.shape = 21, outlier.stroke = 0.3,
+               size = 0.4) +
+  facet_wrap(~om_sc) + 
+  scale_fill_manual(values = c("#F8766D", "#00BA38", "#619CFF"),
+                    labels = c("Base", "More males", "No males")) +
+  xlab("") + ylab("Percent Relative Error") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+  ggtitle("Males") +
+  labs(tag = "B")
+
+male_samps_suppl_plot2 <- sbys_fem_p + sbys_mal_p + 
+  plot_layout(axis_titles = "collect",
+              guides = "collect",
+              nrow = 1) &
+  theme(legend.position = "bottom",
+        axis.line.x = element_line(color = "grey20"),
+        axis.ticks.x = element_line(color = "grey20"),
+        axis.text = element_text(size = 10)) &
+  guides(fill = guide_legend(title = "Male Sampling"))
+
+
+
+
+# ------------------------------------
+# error metrics table
+
+sr_error_metrics <- error_metrics_scens %>%
+  dplyr::select(eofsr, ped_rep, mating, nsampyrs, ssf, ckmr_ssmult,
+                et, year, hze, hzt, nll_type, fec_known, ckmr_seed, 
+                data, sim_value, est_value, id, scenario, scenario) %>%
+  mutate(data2 = data) %>%
+  spread(data, est_value) %>%
+  rename(fem_est = Females, male_est = Males) %>%
+  spread(data2, sim_value) %>%
+  rename(fem_sim = Females, male_sim = Males) %>%
+  group_by(et, year, id, scenario) %>%
+  summarize(fem_est = sum(fem_est, na.rm = TRUE),
+            male_est = sum(male_est, na.rm = TRUE),
+            fem_sim = sum(fem_sim, na.rm = TRUE),
+            male_sim = sum(male_sim, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(sim_sr = male_sim/(male_sim+fem_sim)*100,
+         est_sr = male_est/(male_est+fem_est)*100,
+         pre = get_perror(sim = sim_sr, est = est_sr),
+         ape = abs(est_sr - sim_sr)/sim_sr * 100) %>%
+  group_by(scenario, et, id) %>%
+  summarize(pre = median(pre),
+            ape = median(ape),
+            sd_ape = sd(ape),
+            med_sim = median(sim_sr),
+            med_est = median(est_sr),
+            squared_diff = (med_est-med_sim)^2) %>%
+  ungroup() %>%
+  group_by(scenario, et) %>%
+  summarize(med_PRE = median(pre),
+            med_APE = median(ape),
+            iqr_PRE = IQR(pre),
+            N = length(unique(id)),
+            meanobs = mean(med_sim),
+            rmse = sqrt((1/N) * sum(squared_diff)),
+            nrmse = rmse/meanobs,
+            min_PRE = min(pre),
+            max_PRE = max(pre),
+            med_sd_APE_within = median(sd_ape)) %>%
+  mutate_if(is.numeric, round, digits = 3) %>%
+  ungroup() %>%
+  mutate(data = "SexRatio",
+         .after = et)
+
+sr_error_metrics$scenario <- as.factor(sr_error_metrics$scenario)
+sr_error_metrics$scenario <- factor(sr_error_metrics$scenario, 
+                                    levels(sr_error_metrics$scenario)[c(6,10,7,11,8,9,5,4,3,1,2)])
+
+names(sr_error_metrics) == names(error_metrics)
+
+error_metrics_full <- error_metrics %>%
+  bind_rows(sr_error_metrics) %>%
+  pivot_wider(id_cols = c(scenario, et), 
+              names_from = data, 
+              values_from = c("N", "med_PRE", "iqr_PRE", "nrmse")) %>%
+  dplyr::select(-N_Males, -N_SexRatio) %>%
+  mutate(med_PRE_Males = round(med_PRE_Males,2),
+         med_PRE_Females = round(med_PRE_Females,2),
+         med_PRE_SexRatio = round(med_PRE_SexRatio,2),
+         iqr_PRE_Females = round(iqr_PRE_Females,1),
+         iqr_PRE_Males = round(iqr_PRE_Males,1),
+         iqr_PRE_SexRatio = round(iqr_PRE_SexRatio,1),) %>%
+  rename(N = N_Females,
+         Scenario = scenario,
+         `Parameter Estimation` = et) %>%
+  relocate(Scenario, `Parameter Estimation`, N, med_PRE_Females, iqr_PRE_Females, 
+           nrmse_Females, med_PRE_Males, iqr_PRE_Males, nrmse_Males,
+           med_PRE_SexRatio, iqr_PRE_SexRatio, nrmse_SexRatio) %>%
+  arrange(Scenario, `Parameter Estimation`)
+
+names(error_metrics_full)[4:12] <- rep(c("PRE", "IQR", "NRMSE"), 3)
+
+#--------------------------------
+# CKMR sampling table
+
+# n for each of these is 400
+obs_summary <- ckmr_obs_samps_long %>% 
+  filter(sample_by_sex == samp_sex_base, et == base_et) %>%
+  group_by(scenario, nsampyrs, ckmr_ssmult, pair_type) %>%
+  summarize(median_count = round(median(count),0),
+            #min_count = min(count),
+            #max_count = max(count),
+            iqr_count = round(IQR(count),0)#,
+            #n = n()
+  ) %>%
+  mutate(count = paste0(format(median_count, big.mark = ",", scientific = FALSE), " (", 
+                        format(iqr_count, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
+  dplyr::select(-median_count, -iqr_count) %>%
+  pivot_wider(id_cols = c(scenario, nsampyrs, ckmr_ssmult), 
+              names_from = pair_type, 
+              values_from = c("count"))
+
+# n for each of these is 400
+sample_summary <- samp_summary %>%
+  filter(sample_by_sex == samp_sex_base, et == base_et, LifeStage == "Adult") %>%
+  group_by(scenario, nsampyrs, ckmr_ssmult, Sex) %>%
+  summarize(median_N = round(median(N),0),
+            #min_N = min(N),
+            #max_N = max(N),
+            iqr_N = round(IQR(N),0)#,
+            #n = n()
+  ) %>%
+  mutate(count = paste0(format(median_N, big.mark = ",", scientific = FALSE), " (", 
+                        format(iqr_N, big.mark = ",", scientific = FALSE, trim = TRUE), ")")) %>%
+  dplyr::select(-median_N, -iqr_N) %>%
+  pivot_wider(id_cols = c(scenario, nsampyrs, ckmr_ssmult), 
+              names_from = Sex, 
+              values_from = c("count"))
+
+
+samps_table_data <- sample_summary %>%
+  left_join(obs_summary, 
+            by = c("scenario", "nsampyrs", "ckmr_ssmult")
+  ) %>%
+  relocate(scenario, nsampyrs, ckmr_ssmult, 
+           F, M, POS, POD, HSS, HSD, Unrelated
+  ) %>%
+  mutate(scenario = ifelse(scenario == "Suppl Sampling Intensity",
+         "Vary Sampling", scenario))
+
+samps_table_data$scenario <- as.factor(samps_table_data$scenario)
+samps_table_data$scenario <- factor(samps_table_data$scenario, 
+                                    levels(samps_table_data$scenario)[c(1,5,2,6,3,4,7)])
+
+samps_table_data$ckmr_ssmult <- factor(samps_table_data$ckmr_ssmult, levels = c("50%","100%","150%"))
+
+names(samps_table_data) <- c("Scenario", "Yrs", "Nsamps", "Females", "Males", "POS",
+                             "POD", "HSS", "HSD", "Unrelated")
+samps_table_data$Yrs <- as.character(samps_table_data$Yrs)
+samps_table_data$Yrs <- ifelse(samps_table_data$Yrs == "03 Yrs", 3, 10)
+
+samps_table_data <- samps_table_data %>% arrange(Scenario, Yrs, Nsamps)
+
+
+
 

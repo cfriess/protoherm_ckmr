@@ -55,20 +55,20 @@ sim_pop <- readRDS(file.path(here(), path, "sim_pop_final.rds"))
 
 # abundance estimate results
 abund_res <- readRDS(file.path(here(), path, "abund_res_final.rds")) %>%
+  filter(scen_type == "Main") %>%
   mutate(squared_diff = (sim_value - est_value)^2)
-abund_res$ckmr_ssmult <- factor(abund_res$ckmr_ssmult, levels = c("50%","100%", "150%"))
 abund_res$et <- factor(abund_res$et, levels = et_levels)
 abund_res$om_sc <- factor(abund_res$om_sc, levels = om_sc_levels)
 abund_res$em_sc <- factor(abund_res$em_sc, levels = em_sc_levels)
 
 # simulated parameters
-sim_pars <- readRDS(file.path(here(), path, "sim_pars_final.rds"))
-sim_pars$ckmr_ssmult <- factor(sim_pars$ckmr_ssmult, levels = c("50%","100%", "150%"))
+sim_pars <- readRDS(file.path(here(), path, "sim_pars_final.rds")) %>%
+  filter(scen_type == "Main")
 sim_pars$et <- factor(sim_pars$et, levels = et_levels)
 sim_pars$om_sc <- factor(sim_pars$om_sc, levels = om_sc_levels)
 sim_pars$em_sc <- factor(sim_pars$em_sc, levels = em_sc_levels)
 sim_pars$scenario <- as.factor(sim_pars$scenario)
-sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(19,16:18,1,9:15,2:8)])
+sim_pars$scenario <- factor(sim_pars$scenario, levels(sim_pars$scenario)[c(1,5,2,6,3,4)])
 
 sim_pars <- sim_pars %>%
   mutate(par_name_long = case_when(
@@ -81,8 +81,8 @@ sim_pars <- sim_pars %>%
 
 
 # observed ckmr samples
-ckmr_obs_samps <- readRDS(file.path(here(), path, "ckmr_obs_samps_final.rds"))
-ckmr_obs_samps$ckmr_ssmult <- factor(ckmr_obs_samps$ckmr_ssmult, levels = c("50%","100%", "150%"))
+ckmr_obs_samps <- readRDS(file.path(here(), path, "ckmr_obs_samps_final.rds")) %>%
+  filter(scen_type == "Main")
 ckmr_obs_samps$et <- factor(ckmr_obs_samps$et, levels = et_levels)
 ckmr_obs_samps$om_sc <- factor(ckmr_obs_samps$om_sc, levels = om_sc_levels)
 ckmr_obs_samps$em_sc <- factor(ckmr_obs_samps$em_sc, levels = em_sc_levels)
@@ -96,8 +96,6 @@ ckmr_obs_samps_long$pair_type <- factor(ckmr_obs_samps_long$pair_type, levels = 
 base_eofsr <- "No Sperm Lim"
 base_ssf <- "No Fem SS Fidel"
 base_mating <- "polyandry"
-base_ckmr_nsampyrs <- "03 Yrs"
-base_ckmr_ssmult <- "100%"
 base_hze <- "hze = 1"
 base_hzt <- "hzt = 1"
 base_nll <- "HSP + POP"
@@ -232,8 +230,7 @@ ggsave(here("manuscript", "figures", "Figure_2.pdf"), plot = mRC_plot, width = 7
 sim_pop$scenario <- as.factor(sim_pop$scenario)
 
 sim_pop2 <- sim_pop %>% 
-  filter(scenario %in% c("S0","OM_S2","OM_S3", "OM_S4"),
-         Year >= fyrplot) %>%
+  filter(Year >= fyrplot) %>%
   dplyr::select(Year, scenario, Males, Females, id) %>%
   gather(data, number, Females:Males) 
 
@@ -247,9 +244,9 @@ sim_pop_sum <- sim_pop2 %>%
 sim_pop_plot <- ggplot(sim_pop2) +
   geom_line(aes(x = Year, y = number, col = scenario, linetype = as.factor(id)), alpha = 0.1)  +
   geom_line(data = sim_pop_sum, 
-    aes(x = Year, y = median_sim, col = scenario), linewidth = 1.5) +
+    aes(x = Year, y = median_sim, col = fct_rev(scenario)), linewidth = 1.5) +
   scale_linetype_manual(values = rep(1, 200)) +
-  scale_color_manual(values = c("tomato3","#00BFC4", "#7CAE00", "grey30")) +
+  scale_color_manual(values = c("grey30", "#7CAE00","#00BFC4","tomato3")) +
   scale_y_continuous(labels = scientific_format()) +
   facet_wrap(~data, scales = "free") +
   ylab("Abundance (Age 3+)") +
@@ -263,8 +260,7 @@ ggsave(here("manuscript", "figures", "Figure_3.pdf"), plot = sim_pop_plot, width
 
 
 ckmr_pairs_by_scenario <- ckmr_obs_samps_long %>% 
-  filter(em_sc == "Base", nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, et == base_et)
+  filter(em_sc == "Base", et == base_et)
 
 # Eric explores using TeX() on changed factor levels. See: https://stackoverflow.com/questions/56518893/annotate-ggplot2-face-labels-with-latex-in-r
 ckmr_pairs_by_scenario_TEX <- ckmr_pairs_by_scenario
@@ -290,7 +286,7 @@ main_ckmr_pairs_plot <- ggplot(ckmr_pairs_by_scenario_TEX) +
         axis.line.x = element_line(color = "grey20"),
         axis.ticks.x = element_line(color = "grey20"),
         strip.text.x = element_text(size = 16)) +
-  guides(fill = guide_legend(title = "OM Scenario"))
+  guides(fill = guide_legend(title = "OM Configuration"))
 
 ggsave(here("manuscript", "figures", "Figure_4.pdf"), plot = main_ckmr_pairs_plot, width = 8, height = 6)
 
@@ -301,14 +297,12 @@ ggsave(here("manuscript", "figures", "Figure_4.pdf"), plot = main_ckmr_pairs_plo
 
 
 err_emsc1_2 <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, om_sc == "Base") %>%
+  filter(om_sc == "Base") %>%
   group_by(em_sc, et, data, id) %>%
   summarize(perror = median(perror))
 
 mr_res <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, em_sc == "Base") %>%
+  filter(em_sc == "Base") %>%
   group_by(om_sc, et, data, id) %>%
   summarize(perror = median(perror)) %>%
   ungroup()
@@ -331,7 +325,7 @@ em_p1 <-
   ggtitle("Base") +
   ylab("Percent Relative Error") +
   coord_cartesian(ylim = c(-75,100)) +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
+  guides(fill = guide_legend(title = "EM Configuration"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -355,7 +349,7 @@ om_p3 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Scenario")) +
+  guides(fill = guide_legend(title = "EM Configuration")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "flatter than" ~ RV[F]^{"OM"}))) +
   labs(tag = "E")
 
@@ -377,7 +371,7 @@ om_p4 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Scenario")) +
+  guides(fill = guide_legend(title = "EM Configuration")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "steeper than" ~ RV[F]^{"OM"}))) +
   labs(tag = "F")
 
@@ -399,7 +393,7 @@ om_p2 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) + # omits 26
-  guides(fill = guide_legend(title = "EM Scenario")) +
+  guides(fill = guide_legend(title = "EM Configuration")) +
   ggtitle("Skipped spawning") +
   labs(tag = "D")
 
@@ -419,7 +413,7 @@ em_p3 <-
   coord_cartesian(ylim = c(-65, 750)) +
   ggtitle(expression(bold(H[mt]^{"EM"} < H[mt]^{"OM"}))) +
   ylab("Percent Relative Error") +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
+  guides(fill = guide_legend(title = "EM Configuration"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -441,7 +435,7 @@ em_p4 <-
   coord_cartesian(ylim = c(-75,100)) +
   ggtitle(expression(bold(H[mt]^{"OM"} < H[mt]^{"EM"}))) +
   ylab("Percent Relative Error") +
-  guides(fill = guide_legend(title = "EM Scenario"))  +
+  guides(fill = guide_legend(title = "EM Configuration"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -461,42 +455,18 @@ scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
                       axis.title = element_blank(),
                       axis.text.x = element_blank()
                     ) &
-                    guides(fill = guide_legend(title = "EM Scenario", nrow = 2, byrow = TRUE))
+                    guides(fill = guide_legend(title = "EM Configuration", nrow = 2, byrow = TRUE))
                   ) +
   plot_annotation()  # Ensures the patchwork layout processes all theme elements
 
 ggsave(here("manuscript", "figures", "Figure_5.pdf"), plot = scen_pre_plot, width = 8, height = 7)
-
-# err_emsc1_2 %>% 
-#   filter(em_sc %in% c("est Hmt < sim Hmt")) %>%
-#   group_by(em_sc, et) %>% 
-#   summarize(med = median(perror),
-#             iqr = IQR(perror)) %>% 
-#   arrange(et)
-# 
-# err_emsc1_2 %>% 
-#   filter(!em_sc %in% c("HSPs only", "Base")) %>%
-#   group_by(em_sc, et, data) %>% 
-#   summarize(metric = median(perror)) %>% 
-#   spread(em_sc, metric) %>%
-#   arrange(data)
-# 
-# err_emsc1_2 %>% 
-#   filter(!em_sc %in% c("HSPs only", "Base")) %>%
-#   group_by(em_sc, et, data) %>% 
-#   summarize(metric = IQR(perror)) %>% 
-#   spread(em_sc, metric) %>%
-#   arrange(data)
 
 
 #--------------------------------
 # Figure 6: Sex ratio PRE plot
 
 sr_error <- abund_res %>%
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult,
-         em_sc != "HSPs only") %>%
-  dplyr::select(ped_rep, nsampyrs, ckmr_ssmult,
+  dplyr::select(ped_rep,
                 et, year, ckmr_seed, 
                 data, sim_value, est_value, id, em_sc, om_sc) %>%
   mutate(data2 = data) %>%
@@ -504,7 +474,7 @@ sr_error <- abund_res %>%
   rename(fem_est = Females, male_est = Males) %>%
   spread(data2, sim_value) %>%
   rename(fem_sim = Females, male_sim = Males) %>%
-  group_by(ped_rep, nsampyrs, ckmr_ssmult,
+  group_by(ped_rep,
            et, year, ckmr_seed,
            id, em_sc, om_sc) %>%
   summarize(fem_est = sum(fem_est, na.rm = TRUE),
@@ -520,29 +490,6 @@ sr_error_sum <- sr_error %>%
   group_by(om_sc, em_sc, et, id) %>%
   summarize(prerror = median(prerror))
 
-# sr_error_sum <- sr_error %>%
-#   droplevels() %>%
-#   group_by(ckmr_ssmult,scenario,nsampyrs,
-#            year
-#   ) %>%
-#   mutate(N = n()) %>%
-#   ungroup() %>%
-#   group_by(ckmr_ssmult,scenario,nsampyrs) %>%
-#   mutate(propN = N/max(N)) %>%
-#   ungroup() %>%
-#   filter(propN > prop2plot)
-
-
-
-# sr_error_sum %>%
-#   filter(em_sc == "est Hmt < sim Hmt") %>%
-#   group_by(et) %>%
-#   summarize(med = median(prerror),
-#             iqr = IQR(prerror),
-#             min = min(prerror),
-#             max = max(prerror)) %>%
-#   mutate_if(is.numeric, round, digits = 3) %>%
-#   arrange(et)
 
 sryll <- -95
 sryul <- 150
@@ -678,7 +625,7 @@ sr_plot <- ytitle + sr1 + sr4 + sr3 + sr2 + sr5 + sr6 +
     axis.title = element_blank(),
     axis.text.x = element_blank()
   ) &
-  guides(fill = guide_legend(title = "EM Scenario", nrow = 2, byrow = TRUE))
+  guides(fill = guide_legend(title = "EM Configuration", nrow = 2, byrow = TRUE))
 
 sr_plot_final <- sr_plot +
   plot_annotation() &
@@ -696,9 +643,7 @@ ggsave(here("manuscript", "figures", "Figure_6.pdf"), plot = sr_plot_final, widt
 
 
 est_tf <- sim_pars %>% 
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, 
-         ckmr_ssmult == base_ckmr_ssmult, em_sc != "HSPs only",
-         par_name == "TFsd") %>% 
+  filter(par_name == "TFsd") %>% 
   dplyr::select(id, om_sc, et, value, sim_value, em_sc) %>%
   rename(est_par = value, sim_par = sim_value) %>%
   mutate(sc3 = case_when(
@@ -763,9 +708,7 @@ st_plot <- ggplot(est_tf) +
 
 
 est_mf <- sim_pars %>% 
-  filter(nsampyrs == base_ckmr_nsampyrs, sample_by_sex == samp_sex_base, ckmr_ssmult == base_ckmr_ssmult,
-         em_sc != "HSPs only",
-         par_name == "mRV_exp") %>% 
+  filter(par_name == "mRV_exp") %>% 
   dplyr::select(id, om_sc, et, value, sim_value, em_sc) %>%
   rename(est_par = value, sim_par = sim_value) %>%
   mutate(sc3 = case_when(
