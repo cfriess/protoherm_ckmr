@@ -604,7 +604,7 @@ defined as the number of males divided by the total number of 3+ year-olds.
 We calculated the median of $\mathrm{PRE}_{t,k,c}$ to obtain one $\mathrm{PRE_{k,c}}$ value per iteration. 
 We chose the median over the mean here after inspecting the PRE values within case (Figures S3 and S4). 
 For most cases, PREs were flat over years for all iterations, so median and mean perform similarly. 
-There were, however, a number of iterations (only for the males and primarily within two cases; Figure S3) 
+There were, however, a number of iterations (only for the males and primarily within two cases; Figure S4) 
 where extreme PRE values early in
 the time series distort the mean while the median captures the dominant signal.
 
@@ -631,12 +631,13 @@ sperm limitation in the final 35-40 years of the simulation (Figure 3).
 
 ## 3.2. Simulated CKMR Samples
 
-The number of females sampled in the base case was about two orders of magnitude higher 
+The median number of females sampled in the base scenario was about two orders of magnitude higher 
 than the number of males sampled (median of 3,110 females vs 28 males; Table S1, Figure S6).
-The number
+The median number
 of HSPs found with different mtDNA ($\HSPD$) was about sixteen times higher (758 vs 47) than
-the number of HSPs sharing mtDNA ($\HSPS$). Additionally, POPs with matching mtDNA were 
-seven times more common than those with different mtDNA (36 vs 5; Table S1, Figure S7). 
+HSPs sharing mtDNA ($\HSPS$). Additionally, POPs with matching mtDNA were 
+seven times more common than those with different mtDNA (median of 36 vs 5; Table S1, 
+Figures 4 and S7). 
 
 Some differences in the number of pairs found were apparent across scenarios
 (Figure 4). First, the number of unrelated pairs was much
@@ -651,13 +652,13 @@ HSPs sharing a mother increased.
 The next major effect was that of $\mathrm{RV}_{a,M}^\mathrm{OM}$ on $\HSPD$.
 When $\mathrm{RV}_{a,M}^\mathrm{OM}$ increased more steeply with age, as would be
 expected based on the size advantage model, the number of $\HSPD$ increased about
-three-fold compared to the base case (Figure 4, Table S1).
+three-fold compared to the base scenario (Figure 4, Table S1).
 The explanation is analogous to finding more $\HSPS$ when there is skipped spawning. 
 If $\mathrm{RV}_{a,M}^\mathrm{OM}$ is steeper,
 older males (of which there are fewer than younger males) are much more successful at fathering offspring and
 hence the chance of finding $\HSPD$ increases.
 The opposite is seen when $\mathrm{RV}_{a,M}^\mathrm{OM}$ varies little with age. Here,
-we only found about two-thirds the number of $\HSPD$ compared to the base case
+we only found about two-thirds the number of $\HSPD$ compared to the base scenario
 (Figure 4)
 because now younger males are also very successful and the offspring are more
 evenly spread out among fathers, reducing the likelihood of encountering HSPs sharing
@@ -682,7 +683,7 @@ the data weight checks after the first time fitting the model and an additional
 28% after the second time. If the model ran 3 times, we used the
 run with the lowest negative log likelihood amongst those 3 runs.
 
-## 3.4. Base Case Estimation Performance 
+## 3.4. Base Scenario Estimation Performance 
 
 In the base scenario ($\Hmte$ = $\Hmts$, no skipped spawning, 
 $\mathrm{RV}_{a,M}^\mathrm{OM}$ = $\mathrm{RV}_{a,F}^\mathrm{OM}$), male and female abundance were estimated very well
@@ -695,12 +696,6 @@ known ($\mathrm{IQR_{c}} {\approx} 7\%$). Precision was lowest for males when bo
 
 ## 3.5 Effect of Parental Sex Assignment Accuracy
 
-Generally for all scenarios,
-abundance estimate errors were similar between the sexes when $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was assumed known,
-resulting in accurate sex ratio estimates (Figure 6). We, therefore, focus
-between-sex comparisons in this and the next sections on the case when 
-$P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was allowed to be estimated.
-
 Misspecifying $\Hmt$ in the EM had major effects on abundance estimation
 performance, but only when at least one of $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ 
 was estimated rather than assumed known (Figure 5B&C).
@@ -710,7 +705,7 @@ fixed in the EM ($|\mathrm{PRE_{c}}| <62\%$; Figure 5B). Conversely, females wer
 when $\Hmte$ < $\Hmts$ and $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and/or $\mathrm{RV}_{a,M}$
 were estimated, with $\mathrm{PRE_c}$ values ranging from 117 to 335$\%$ (Table S2) --- the largest
 observed in this study. Precision was also quite low for these cases, $\mathrm{IQR_c}$ ranging from
-91 to 254% (Table S2). Precision in female abundance estimates for the same EM configurations 
+91 to 254% (Table S2). Precision in female abundance estimates for the same parameter estimation options 
 for $\Hmts$ < $\Hmte$, on the other hand, was much higher ($\mathrm{IQR_c} < 6\%$).
 
 For males, results were more nuanced. When only $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was assumed known, male
@@ -723,7 +718,7 @@ When both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ were 
 male abundance estimates were fairly accurate ($|\mathrm{PRE_{c}}| \pm 9\%$), in stark contrast to 
 female abundance estimates. When only $\mathrm{RV}_{a,M}$ was estimated but
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ remained fixed, male abundance was systematically
-inaccurate in the opposite direction compared to females (Figure 5B&C).
+inaccurate in the opposite direction to females (Figure 5B&C).
 Consequently, allowing
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ to be estimated when $\Hmt$ was misspecified in the EM resulted in highly
 inaccurate sex ratio estimates (Figure 6B&C).
@@ -739,10 +734,9 @@ When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ is fixed, thereby locking in the s
 number of females by also lowering the expected number of males (Figure 5B), and it does this by
 flattening the estimated $\mathrm{RV}_{a,M}$ function (Figure 7D). This also reduces
 the expected number of $\HSPD$, in contradiction to what the genetic data for the
-males are indicating. When allowed, the EM will flatten the estimated $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ which
+males are indicating. When allowed, the EM will flatten the estimated $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ (Figure 7D) which
 results in females turning into males at a younger age, reducing the shift in $\mathrm{RV}_{a,M}^\mathrm{EM}$
-required to reconcile observed and expected numbers
-(Figure 7D). The opposite is true when the EM sees fewer
+required to reconcile observed and expected numbers. The opposite is true when the EM sees fewer
 $\HSPS$ than it expects in the data for the $\Hmte$ < $\Hmts$ scenario: recruitment is now
 overestimated (Figure S9) and the estimated
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ functions are steeper to create
@@ -757,7 +751,7 @@ contributing offspring, effectively shifting $\mathrm{RV}_{a,F}^\mathrm{OM}$ to 
 Given that fewer females contribute to reproduction, the
 chance of encountering $\HSPS$ increases against the EM's expectation and female abundance is underestimated (Figure 5D).
 Under a known $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$, underestimation for both sexes was
-low ($|\mathrm{PRE_{c}}| < 5\%$) when $\mathrm{RV}_{a,M}$ was also known but increased
+low when $\mathrm{RV}_{a,M}$ was also known ($|\mathrm{PRE_{c}}| < 5\%$) but increased
 when $\mathrm{RV}_{a,M}$ was estimated ($|\mathrm{PRE_{c}}| <20\%$; Figure 5D). 
 When $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was estimated, it was estimated to be slightly less steep than simulated
 (Figure 7B), and the resulting female underestimation increased to 
@@ -782,12 +776,12 @@ while $\mathrm{RV}_{a,M}$ was also fixed at the wrong value ($|\mathrm{PRE_{c}}|
 the direction of male inaccuracy. However, when either $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ 
 or $\mathrm{RV}_{a,M}$ was allowed to be
 estimated, median female abundance estimates were accurate within $\pm{5}\%$ (Figure 5E&F). 
-Precision in male and female estimation was variable between scenarios, as low as 
+Precision in male and female estimation was variable between cases, as low as 
 $\mathrm{IQR_{c}} = 4\%$ and as high as $\mathrm{IQR_{c}} = 92\%$ (Table S2).
 Sex ratios were least accurate when
 $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ was allowed to be estimated but $\mathrm{RV}_{a,M}$ continued to be
 misspecified ($|\mathrm{PRE_{c}}| \pm65\%$). Allowing $\mathrm{RV}_{a,M}$ to be estimated improved accuracy
-to within $\pm{20}\%$ (Figure 6E&F), even though precision in sex ratio estimates was 
+to within $\pm{20}\%$ (Figure 6E&F). Precision in sex ratio estimates was 
 very low for $\mathrm{RV}_{a,M}^\mathrm{OM}$ steeper than $\mathrm{RV}_{a,F}^\mathrm{OM}$
 and estimating both $P_a^{\mathrm{F}\rightarrow \mathrm{M}}$ and $\mathrm{RV}_{a,M}$ 
 ($\mathrm{IQR_{c}} = 92\%$; Table S2).
@@ -799,7 +793,7 @@ $\mathrm{RV}_{a,F}^\mathrm{OM}$ and $\mathrm{RV}_{a,M}$ was also estimated (Figu
 The $\mathrm{RV}_{a,M}$ function was much more variable (Figures 7 and S10).
 Generally, the median estimated $\mathrm{RV}_{a,M}$ shapes matched the simulated curvatures,
 with the notable exception of when $\Hmts < \Hmte$ (Figure 7D).
-However, in almost all scenarios, some runs estimated incorrect curvatures (i.e., estimated
+However, in almost all cases, some runs estimated incorrect curvatures (i.e., estimated
 $\mathrm{RV}_{a,M}$ increased at an increasing rate with age when it was simulated
 to increase at a decreasing rate with age, and *vice versa*).
 
@@ -820,14 +814,14 @@ which of them, in isolation or combined, have the largest impact on estimation p
 
 We showed that sex-specific abundance for protogynous hermaphrodites can be estimated in
 an integrated stock assessment model and that even key parameters used to calculate expected relative reproductive output, 
-such as the shape of the age-specific sex transition function and individual male reproductive 
+such as the shape of the age-specific sex transition function and male reproductive 
 value-at-age, are estimable using genetic data, but only as long as there are no 
 misspecifications in the
 estimation model that bias the expected probabilities of observing CKMR kin pairs. 
 
 ## 4.1 Effect of Parental Sex Assignment Accuracy
 
-One misspecification we explored is the level of mitochondrial haplotype diversity in the population
+One misspecification we explored is the level of mitochondrial haplotype diversity in the population,
 which describes the probability that two randomly sampled mtDNA sequences are different and in turn
 affects our ability to accurately determine the sex of the shared parent of an HSP (or the parent's sex
 in the case of a POP where the parent was male at the time of sampling).
@@ -839,14 +833,14 @@ the true number of HSPs sharing a mother in the sample, thus producing biased ab
 In the base configuration, $\Hmt$ in both EM and OM ($\Hmte$ and $\Hmts$, respectively)
 was set to 1. In two alternative configurations we first set $\Hmts$ higher than $\Hmte$
 (1 vs 0.9) and then *vice versa*. In the case of $\Hmts$ < $\Hmte$, the observed number of HSPs with the same mtDNA ($\HSPS$) 
-is larger than the true number of maternal HSPs sharing a mother but the EM won't know this, 
+is larger than the true number of maternal HSPs but the EM won't know this, 
 meaning it will see more maternal HSPs than there truly are. This leads to underestimating
 the number of females and overestimating the number of males.\footnote{Note that $\HSPS$ is only 
 synonymous with maternal HSPs when $\Hmt$ is 1, and $\HSPD$ could be either paternal HSPs or HSPs where
 the shared parent changed sex.} Conversely, in the case of $\Hmte$ < $\Hmts$, the observed number 
 of $\HSPS$ is closer to the true number of maternal HSPs, 
-but the EM discounts the true number of maternal HSPs because it 
-assumes some of them are HSPs with different mitochondrial DNA ($\HSPD$), and it overestimates female
+but the EM discounts the number of maternal HSPs it sees because it 
+expects some of them to be HSPs with different mitochondrial DNA ($\HSPD$), and it overestimates female
 abundance.
 
 Even though $\Hmt$ can be easily and accurately estimated by typing the mtDNA of
@@ -894,12 +888,12 @@ included two scenarios with shapes for male reproductive value at age that diffe
 females. We illustrate the expected effect of misspecifying $\mathrm{RV}_{a,M}$ for the case where 
 $\mathrm{RV}_{a,M}^\mathrm{OM}$ is steeper than $\mathrm{RV}_{a,F}^\mathrm{OM}$ 
 (but $\mathrm{RV}_{a,F}^\mathrm{EM}$ = $\mathrm{RV}_{a,M}^\mathrm{EM}$). Here, younger males in 
-the simulated population contribute fewer offspring and the older males (of which there are
-fewer) contribute more to reproduction. Consequently, more HSPs sharing a father should be found than what the EM expects. 
-This would signal to the EM that there are
-fewer males in the population and male abundance should be underestimated. When $\mathrm{RV}_{a,M}^\mathrm{OM}$
+the simulated population contribute fewer offspring, and the older males (of which there are
+fewer) contribute more to reproduction. Consequently, more HSPs sharing a father are found than what the EM expects. 
+This signals to the EM that there are
+fewer males in the population and male abundance is underestimated. When $\mathrm{RV}_{a,M}^\mathrm{OM}$
 is flatter (i.e., more age-invariant) than $\mathrm{RV}_{a,F}^\mathrm{OM}$ 
-(but $\mathrm{RV}_{a,F}^\mathrm{EM}$ = $\mathrm{RV}_{a,M}^\mathrm{EM}$), the opposite would be the case: younger males would
+(but $\mathrm{RV}_{a,F}^\mathrm{EM}$ = $\mathrm{RV}_{a,M}^\mathrm{EM}$), the opposite is the case: younger males
 contribute almost as many offspring as older males, and so the probability of finding HSPs
 sharing a father decreases, causing an overestimation of male abundance.  
 
@@ -965,8 +959,8 @@ calculating and including kinship probabilities for grandparents and avuncular p
 [@forland2025close] and/or setting one's false negative rate to ensure distinction between HSPs and half-avunculars,
 we did not model such processes in this study.
 
-Additionally, neither our OM nor our EM modeled size variation at age.
-In real populations, there is variation in size at age, which matters because many
+Additionally, neither our OM nor our EM modeled the type of size variation at age present
+in real populations.This matters because many
 fish life history traits, including reproductive output [@barneche2018fish; @trippel1997effects],
 are more strongly correlated with size than age. Variation in size at age may 
 lead to a distribution amongst same-age individuals in reproductive output, and hence in expected relative 

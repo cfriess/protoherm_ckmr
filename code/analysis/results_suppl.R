@@ -241,46 +241,6 @@ F_vul_plot <- vul_plot + fplot +
 #--------------------------------
 # Figure S3: PRE by iteration for males
 
-# note filtering for only those where all years are < 500 PRE
-# results in omitting 20 iterations (6 for eHmt < sHmt fixed trans & est mRV
-# and 16 for mRV steeper est trans & mRV). no interesting patterns, just
-# really high errors:
-
-# abund_res %>% 
-#   filter(scen_type == "Main", data == "Males") %>%
-#   group_by(scenario, et, id) %>%
-#   mutate(tmp_id = cur_group_id()) %>% 
-#   group_by(scenario) %>%
-#   mutate(tmp_id = dense_rank(tmp_id)) %>% 
-#   ungroup() %>%
-#   group_by(scenario, et, id) %>%
-#   filter(any(perror > 500)) %>%
-#   ungroup() %>%
-#   distinct(scenario, et, id)
-
-pre_by_year_males <- abund_res %>% 
-  filter(scen_type == "Main", data == "Males") %>%
-  group_by(scenario, et, id) %>%
-  mutate(tmp_id = cur_group_id()) %>%  # first get a unique group number per scenario+id combo
-  group_by(scenario) %>%
-  mutate(tmp_id = dense_rank(tmp_id)) %>% # then re-rank within scenario so it starts at 1
-  ungroup() %>%
-  group_by(scenario, et, id) %>%
-  filter(all(perror < 500)) %>%
-  ungroup() %>%
-  ggplot(aes(x = year, y = perror, color = as.factor(tmp_id))) +
-  geom_line() +
-  facet_grid(et~scenario) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  labs(y = "PRE", x = "Year") +
-  theme(legend.position =  "none",
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 12),
-        strip.text = element_text(size = 9))
-
-#--------------------------------
-# Figure S4: PRE by iteration for males
-
 # note filtering for only those where all years are < 1000 PRE
 # results in omitting 10 iterations (all for eHmt < sHmt). 
 # no interesting patterns, just really high errors:
@@ -319,6 +279,47 @@ pre_by_year_females <- abund_res %>%
 
 
 #--------------------------------
+# Figure S4: PRE by iteration for males
+
+# note filtering for only those where all years are < 500 PRE
+# results in omitting 20 iterations (6 for eHmt < sHmt fixed trans & est mRV
+# and 16 for mRV steeper est trans & mRV). no interesting patterns, just
+# really high errors:
+
+# abund_res %>% 
+#   filter(scen_type == "Main", data == "Males") %>%
+#   group_by(scenario, et, id) %>%
+#   mutate(tmp_id = cur_group_id()) %>% 
+#   group_by(scenario) %>%
+#   mutate(tmp_id = dense_rank(tmp_id)) %>% 
+#   ungroup() %>%
+#   group_by(scenario, et, id) %>%
+#   filter(any(perror > 500)) %>%
+#   ungroup() %>%
+#   distinct(scenario, et, id)
+
+pre_by_year_males <- abund_res %>% 
+  filter(scen_type == "Main", data == "Males") %>%
+  group_by(scenario, et, id) %>%
+  mutate(tmp_id = cur_group_id()) %>%  # first get a unique group number per scenario+id combo
+  group_by(scenario) %>%
+  mutate(tmp_id = dense_rank(tmp_id)) %>% # then re-rank within scenario so it starts at 1
+  ungroup() %>%
+  group_by(scenario, et, id) %>%
+  filter(all(perror < 500)) %>%
+  ungroup() %>%
+  ggplot(aes(x = year, y = perror, color = as.factor(tmp_id))) +
+  geom_line() +
+  facet_grid(et~scenario) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(y = "PRE", x = "Year") +
+  theme(legend.position =  "none",
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12),
+        strip.text = element_text(size = 9))
+
+
+#--------------------------------
 # Figure S5: distribution of PREs
 
 dat <- abund_res %>% filter(scen_type == "Main") %>%
@@ -326,7 +327,6 @@ dat <- abund_res %>% filter(scen_type == "Main") %>%
   summarize(perror = median(perror), .groups = "drop")
 
 plot_settings <- list(
-  geom_histogram(),
   geom_vline(xintercept = 0, linetype = "dashed"),
   facet_wrap(~et, scales = "free"),
   theme(plot.title = element_text(size = 9),
@@ -336,22 +336,22 @@ plot_settings <- list(
 )
 
 p1 <- dat %>% filter(data == "Males", scenario == "Base") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("Base")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#F8766D") + plot_settings + ggtitle("Base")
 
 p2 <- dat %>% filter(data == "Males", scenario == "sHmt < eHmt") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("est Hmt < sim Hmt")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#7CAE00") + plot_settings + ggtitle("sHmt < eHmt")
 
 p3 <- dat %>% filter(data == "Males", scenario == "eHmt < sHmt") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("sim Hmt < est Hmt")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#00BFC4") + plot_settings + ggtitle("eHmt < sHmt")
 
 p4 <- dat %>% filter(data == "Males", scenario == "skipped spawning") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("skipped spawning")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#C77CFF") + plot_settings + ggtitle("skipped spawning")
 
 p5 <- dat %>% filter(data == "Males", scenario == "mRV flatter") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("mRV flatter")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#E58700") + plot_settings + ggtitle("mRV flatter")
 
 p6 <- dat %>% filter(data == "Males", scenario == "mRV steeper") %>%
-  ggplot(aes(x = perror)) + plot_settings + ggtitle("mRV steeper")
+  ggplot(aes(x = perror)) + geom_histogram(fill = "#00BE67") + plot_settings + ggtitle("mRV steeper")
 
 
 #--------------------------------
@@ -499,7 +499,7 @@ para_res_plot_nll <- wrap_plots(par_est_nll, design = layout3) + guide_area() +
 # Figure S10: estimated parameters by OM scenario
 
 pars_mRV <- sim_pars %>%
-  filter(scenario %in% c("Base", "sipped spawning", "mRV flatter", "mRV steeper")
+  filter(scenario %in% c("Base", "skipped spawning", "mRV flatter", "mRV steeper")
   ) 
 
 levels(pars_mRV$et)[levels(pars_mRV$et) == "fixed trans & est mRV"] <- "fixed trans, free mRV"
@@ -762,7 +762,8 @@ mdat <- mdat %>% droplevels()
 
 ### Figure S15: female plot
 
-fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
+fpr_plot <- ggplot(fdat %>% filter(perror < 1500,
+                                   ped_rep %in% 1:20), # omits one point for est Hmt < sim Hmt
                    aes(x = ped_rep, y = perror, fill = et)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_boxplot(outlier.size = 0.5, outlier.fill = NULL, 
@@ -783,7 +784,7 @@ fpr_plot <- ggplot(fdat %>% filter(perror < 1500), # omits two points for est Hm
 
 ### Figure S16: male plot
 
-mpr_plot <- ggplot(mdat %>% filter(perror < 1500), # omits two points for est Hmt < sim Hmt
+mpr_plot <- ggplot(mdat %>% filter(ped_rep %in% 1:20),
                    aes(x = ped_rep, y = perror, fill = et)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_boxplot(outlier.size = 0.5, outlier.fill = NULL, 
@@ -1133,7 +1134,7 @@ samps_table_data <- sample_summary %>%
            F, M, POS, POD, HSS, HSD, Unrelated
   ) %>%
   mutate(scenario = ifelse(scenario == "Suppl Sampling Intensity",
-         "Vary Sampling", scenario))
+         "Varied Sampling", scenario))
 
 samps_table_data$scenario <- as.factor(samps_table_data$scenario)
 samps_table_data$scenario <- factor(samps_table_data$scenario, 
