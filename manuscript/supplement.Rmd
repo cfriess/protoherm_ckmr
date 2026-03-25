@@ -281,7 +281,8 @@ $\mathrm{POPs}$ on our estimator's accuracy and precision.
 
 ```{r tableS1, echo=FALSE, warning=FALSE, results='asis'}
 tS1_cap <- "Median number of adult males and females sampled and number of observed related pairs found by 
-scenario as well as a number of supplemental runs ('Varied Sampling') investigating the effect of increasing
+scenario as well as a number of supplemental scenarios ('Varied Sampling', where the number of CKMR
+samples and sampling time frame were modified) investigating the effect of increasing
 the number of years over which CKMR samples are collected (Yrs) and varying the number of 
 samples collected (Nsamps; proportion of base sample size, see text for details). The 
 number in parentheses is the interquartile range. sHmt = simulated mitochondrial haplotype diversity,
@@ -320,7 +321,7 @@ cat(tab_tex)
 
 
 ```{r tableS2, echo=FALSE, warning=FALSE, results='asis'}
-tS2_cap <- "Error metrics for the six main scenarios and the supplementary scenarios where 
+tS2_cap <- "Error metrics for the six main scenarios (24 cases) and the supplementary scenarios where 
 CKMR sample size and sampling time frame were varied. PRE = Percent Relative Error. Median PREs were first calculated
 across years within model run iteration to obtain a single PRE value per iteration. The PRE and IQR
 (interquartile range) values reported in this table represent the median and IQR, respectively, of

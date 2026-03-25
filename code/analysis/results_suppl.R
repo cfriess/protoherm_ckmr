@@ -686,7 +686,7 @@ icc_plot <- ggplot(icc_results) +
   facet_wrap(~data) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom") +
-  guides(fill = guide_legend(title = "EM Configuration",
+  guides(fill = guide_legend(title = "Parameter Estimation",
                              nrow = 2, byrow = T)) +
   xlab("Scenario") + ylab("Intraclass Correlation Coefficient")
 

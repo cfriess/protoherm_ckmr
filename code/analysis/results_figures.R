@@ -325,7 +325,7 @@ em_p1 <-
   ggtitle("Base") +
   ylab("Percent Relative Error") +
   coord_cartesian(ylim = c(-75,100)) +
-  guides(fill = guide_legend(title = "EM Configuration"))  +
+  guides(fill = guide_legend(title = "Parameter Estimation"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -349,7 +349,7 @@ om_p3 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Configuration")) +
+  guides(fill = guide_legend(title = "Parameter Estimation")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "flatter than" ~ RV[F]^{"OM"}))) +
   labs(tag = "E")
 
@@ -371,7 +371,7 @@ om_p4 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) +
-  guides(fill = guide_legend(title = "EM Configuration")) +
+  guides(fill = guide_legend(title = "Parameter Estimation")) +
   ggtitle(expression(bold(RV[M]^{"OM"} ~ "steeper than" ~ RV[F]^{"OM"}))) +
   labs(tag = "F")
 
@@ -393,7 +393,7 @@ om_p2 <-
         axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
   coord_cartesian(ylim = c(-75,mrole_y_upper)) + # omits 26
-  guides(fill = guide_legend(title = "EM Configuration")) +
+  guides(fill = guide_legend(title = "Parameter Estimation")) +
   ggtitle("Skipped spawning") +
   labs(tag = "D")
 
@@ -413,7 +413,7 @@ em_p3 <-
   coord_cartesian(ylim = c(-65, 750)) +
   ggtitle(expression(bold(H[mt]^{"EM"} < H[mt]^{"OM"}))) +
   ylab("Percent Relative Error") +
-  guides(fill = guide_legend(title = "EM Configuration"))  +
+  guides(fill = guide_legend(title = "Parameter Estimation"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -435,7 +435,7 @@ em_p4 <-
   coord_cartesian(ylim = c(-75,100)) +
   ggtitle(expression(bold(H[mt]^{"OM"} < H[mt]^{"EM"}))) +
   ylab("Percent Relative Error") +
-  guides(fill = guide_legend(title = "EM Configuration"))  +
+  guides(fill = guide_legend(title = "Parameter Estimation"))  +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5, size = 12)) +
@@ -455,7 +455,7 @@ scen_pre_plot <- (ytitle + em_p1 + em_p4 + em_p3 + om_p2 + om_p3 + om_p4 +
                       axis.title = element_blank(),
                       axis.text.x = element_blank()
                     ) &
-                    guides(fill = guide_legend(title = "EM Configuration", nrow = 2, byrow = TRUE))
+                    guides(fill = guide_legend(title = "Parameter Estimation", nrow = 2, byrow = TRUE))
                   ) +
   plot_annotation()  # Ensures the patchwork layout processes all theme elements
 
@@ -625,7 +625,7 @@ sr_plot <- ytitle + sr1 + sr4 + sr3 + sr2 + sr5 + sr6 +
     axis.title = element_blank(),
     axis.text.x = element_blank()
   ) &
-  guides(fill = guide_legend(title = "EM Configuration", nrow = 2, byrow = TRUE))
+  guides(fill = guide_legend(title = "Parameter Estimation", nrow = 2, byrow = TRUE))
 
 sr_plot_final <- sr_plot +
   plot_annotation() &

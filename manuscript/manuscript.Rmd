@@ -1423,6 +1423,8 @@ where $Y_t$ was calculated as:
 Y_t = log(I_t) - log(\hat{I_t}).
 \end{equation}
 
+where $\hat{I_t}$ is the model-predicted age-1 recruitment and $I_t$ is the 
+recruitment index.
 The composition data likelihood, $L_C$, was specified using a multivariate logistic 
 negative log likelihood (Richards et al. 1997). This likelihood, implemented via ADMB's *dmvlogistic* 
 function, accounts for differences between observed and expected proportions 
