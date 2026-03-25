@@ -381,7 +381,7 @@ $\\mathrm{HSP}^{\\neq}$ = half-sibling pairs with different mitochondrial DNA, $
 DNA. Boxplot elements are as described for Figure S6."
 
 parnll_plot_fig_caption <- "Estimated parameters for the scenario group exploring the effect of parental sex
-assignment accuracy, by whether or not the sex transition function standard deviation parameter, $\\mathrm{STF}_{SD}$ and the exponent of the male reproductive value 
+assignment misspecification, by whether or not the sex transition function standard deviation parameter, $\\mathrm{STF}_{SD}$ and the exponent of the male reproductive value 
 (RV) functions are assumed known (fixed) or estimated (free).
 trans = sex transition function, mRV = male reproductive value. Y-axis for mean recruitment and Male RV function exponent truncated to improve readability. Boxplot elements are as described for Figure S6."
 

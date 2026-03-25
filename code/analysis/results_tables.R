@@ -66,7 +66,7 @@ table1 <- data.frame(Notation = col1,
 
 table2_df <- data.frame(
   Issue = c("",
-            "\\multirow{2}{*}{\\shortstack[l]{Sex Assignment\\\\[4pt]Accuracy}}",
+            "\\multirow{2}{*}{\\shortstack[l]{Sex Assignment\\\\[4pt]Misspecification}}",
             "",
             "\\multirow{3}{*}{\\shortstack[l]{Male Contribution\\\\[4pt]to Repro Success}}",
             "",
